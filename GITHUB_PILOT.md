@@ -1,3 +1,5 @@
+> Historical first pilot: repository selection and the 30-issue limit below have been superseded by [multi-repository onboarding and complete issue pagination](GITHUB_REPOSITORIES.md). The original verification receipts remain unchanged.
+
 # CaseRoute: one-repository GitHub pilot
 
 Repository: **getzep/graphiti**. Inspired by TraceFix's repository-scoped, read-only lead search and observation-driven memory, implemented in CaseRoute's own Python/FastAPI workflow. The TraceFix directory was inspected read-only; its environment file and database were not used.

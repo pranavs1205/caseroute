@@ -1,5 +1,13 @@
 # CaseRoute verification — 16 October 2026, IST
 
+## Multi-repository gate ? 18 October 2026
+
+Self-service public repository onboarding, persistent per-repository graphs, unbounded-total resumable all-state issue pagination and cached workspace search are implemented. Live traversals exhausted 20 Graphiti pages (597 issues), 4 GraphRAG-SDK pages (95 issues) and 1 CaseRoute page (0 issues), excluding PRs. [Coverage](submission/verification/repository-coverage.json) and [browser receipt](submission/verification/repositories-browser.json).
+
+All 54 backend tests pass. They include seven new multi-repository checks for isolation, onboarding, page completion, pause/retry semantics, result pagination and repository validation. The real browser check adds the third repository, finishes ingestion, switches scope and searches cached records. Code coverage remains a partial Python sample; no multi-user authentication or new fix-accuracy result is claimed.
+
+A Windows connection probe found default `localhost` setup taking 2.068 seconds versus 0.033 for `127.0.0.1`. The default DB host now uses IPv4 loopback; an explicit FALKORDB_HOST still overrides it. This is a local connection fix, not a graph-algorithm speed benchmark.
+
 ## GitHub pilot gate ? 18 October 2026
 
 The separate Graphiti pilot imported 30 public issues and a balanced 16/236-file Python snapshot at commit `a107b622205733c0a53617ce0cd79fe4461cdb35`, 382,760 downloaded code bytes, 20 GitHub GET requests and no model calls for sync. The original Spark graph/evaluation remain separate.

@@ -62,3 +62,5 @@ The selected provider is now **AnyAPI**, using an exact authenticated catalog ID
 ## Public GitHub pilot (18 October 2026)
 
 A separate `caseroute_github` graph imports bounded public records from getzep/graphiti through GitHub API reads and a commit-pinned partial Python AST index. Source URLs, checked/updated times and code commit are retained. Repository metadata reports Apache-2.0 for code; no blanket license is asserted for issue comments. Raw imports are not committed; verification receipts contain bounded metadata and references. Optional LLM review sends bounded report/evidence excerpts to the configured provider. See [GITHUB_PILOT.md](GITHUB_PILOT.md). The original Spark dataset and frozen 20-case assessment are unchanged.
+
+Multi-repository update: public repositories can now be added through a persistent catalog and isolated graphs. Live all-state issue pagination read 597 Graphiti and 95 GraphRAG-SDK issues, excluding PRs; source bodies/comments retain their documented bounds. See [GITHUB_REPOSITORIES.md](GITHUB_REPOSITORIES.md) and the coverage receipt. The earlier 30-issue snapshot describes the first pilot only.

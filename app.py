@@ -10,14 +10,15 @@ from real_cases import RealCases
 from landscape import Landscape
 from llm import LLMUnavailable, configuration, investigate as run_investigation
 import os
-from github_client import GitHubUnavailable
-from repo_pilot import RepoPilot, RevisionConflict
+from github_client import GitHubUnavailable, REPOSITORY
+from repo_pilot import RevisionConflict
+from repositories import RepositoryRegistry
 
 app = FastAPI(title='CaseRoute', description='Graph-guided investigations with sourced real historical reports and a synthetic ownership lab')
 store = Store()
 real = RealCases(store)
 landscape = Landscape(real)
-repo_pilot = RepoPilot(Store(os.getenv('CASE_GITHUB_GRAPH', 'caseroute_github')))
+repository_registry = RepositoryRegistry()
 
 
 @app.exception_handler(RevisionConflict)
@@ -32,11 +33,14 @@ async def github_error(request, exc):
 
 class RepoSyncInput(BaseModel):
     include_code: bool = True
+    max_pages: int = Field(default=2,ge=1,le=5)
+    restart: bool = False
 
 
 class RepoSearchInput(BaseModel):
     keywords: str = Field(default='', max_length=160)
     live: bool = False
+    offset: int = Field(default=0,ge=0)
 
 
 class RepoIntakeInput(BaseModel):
@@ -56,59 +60,79 @@ class RepoObservationInput(BaseModel):
     revision: int = Field(ge=0)
 
 
+class RepositoryInput(BaseModel):
+    repository: str = Field(min_length=3,max_length=220)
+
+
+@app.get('/api/repos')
+def repositories():
+    return repository_registry.list()
+
+
+@app.post('/api/repos',status_code=201)
+def add_repository(data: RepositoryInput):
+    return repository_registry.add(data.repository)
+
+
+@app.post('/api/repos/search')
+def search_repositories(data: RepoSearchInput):
+    if data.live:raise ValueError('Cross-repository search uses local evidence. Select a repository for live search.')
+    return repository_registry.search_all(data.keywords)
+
+
 @app.get('/repo.js')
 def repo_script():
     return FileResponse(Path(__file__).parent/'static'/'repo.js',media_type='text/javascript')
 
 
 @app.get('/api/repo/status')
-def repo_status():
-    return repo_pilot.stats()
+def repo_status(repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).stats()
 
 
 @app.post('/api/repo/sync')
-def repo_sync(data: RepoSyncInput):
-    return repo_pilot.sync(data.include_code)
+def repo_sync(data: RepoSyncInput,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).sync(data.include_code,data.max_pages,data.restart)
 
 
 @app.post('/api/repo/search')
-def repo_search(data: RepoSearchInput):
-    return repo_pilot.search(data.keywords,data.live)
+def repo_search(data: RepoSearchInput,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).search(data.keywords,data.live,data.offset)
 
 
 @app.get('/api/repo/issues/{number}')
-def repo_issue(number: int):
-    return repo_pilot.issue(number)
+def repo_issue(number: int,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).issue(number)
 
 
 @app.post('/api/repo/issues/{number}/refresh')
-def repo_issue_refresh(number: int):
-    return repo_pilot.refresh(number)
+def repo_issue_refresh(number: int,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).refresh(number)
 
 
 @app.get('/api/repo/intakes')
-def repo_intakes():
-    return repo_pilot.cases()
+def repo_intakes(repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).cases()
 
 
 @app.post('/api/repo/intakes',status_code=201)
-def repo_intake_create(data: RepoIntakeInput):
-    return repo_pilot.create(data.title,data.body,data.version,data.source_number)
+def repo_intake_create(data: RepoIntakeInput,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).create(data.title,data.body,data.version,data.source_number)
 
 
 @app.get('/api/repo/intakes/{cid}')
-def repo_intake_read(cid: str):
-    return repo_pilot.case(cid)
+def repo_intake_read(cid: str,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).case(cid)
 
 
 @app.post('/api/repo/intakes/{cid}/run')
-def repo_intake_run(cid: str,data: RepoRunInput):
-    return repo_pilot.investigate(cid,data.use_llm)
+def repo_intake_run(cid: str,data: RepoRunInput,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).investigate(cid,data.use_llm)
 
 
 @app.post('/api/repo/intakes/{cid}/observations')
-def repo_intake_observe(cid: str,data: RepoObservationInput):
-    return repo_pilot.observe(cid,data.outcome,data.note,data.revision)
+def repo_intake_observe(cid: str,data: RepoObservationInput,repository: str = REPOSITORY):
+    return repository_registry.pilot(repository).observe(cid,data.outcome,data.note,data.revision)
 
 
 @app.get('/api/graph/examples')

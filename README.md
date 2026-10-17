@@ -4,9 +4,11 @@ A local investigation agent with FalkorDB as its context and memory layer. Built
 
 [Watch/download the working demo](https://github.com/pranavs1205/caseroute/releases/download/demo-v1/caseroute-demo.webm) | [Real-report assessment](evaluation/real/REPORT.md) | [Release](https://github.com/pranavs1205/caseroute/releases/tag/demo-v1)
 
-## GitHub repository pilot
+## GitHub repository workspace
 
-**getzep/graphiti** is now connected through a separate **GitHub pilot** tab: cached/live issue search, direct issue URLs, new local investigations, commit-pinned Python declaration/caller-name paths, saved observations and optional one-call LLM review. The verified import contains 30 issues and a partial 16-file snapshot; it does not automatically fix or publish issues. [Setup, data model, limits and call counts](GITHUB_PILOT.md). Run `python github_pilot.py sync` after the standard setup to import public evidence. Freshness currently uses manual sync/refresh, not webhooks.
+Users can add **any public GitHub repository** by URL or owner/name, switch between connected repositories, search cached issues across them, and create scoped investigations. There is no fixed repository allowlist. **Import all issue pages / resume** backfills open and closed issues with saved pagination cursors, rather than a 30-issue sample. Verified coverage: Graphiti 597 issues, GraphRAG-SDK 95, and the CaseRoute repository's empty issue list. [Setup, behavior and limitations](GITHUB_REPOSITORIES.md).
+
+Issue ingestion supports repositories in any language. Code analysis remains a separately reported partial Python sample. The app does not automatically reproduce bugs, apply fixes, or publish GitHub issues. The old [single-repository pilot](GITHUB_PILOT.md) is historical documentation.
 
 ## Graph-guidance improvement
 
@@ -123,7 +125,7 @@ Integration tests require live FalkorDB. Each run creates and deletes a uniquely
 
 This is a single-company local prototype. Ownership and recommendation sources older than 90 days (or missing valid dates) produce a review warning. Conflicting ownership blocks routing. Multi-tenant authentication, duplicate clustering, multi-agent coordination and independently held-out evaluation are not implemented. A passed check is recorded as an attempt; it does not automatically resolve a case. A human must interpret the result.
 
-Public repository: https://github.com/pranavs1205/caseroute. Clean Windows setup, 47 backend tests, three case studies and the AI-assisted real-report baseline are complete. See [submission checklist](submission/CHECKLIST.md) for the working video and final form requirements. No real-case accuracy/speed advantage over a baseline is established. Track 02 and Track 03 are not claimed by this prototype.
+Public repository: https://github.com/pranavs1205/caseroute. Clean Windows setup, 54 backend tests, three case studies and the AI-assisted real-report baseline are complete. See [submission checklist](submission/CHECKLIST.md) for the working video and final form requirements. No real-case accuracy/speed advantage over a baseline is established. Track 02 and Track 03 are not claimed by this prototype.
 
 Current verification and limits are in `VERIFICATION.md`. Existing imports should run `python evidence_graph.py` to build/update the derived index; fresh imports do so automatically. Assessment integrity tests enforce prelabels and preserve failed runs. Run `python evaluate.py` for the 24-scenario synthetic policy benchmark; results are saved to `evaluation/results.json`. It compares against static feature/service lookup from the same fixture corpus, not an independent held-out language-routing benchmark. Optional browser checks: install Playwright, install Chromium with `python -m playwright install chromium`, run the server, then run `python tests/browser_check.py`.
 

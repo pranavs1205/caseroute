@@ -28,12 +28,12 @@ def main():
                 page.set_default_timeout(30000)
                 errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
                 page.goto(base);page.locator('[data-tab="repo"]').click()
-                expect(page.locator('#repo-status')).to_contain_text('30 cached issues')
+                expect(page.locator('#repo-status')).to_contain_text('cached issues')
                 page.locator('#repo-keywords').fill('#2014')
                 page.locator('#repo-search button').click()
                 page.locator('[data-repo-issue="2014"]').click()
                 expect(page.locator('#repo-issue')).to_contain_text('SearchResults.merge()')
-                with page.expect_response(lambda r:r.url.endswith('/api/repo/intakes')) as response:
+                with page.expect_response(lambda r:r.url.split('?')[0].endswith('/api/repo/intakes')) as response:
                     page.locator('#repo-investigate-source').click()
                 result=response.value.json();assert response.value.status==201,result
                 case=result['intake']['id']
@@ -54,7 +54,7 @@ def main():
                 page.locator('#repo-title').fill('SearchResults.merge ranking differs in my application')
                 page.locator('#repo-body').fill('My application merges results from two groups using SearchResults.merge. I expected the scores to remain in descending order with the configured limit, but the result order changes. This is a new local report for investigation, not a published GitHub issue.')
                 page.locator('#repo-version').fill('not yet verified')
-                with page.expect_response(lambda r:r.url.endswith('/api/repo/intakes')) as fresh:
+                with page.expect_response(lambda r:r.url.split('?')[0].endswith('/api/repo/intakes')) as fresh:
                     page.locator('#repo-new button').click()
                 new=fresh.value.json();assert fresh.value.status==201
                 assert new['run']['code'] and new['run']['issues']

@@ -1,0 +1,26 @@
+{
+  "scope": "Observed local coverage, not an atomic GitHub snapshot",
+  "repositories": [
+    {
+      "repository": "falkordb/graphrag-sdk",
+      "issues": 95,
+      "all_issue_pages_read": true,
+      "issue_pages": 4,
+      "checked": "2026-10-17T21:00:47.498401+00:00"
+    },
+    {
+      "repository": "getzep/graphiti",
+      "issues": 597,
+      "all_issue_pages_read": true,
+      "issue_pages": 20,
+      "checked": "2026-10-17T20:59:48.680671+00:00"
+    },
+    {
+      "repository": "pranavs1205/caseroute",
+      "issues": 0,
+      "all_issue_pages_read": true,
+      "issue_pages": 1,
+      "checked": "2026-10-17T21:01:02.214327+00:00"
+    }
+  ]
+}

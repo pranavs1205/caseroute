@@ -9,7 +9,7 @@ from falkordb import FalkorDB
 class Store:
     def __init__(self, name=None):
         self.graph = FalkorDB(
-            host=os.getenv('FALKORDB_HOST', 'localhost'),
+            host=os.getenv('FALKORDB_HOST', '127.0.0.1'),
             port=int(os.getenv('FALKORDB_PORT', '6380')),
             password=os.getenv('FALKORDB_PASSWORD') or None,
             socket_timeout=8,

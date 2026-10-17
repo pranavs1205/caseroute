@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "source_issue": "getzep/graphiti#2014",
+  "known_case": "GHCASE-b0f9277a7aeb",
+  "new_case": "GHCASE-6126ecc6f3db",
+  "source_self_excluded": true,
+  "declaration": "SearchResults.merge",
+  "observation_persists": true,
+  "stale_write_status": 409,
+  "new_report_github_calls": 0,
+  "llm_calls": 0,
+  "browser_errors": []
+}

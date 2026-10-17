@@ -105,6 +105,7 @@ class RepositoryGraph(unittest.TestCase):
         self.store.write('MATCH (r:PilotRepository) SET r.coverage=$coverage',coverage='{"indexed_files":1}')
         client=MagicMock();client.get.return_value=dict(private=False,description='fixture',license={})
         client.search.return_value=dict(items=[],incomplete=False);client.receipts=[]
+        client.issue_page.return_value=dict(items=[],has_next=False,records=0)
         self.pilot.client_factory=lambda:client
         result=self.pilot.sync(False)
         self.assertEqual(result['snapshot']['commit'],'fixture-commit')

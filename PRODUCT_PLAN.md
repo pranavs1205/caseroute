@@ -2,6 +2,10 @@
 
 **Updated 18 October 2026, India time.** CaseRoute is an original support operations product centered on FalkorDB. Its UI, graph schema, traversal tools, decision policy, and case memory are built in this repository. It does not connect to another support platform. Standard third-party dependencies still need normal attribution and accurate AI-assistance disclosure in the final submission.
 
+## Multi-repository update ? 18 October 2026
+
+The single-repo restriction and 30-issue import cap are removed. Public repositories can be added through the UI without code edits. Persistent graph isolation, repository switching, cached cross-repository search, resumable all-state issue ingestion and explicit coverage are implemented and tested. Live pagination completed for Graphiti, GraphRAG-SDK and CaseRoute. All 54 backend tests pass. See `GITHUB_REPOSITORIES.md`; hosted user authorization, background/webhook sync and broader code parsers remain future work.
+
 ## One-repository pilot ? 18 October 2026
 
 A read-only getzep/graphiti integration is implemented in a separate graph: 30 public issue records, a bounded commit-pinned Python AST index, cached/live/direct-number search, new local intakes, source/caller-name paths, observations with revision checks and optional one-call LLM review. Real browser and source integration checks pass. See `GITHUB_PILOT.md` for scope and costs. Manual updates are implemented; webhooks, reproduction execution and patch generation remain future work. The earlier Spark demo and frozen baseline remain valid historical evidence, not validation of this new repository workflow.
