@@ -66,7 +66,7 @@ def records(path):
                        url='https://issues.apache.org/jira/secure/ViewIssue.jspa?id=' + issue_id)
 
 
-def load(store, path):
+def load(store, path, manifest_path=MANIFEST):
     store.write('''MERGE (d:Dataset {id:'gitbugs-spark'})
         SET d.name='GitBugs / Apache Spark', d.url=$url, d.revision=$revision,
             d.license='CC BY 4.0', d.author='Avinash Patil', d.kind='real_historical'
@@ -121,7 +121,8 @@ def load(store, path):
                                      'Split comma-delimited affected versions into Version nodes.',
                                      'Added dataset provenance and constructed JIRA URLs from internal numeric issue IDs.',
                                      'No owner, root cause, fix procedure, duplicate target, or service dependency was inferred.'])
-    MANIFEST.write_text(json.dumps(manifest, indent=2), encoding='utf-8')
+    if manifest_path is not None:
+        Path(manifest_path).write_text(json.dumps(manifest, indent=2), encoding='utf-8')
     print(json.dumps(manifest, indent=2))
 
 

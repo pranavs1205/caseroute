@@ -1,0 +1,16 @@
+{
+  "graph": "caseroute_video_48a7c6f63b444119a74611c3b1a78d03",
+  "mode": "graph_only",
+  "captioned": true,
+  "audio": false,
+  "passed": true,
+  "duration_seconds": 165.02,
+  "first_run": "RUN-b504f2ff7876",
+  "second_run": "RUN-1c834afc55b6",
+  "initial_step": "investigate_component_boundary",
+  "after_review_step": "request_details",
+  "issue": "spark-13289604",
+  "source_resolution": "Invalid",
+  "captured_url": "http://127.0.0.1:51100",
+  "temporary_graph_deleted": true
+}

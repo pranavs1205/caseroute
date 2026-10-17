@@ -1,0 +1,292 @@
+{
+  "protocol": "known_history_investigation_v1",
+  "reviewer_kinds": [
+    "ai_assisted"
+  ],
+  "summaries": [
+    {
+      "mode": "graph",
+      "completed": 20,
+      "attempted": 20,
+      "step_agreement": 7,
+      "required_abstentions": 8,
+      "correct_abstentions": 0,
+      "citation_membership": 20,
+      "citation_support": "Post-review checks factual source binding only; it does not establish recommendation adequacy or root cause.",
+      "original_source_in_top5": 20,
+      "predeclared_relevance_cases": 0,
+      "top5_hits_on_judged_cases": 0,
+      "postrun_judged": 20,
+      "postrun_evidence_relevant": 10,
+      "postrun_step_acceptable": 6,
+      "postrun_citations_supported": 20,
+      "postrun_failure_notes": [
+        {
+          "case_id": "R01",
+          "note": "Same Kafka micro-batch test family offers contextual leads; timing/clock cause remains source-specific."
+        },
+        {
+          "case_id": "R02",
+          "note": "No concrete serialization-buffer OOM analogue in the other top-five hits. Scheduler mention is incidental; environment/data-volume inquiry fits better."
+        },
+        {
+          "case_id": "R03",
+          "note": "Other CI failures do not identify the missing BouncyCastle class. Investigate dependency/classpath rather than broad component boundary."
+        },
+        {
+          "case_id": "R04",
+          "note": "Python-version overlap does not explain MLflow feature-name mismatch. Scheduler and Shuffle are incidental stack mentions; prelabel enum agreement overstates action quality."
+        },
+        {
+          "case_id": "R05",
+          "note": "Streaming temp-view/session reports provide contextual leads. Connect/SQL/Streaming boundary is reasonable; no shared cause or fix established."
+        },
+        {
+          "case_id": "R06",
+          "note": "Rename-only source has no diagnosis context; generic environment action should yield to clarification. Other rename hits are unrelated."
+        },
+        {
+          "case_id": "R07",
+          "note": "Other checkError suite migrations are title-level engineering analogues. Empty source description still requires scope clarification."
+        },
+        {
+          "case_id": "R08",
+          "note": "Other inline-type-hint reports include the same migration pattern and rationale. Missing udf.py details require clarification."
+        },
+        {
+          "case_id": "R09",
+          "note": "Non-existent error-class handling is relevant catalog context; no implementation details for this removal are supplied."
+        },
+        {
+          "case_id": "R10",
+          "note": "Empty description and ambiguous input/output path title require reproduction and expected behavior. Other top-five hits concern different APIs."
+        },
+        {
+          "case_id": "R11",
+          "note": "ANSI-mode test reports explicitly discuss the same setting and invalid datetime behavior; bounded environment/configuration check is reasonable."
+        },
+        {
+          "case_id": "R12",
+          "note": "assertDataFrameEqual migrations provide title-level analogues; target tests and schema expectations should be requested."
+        },
+        {
+          "case_id": "R13",
+          "note": "No other top-five report provides the source-specific DNS mechanism. Environment/network check is a reasonable next step."
+        },
+        {
+          "case_id": "R14",
+          "note": "Another ReattachableExecuteSuite/session-invalidation failure is a useful lead; verify branch and reproduction without asserting the same cause."
+        },
+        {
+          "case_id": "R15",
+          "note": "Readyz enhancement needs design/recorded-implementation context. Generic REST reports do not address readiness and environment check is unsuitable."
+        },
+        {
+          "case_id": "R16",
+          "note": "Other Connect operator migrations concern different type families and provide no NullOps mechanism; request source details."
+        },
+        {
+          "case_id": "R17",
+          "note": "Scala 2.13 compiler-deprecation migration is relevant context; compiler/version check is reasonable, not a claim of identical fix."
+        },
+        {
+          "case_id": "R18",
+          "note": "Other top-five hits do not address staticmethod usage-logger attachment. Investigate the logger boundary or original change, rather than generic environment."
+        },
+        {
+          "case_id": "R19",
+          "note": "Other ALTER TABLE commands migrated to the same resolution framework are useful engineering analogues. Generic environment check misses this maintenance task."
+        },
+        {
+          "case_id": "R20",
+          "note": "Unclear optimization goal needs benchmark, expected behavior and scope; unrelated optimization reports are not useful evidence."
+        }
+      ],
+      "failures": [
+        {
+          "case_id": "R02",
+          "error": null,
+          "decision": {
+            "next_step": "investigate_component_boundary",
+            "evidence_ids": [
+              "spark-13299616"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Isolate a minimal reproduction across these mentioned components: Parquet, Scheduler, Spark SQL / DataFrames. Compare the source excerpts and connector/runtime versions before proposing a change.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R03",
+          "error": null,
+          "decision": {
+            "next_step": "investigate_component_boundary",
+            "evidence_ids": [
+              "spark-13587019"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Isolate a minimal reproduction across these mentioned components: Hive, ORC, Scheduler, Spark SQL / DataFrames. Compare the source excerpts and connector/runtime versions before proposing a change.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R06",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13369944"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R07",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13541049"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R08",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13405309"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R09",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13516136"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R10",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13595781"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R12",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13600132"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R15",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13561452"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R16",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13537110"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R18",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13439294"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R19",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13355742"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        },
+        {
+          "case_id": "R20",
+          "error": null,
+          "decision": {
+            "next_step": "check_environment",
+            "evidence_ids": [
+              "spark-13353674"
+            ],
+            "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+            "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+            "requires_human_review": true,
+            "llm_selected_step": false
+          }
+        }
+      ]
+    }
+  ],
+  "caveat": "Known-history study. Predeclared labels are human only if reviewer_kind is human. No independently held-out retrieval or accuracy claim."
+}

@@ -1,6 +1,12 @@
 # CaseRoute — independent product and execution plan
 
-**Updated 15 October 2026, India time.** CaseRoute is an original support operations product centered on FalkorDB. Its UI, graph schema, traversal tools, decision policy, and case memory are built in this repository. It does not connect to another support platform. Standard third-party dependencies still need normal attribution and accurate AI-assistance disclosure in the final submission.
+**Updated 18 October 2026, India time.** CaseRoute is an original support operations product centered on FalkorDB. Its UI, graph schema, traversal tools, decision policy, and case memory are built in this repository. It does not connect to another support platform. Standard third-party dependencies still need normal attribution and accurate AI-assistance disclosure in the final submission.
+
+## Current evidence gate ? 18 October 2026
+
+The public repository, fresh Windows setup check, 26 passing backend tests, three real source case studies and a frozen 20-case AI-assisted graph-only assessment are complete. The assessment exposes weak action selection: 7/20 prelabel agreement, 6/20 post-review acceptable actions, 0/8 required clarifications. This replaces the earlier ?real accuracy unmeasured? status with a limited implementation-informed baseline, not an independent accuracy claim. See `evaluation/real/REPORT.md` and `submission/CHECKLIST.md`. Prioritize a working real-case video and final submission over new features. Persisted approved investigation tasks remain deferred.
+
+The execution entries below are historical and their smaller test counts/open repository status are superseded by this update.
 
 ## Execution update — 16 October 2026
 

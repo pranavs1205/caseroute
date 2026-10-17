@@ -1,0 +1,21 @@
+case_id,reviewer,evidence_relevant,step_acceptable,citations_supported,failure_note
+R01,Codex assistant (AI-assisted; implementation-informed),yes,yes,yes,Same Kafka micro-batch test family offers contextual leads; timing/clock cause remains source-specific.
+R02,Codex assistant (AI-assisted; implementation-informed),no,no,yes,No concrete serialization-buffer OOM analogue in the other top-five hits. Scheduler mention is incidental; environment/data-volume inquiry fits better.
+R03,Codex assistant (AI-assisted; implementation-informed),no,no,yes,Other CI failures do not identify the missing BouncyCastle class. Investigate dependency/classpath rather than broad component boundary.
+R04,Codex assistant (AI-assisted; implementation-informed),no,no,yes,Python-version overlap does not explain MLflow feature-name mismatch. Scheduler and Shuffle are incidental stack mentions; prelabel enum agreement overstates action quality.
+R05,Codex assistant (AI-assisted; implementation-informed),yes,yes,yes,Streaming temp-view/session reports provide contextual leads. Connect/SQL/Streaming boundary is reasonable; no shared cause or fix established.
+R06,Codex assistant (AI-assisted; implementation-informed),no,no,yes,Rename-only source has no diagnosis context; generic environment action should yield to clarification. Other rename hits are unrelated.
+R07,Codex assistant (AI-assisted; implementation-informed),yes,no,yes,Other checkError suite migrations are title-level engineering analogues. Empty source description still requires scope clarification.
+R08,Codex assistant (AI-assisted; implementation-informed),yes,no,yes,Other inline-type-hint reports include the same migration pattern and rationale. Missing udf.py details require clarification.
+R09,Codex assistant (AI-assisted; implementation-informed),yes,no,yes,Non-existent error-class handling is relevant catalog context; no implementation details for this removal are supplied.
+R10,Codex assistant (AI-assisted; implementation-informed),no,no,yes,Empty description and ambiguous input/output path title require reproduction and expected behavior. Other top-five hits concern different APIs.
+R11,Codex assistant (AI-assisted; implementation-informed),yes,yes,yes,ANSI-mode test reports explicitly discuss the same setting and invalid datetime behavior; bounded environment/configuration check is reasonable.
+R12,Codex assistant (AI-assisted; implementation-informed),yes,no,yes,assertDataFrameEqual migrations provide title-level analogues; target tests and schema expectations should be requested.
+R13,Codex assistant (AI-assisted; implementation-informed),no,yes,yes,No other top-five report provides the source-specific DNS mechanism. Environment/network check is a reasonable next step.
+R14,Codex assistant (AI-assisted; implementation-informed),yes,yes,yes,Another ReattachableExecuteSuite/session-invalidation failure is a useful lead; verify branch and reproduction without asserting the same cause.
+R15,Codex assistant (AI-assisted; implementation-informed),no,no,yes,Readyz enhancement needs design/recorded-implementation context. Generic REST reports do not address readiness and environment check is unsuitable.
+R16,Codex assistant (AI-assisted; implementation-informed),no,no,yes,Other Connect operator migrations concern different type families and provide no NullOps mechanism; request source details.
+R17,Codex assistant (AI-assisted; implementation-informed),yes,yes,yes,"Scala 2.13 compiler-deprecation migration is relevant context; compiler/version check is reasonable, not a claim of identical fix."
+R18,Codex assistant (AI-assisted; implementation-informed),no,no,yes,"Other top-five hits do not address staticmethod usage-logger attachment. Investigate the logger boundary or original change, rather than generic environment."
+R19,Codex assistant (AI-assisted; implementation-informed),yes,no,yes,Other ALTER TABLE commands migrated to the same resolution framework are useful engineering analogues. Generic environment check misses this maintenance task.
+R20,Codex assistant (AI-assisted; implementation-informed),no,no,yes,"Unclear optimization goal needs benchmark, expected behavior and scope; unrelated optimization reports are not useful evidence."

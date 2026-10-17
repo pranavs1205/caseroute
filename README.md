@@ -2,6 +2,8 @@
 
 A local investigation agent with FalkorDB as its context and memory layer. Built for **Track 01: Agents That Act on Connected Data**. The real-data workflow uses **20,275 historical Apache Spark reports** from GitBugs (18.67 MB CSV, CC BY 4.0). The separate checkout-company ownership lab remains fictional.
 
+[Watch/download the working demo](https://github.com/pranavs1205/caseroute/releases/download/demo-v1/caseroute-demo.webm) ? [Real-report assessment](evaluation/real/REPORT.md) ? [Release](https://github.com/pranavs1205/caseroute/releases/tag/demo-v1)
+
 ## Run
 
 Requires Python 3.11+ and Docker Desktop (Linux containers).
@@ -49,7 +51,17 @@ python anyapi_smoke.py nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
 
 Ollama remains an explicit optional override (`CASE_LLM_PROVIDER=ollama`, `CASE_LLM_MODEL` set to an installed model). Earlier development checks used the existing `qwen2.5:0.5b` model; no model download was made. The alternative Vercel gateway adapter remains available but untested. `.env.example` lists the supported settings.
 
-## Two-minute demo
+## Real-case demo and assessment
+
+[Three real case studies](case_studies/) cover a four-component report, a straightforward DataFrame API example and an empty-description failure. Their JSON companions preserve actual graph evidence and before/after-review decisions. Human independent assessment remains pending.
+
+The [20-case AI-assisted report](evaluation/real/REPORT.md) preserves frozen prelabels and raw answers: **7/20** action-ID agreement, **6/20** post-review acceptable actions, **10/20** useful non-self top-five hits, **0/8** required clarifications. It is a graph-only known-history study by an implementation-informed AI reviewer, not independent new-issue accuracy. The generic action policy needs improvement. The separate 24/24 synthetic benchmark does not establish real-case quality.
+
+Run `python acceptance.py` after installing dependencies for a fresh disposable graph/full-import check. It preserves your normal graph and writes an ignored local receipt. On Windows with Docker 29.8.2, the clean-environment gate passed; see [verification evidence](submission/verification/setup-check.json).
+
+The captioned working video and reproduction script are documented in [DEMO_SCRIPT.md](submission/DEMO_SCRIPT.md). The main demo uses real sources and graph-only decisions; optional AnyAPI mode is not presented as a successful call in that recording.
+
+## Separate synthetic lab walkthrough
 
 1. Choose **Discount codes**, submit the sample report. Follow case → feature → Pricing API → Commerce Engineering. Inspect RUN-101 and the past resolution.
 2. Record **Check failed**, with “Cache and price-book versions match.” The next check becomes discount eligibility. Restart the API, reopen the saved case and show the stored attempt.
@@ -71,7 +83,20 @@ ResolvedCase -FIXED_BY-> Action
 Case -TRIED {outcome, note, at}-> Action
 ```
 
-The graph directly controls the team and available check. There is no in-memory routing fallback. A missing graph produces an explicit error. All Cypher is in `graph.py` and `seed.py`; user values are query parameters. Impact is bounded to three service hops and runs with `ro_query`.
+The real-data model is:
+
+```text
+HistoricalIssue -SOURCED_FROM-> Dataset
+HistoricalIssue -IN_PROJECT-> Project
+HistoricalIssue -AFFECTS-> Version
+HistoricalIssue -MENTIONS {excerpt, field, rule}-> Component
+Review -BASED_ON-> HistoricalIssue
+InvestigationRun -EXAMINED-> HistoricalIssue
+```
+
+Runs store serialized source/evidence/decision/query-receipt snapshots; the canvas final action is a projection of the saved decision, not an independently stored dependency edge. The agent follows issue ? version/component ? other issue and reads prior reviews before choosing a next step.
+
+The graph directly controls the team and available check. There is no in-memory routing fallback. A missing graph produces an explicit error. Cypher lives in `graph.py`, `seed.py`, `real_cases.py`, `import_real_data.py`, `components.py` and `landscape.py`; user values are query parameters. Impact is bounded to three service hops and runs with `ro_query`.
 
 ## Verify
 
@@ -89,8 +114,8 @@ Integration tests require live FalkorDB. Each run creates and deletes a uniquely
 
 This is a single-company local prototype. Ownership and recommendation sources older than 90 days (or missing valid dates) produce a review warning. Conflicting ownership blocks routing. Multi-tenant authentication, duplicate clustering, multi-agent coordination and independently held-out evaluation are not implemented. A passed check is recorded as an attempt; it does not automatically resolve a case. A human must interpret the result.
 
-Before submission: complete browser/restart checks, record evaluation against a keyword baseline, capture the demo, publish the repository, and confirm current event rules and deadline. Track 02 and Track 03 are not claimed by this prototype.
+Public repository: https://github.com/pranavs1205/caseroute. Clean Windows setup, 26 backend tests, three case studies and the AI-assisted real-report baseline are complete. See [submission checklist](submission/CHECKLIST.md) for the working video and final form requirements. No real-case accuracy/speed advantage over a baseline is established. Track 02 and Track 03 are not claimed by this prototype.
 
-Current verification and limits are in `VERIFICATION.md`. Run `python evaluate.py` for the 24-scenario synthetic policy benchmark; results are saved to `evaluation/results.json`. It compares against static feature/service lookup from the same fixture corpus, not an independent held-out language-routing benchmark. Optional browser checks: install Playwright, install Chromium with `python -m playwright install chromium`, run the server, then run `python tests/browser_check.py`.
+Current verification and limits are in `VERIFICATION.md`. Assessment integrity tests enforce prelabels and preserve failed runs. Run `python evaluate.py` for the 24-scenario synthetic policy benchmark; results are saved to `evaluation/results.json`. It compares against static feature/service lookup from the same fixture corpus, not an independent held-out language-routing benchmark. Optional browser checks: install Playwright, install Chromium with `python -m playwright install chromium`, run the server, then run `python tests/browser_check.py`.
 
 AI assistance: OpenAI Codex assisted with planning, implementation and tests. Review and amend this disclosure to reflect all team contributions. Third-party dependencies retain their respective licenses; this repository has not yet selected a project license.

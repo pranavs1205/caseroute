@@ -1,0 +1,207 @@
+{
+  "created": "2026-10-17T20:00:14.521756+00:00",
+  "plan_sha256": "a689392b5ab550fb7dfeda71bebb825e8958d52e057e88823788b2204a50b3f2",
+  "labels_sha256": "34ddbe13262f83a528896de3e3aef78f9b511295570947e002eda99870138a1b",
+  "labels": [
+    {
+      "case_id": "R01",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "review_recorded_resolution;investigate_component_boundary",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Clock control and deterministic trigger timing",
+      "rationale": "The report identifies a Kafka test timing problem with manual-clock evidence; inspect the original resolution or isolate the clock/connector interaction rather than infer a production outage."
+    },
+    {
+      "case_id": "R02",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "check_environment;request_details",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Serialized dataset size, full reproducer, driver versus executor settings",
+      "rationale": "OOM while serializing a local Dataset to Parquet calls for environment/data-size inspection or missing reproduction details. Scheduler names in a stack trace alone do not justify a multi-component diagnosis."
+    },
+    {
+      "case_id": "R03",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "check_environment;review_recorded_resolution",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Dependency/classpath and test runtime",
+      "rationale": "The explicit ClassNotFoundException for BouncyCastle supports checking the environment or original resolution, rather than treating every stack-trace component as the fault boundary."
+    },
+    {
+      "case_id": "R04",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "check_environment;investigate_component_boundary",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Actual Python version and feature-column schema",
+      "rationale": "The title mentions Python 3.12 while the trace shows 3.10 and mismatched feature names. Verify environment/schema or isolate the pandas/Arrow/model-conversion boundary; do not assume the title establishes cause."
+    },
+    {
+      "case_id": "R05",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "investigate_component_boundary;review_recorded_resolution",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Applicable Spark Connect build",
+      "rationale": "A minimal SQL-on-streaming-view reproducer and source-linked planner behavior justify a Connect/SQL/Streaming boundary investigation or inspection of the recorded resolution."
+    },
+    {
+      "case_id": "R06",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Intent, affected code, expected behavior and acceptance criteria",
+      "rationale": "The description only repeats a rename request. It is not enough to infer a bug investigation or a fix."
+    },
+    {
+      "case_id": "R07",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Description, failing test and intended assertion behavior",
+      "rationale": "No description accompanies a maintenance-style title; request the test context before routing a meaningful investigation."
+    },
+    {
+      "case_id": "R08",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Type-hint scope, target signatures and intended behavior",
+      "rationale": "An empty-description type-hint change is not an incident. Ask for the intended task rather than inventing a diagnosis."
+    },
+    {
+      "case_id": "R09",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Evidence that the error class is absent and expected behavior",
+      "rationale": "The title alone and a Fixed label do not supply enough evidence for the next bug-investigation action."
+    },
+    {
+      "case_id": "R10",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Concrete input/output paths, example operation and reproduction",
+      "rationale": "The report says some overwrite scenes are not recognized but provides no description or reproduction. Clarification is required."
+    },
+    {
+      "case_id": "R11",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "check_environment;review_recorded_resolution",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "ANSI configuration in the target test job",
+      "rationale": "The source states the SQL test mode/configuration and intended coverage. Checking the current configuration or original test change is bounded and supported."
+    },
+    {
+      "case_id": "R12",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Target test locations, expected schema and task scope",
+      "rationale": "This is an assertion-migration proposal, not an environment failure. The allowed investigation actions need clarification of the intended maintenance task."
+    },
+    {
+      "case_id": "R13",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "check_environment;request_details",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Executor DNS behavior, configuration and reproduction",
+      "rationale": "The source distinguishes executor-host DNS failures from a shuffle-service fault. Environment checks or reproduction details are appropriate; do not blame a shared shuffle node."
+    },
+    {
+      "case_id": "R14",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "check_environment;review_recorded_resolution",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Branch/build, session lifetime and expected status behavior",
+      "rationale": "The expected/actual error and CI links justify verifying build/session environment or inspecting the original resolution. A common version is not sufficient cause evidence."
+    },
+    {
+      "case_id": "R15",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "review_recorded_resolution;request_details",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Readiness semantics and API deployment expectations",
+      "rationale": "This is a readiness endpoint enhancement with a workaround, not proof of a service outage. Inspect the recorded implementation or clarify requirements."
+    },
+    {
+      "case_id": "R16",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Failing comparison example, expected result and runtime",
+      "rationale": "The description repeats the title and gives no reproducer. A meaningful next step requires details."
+    },
+    {
+      "case_id": "R17",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "check_environment;review_recorded_resolution",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Scala compiler version and affected test scope",
+      "rationale": "The source gives a precise Scala deprecation warning and replacement direction. Check compiler compatibility or inspect the original change; no production repair is implied."
+    },
+    {
+      "case_id": "R18",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "investigate_component_boundary;review_recorded_resolution",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Applicable build and logger wrapper implementation",
+      "rationale": "A with/without-logger reproduction supports examining the usage-logging/static-method boundary or original resolution, rather than only a generic environment check."
+    },
+    {
+      "case_id": "R19",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "review_recorded_resolution;request_details",
+      "must_abstain": "no",
+      "relevant_issue_ids": "",
+      "missing_information": "Migration acceptance criteria and affected planner code",
+      "rationale": "A design/migration task with concrete bullets should lead to the recorded change or scope clarification, not a fabricated operational diagnosis."
+    },
+    {
+      "case_id": "R20",
+      "reviewer": "Codex assistant (implementation-informed)",
+      "reviewer_kind": "ai_assisted",
+      "acceptable_steps": "request_details",
+      "must_abstain": "yes",
+      "relevant_issue_ids": "",
+      "missing_information": "Performance evidence, intended algorithm and acceptance target",
+      "rationale": "The short optimization suggestion lacks a benchmark and clear implementation detail. Request requirements before deciding a useful investigation."
+    }
+  ]
+}

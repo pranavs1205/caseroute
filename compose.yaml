@@ -1,6 +1,6 @@
 services:
   graph:
-    image: falkordb/falkordb:latest
+    image: falkordb/falkordb@sha256:b0bdcac2cbaff989e77cb0610439b7a9289e86de033ccbbd4368b66fb680ae7a
     command: ["redis-server", "--loadmodule", "/var/lib/falkordb/bin/falkordb.so", "--appendonly", "yes"]
     ports:
       - "127.0.0.1:6380:6379"

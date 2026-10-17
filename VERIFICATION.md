@@ -1,5 +1,17 @@
 # CaseRoute verification — 16 October 2026, IST
 
+## Submission evidence gate ? 18 October
+
+- Fresh Windows Python 3.11.5 virtual environment installed from `requirements.lock`; `pip check` passed. Docker 29.8.2 and pinned FalkorDB image used.
+- `acceptance.py` passed a full fresh CSV import/enrichment, source counts, persistent memory from a new client, changed real-case decision, saved-run reload and full projection validation. Its uniquely named graph was deleted; the normal graph was preserved. [Receipt](submission/verification/setup-check.json). Full projection query: 5941.98 ms locally, not a comparative speedup.
+- All **26 backend tests passed** in that clean virtual environment, including four assessment-integrity tests. Functional success is separate from recommendation quality.
+- [Three actual case studies](case_studies/) captured with marked reviews and fresh-client reload. The insufficient-source case preserves an initial inappropriate generic action.
+- [Twenty real-report AI-assisted baseline](evaluation/real/REPORT.md): 7/20 prelabel agreement, 6/20 post-review acceptable actions, 10/20 useful non-self search hits, 0/8 required clarifications. No independent human, held-out new-issue or LLM quality claim.
+- [Working captioned demo](https://github.com/pranavs1205/caseroute/releases/download/demo-v1/caseroute-demo.webm) passed real source, executed query, saved review, reload and changed-decision assertions. Chromium decoded the 164.52-second 1440?900 WebM without error. [Receipt](submission/verification/demo-receipt.json).
+- Public repository: https://github.com/pranavs1205/caseroute. Main demo is graph-only; previous AnyAPI success and subsequent upstream 502 remain separate smoke-test evidence.
+
+Earlier entries below are historical development checks; the 26-test count above supersedes their smaller totals. The decision policy was not tuned against this frozen real-case set.
+
 The workspace initially contained only PRODUCT_PLAN.md. The prototype was built and tested against a real local FalkorDB instance during this session.
 
 ## Real-data and LLM extension

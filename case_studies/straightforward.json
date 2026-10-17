@@ -1,0 +1,757 @@
+{
+  "category": "straightforward",
+  "mode": "graph_only",
+  "source": {
+    "id": "spark-13524752",
+    "title": "DataFrame.drop should handle multi columns properly",
+    "description": "{code:java}\r\nfrom pyspark.sql import Row\r\ndf1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\", \"name\"])\r\ndf2 = spark.createDataFrame([Row(height=80, name=\"Tom\"), Row(height=85, name=\"Bob\")])\r\ndf1.join(df2, df1.name == df2.name, 'inner').drop('name', 'age').show()\r\n{code}\r\n\r\nThis works in 3.3\r\n\r\n{code:java}\r\n+------+\r\n|height|\r\n+------+\r\n|    85|\r\n|    80|\r\n+------+\r\n{code}\r\n\r\nbut fails in 3.4\r\n\r\n\r\n{code:java}\r\n---------------------------------------------------------------------------\r\nAnalysisException                         Traceback (most recent call last)\r\nCell In[1], line 4\r\n      2 df1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\", \"name\"])\r\n      3 df2 = spark.createDataFrame([Row(height=80, name=\"Tom\"), Row(height=85, name=\"Bob\")])\r\n----> 4 df1.join(df2, df1.name == df2.name, 'inner').drop('name', 'age').show()\r\n\r\nFile ~/Dev/spark/python/pyspark/sql/dataframe.py:4913, in DataFrame.drop(self, *cols)\r\n   4911     jcols = [_to_java_column(c) for c in cols]\r\n   4912     first_column, *remaining_columns = jcols\r\n-> 4913     jdf = self._jdf.drop(first_column, self._jseq(remaining_columns))\r\n   4915 return DataFrame(jdf, self.sparkSession)\r\n\r\nFile ~/Dev/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py:1322, in JavaMember.__call__(self, *args)\r\n   1316 command = proto.CALL_COMMAND_NAME +\\\r\n   1317     self.command_header +\\\r\n   1318     args_command +\\\r\n   1319     proto.END_COMMAND_PART\r\n   1321 answer = self.gateway_client.send_command(command)\r\n-> 1322 return_value = get_return_value(\r\n   1323     answer, self.gateway_client, self.target_id, self.name)\r\n   1325 for temp_arg in temp_args:\r\n   1326     if hasattr(temp_arg, \"_detach\"):\r\n\r\nFile ~/Dev/spark/python/pyspark/errors/exceptions/captured.py:159, in capture_sql_exception.<locals>.deco(*a, **kw)\r\n    155 converted = convert_exception(e.java_exception)\r\n    156 if not isinstance(converted, UnknownException):\r\n    157     # Hide where the exception came from that shows a non-Pythonic\r\n    158     # JVM exception message.\r\n--> 159     raise converted from None\r\n    160 else:\r\n    161     raise\r\n\r\nAnalysisException: [AMBIGUOUS_REFERENCE] Reference `name` is ambiguous, could be: [`name`, `name`].\r\n\r\n{code}",
+    "status": "Resolved",
+    "priority": "Blocker",
+    "resolution": "Fixed",
+    "created": "15/Feb/23 02:46",
+    "resolved": "24/Feb/23 00:03",
+    "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13524752",
+    "record": 3,
+    "project": "Apache Spark",
+    "dataset_url": "https://raw.githubusercontent.com/av9ash/gitbugs/eadf2d6794990a1aaa26d0ae15391f29f8969301/spark/spark_bugs.csv",
+    "revision": "eadf2d6794990a1aaa26d0ae15391f29f8969301",
+    "license": "CC BY 4.0"
+  },
+  "versions": [
+    {
+      "version": "3.4.0",
+      "project": "Apache Spark"
+    }
+  ],
+  "components": [
+    {
+      "id": "pyspark",
+      "name": "Python / PySpark",
+      "excerpt": "{code:java} from pyspark.sql import Row df1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\",",
+      "field": "description",
+      "matched": "pyspark",
+      "rule": "component-mentions-v1"
+    },
+    {
+      "id": "sql",
+      "name": "Spark SQL / DataFrames",
+      "excerpt": "DataFrame.drop should handle multi columns properly",
+      "field": "title",
+      "matched": "DataFrame",
+      "rule": "component-mentions-v1"
+    }
+  ],
+  "version_paths": [
+    {
+      "from_issue": "spark-13524752",
+      "version": "3.4.0",
+      "project": "Apache Spark"
+    }
+  ],
+  "component_leads": [
+    {
+      "id": "spark-13603466",
+      "title": "Skip test_value_state_ttl_expiration in Coverage build",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13603466",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    },
+    {
+      "id": "spark-13602926",
+      "title": "Spark SQL:  `SELECT col1 AS col1` can cause erroneous col1 duplicity in plan nodes",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602926",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    },
+    {
+      "id": "spark-13602747",
+      "title": "connect createDataFrame schema logic bug",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602747",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    },
+    {
+      "id": "spark-13602629",
+      "title": "Refactor Data[Frame|Stream]Reader to leverage the analyzer",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602629",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    },
+    {
+      "id": "spark-13602500",
+      "title": "basePath can cause failures on streaming reads for file sources",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602500",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    },
+    {
+      "id": "spark-13602027",
+      "title": "Clearing dataframes/views persisted in isolated Connect session",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602027",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    },
+    {
+      "id": "spark-13601347",
+      "title": "df.rdd.countApprox() : PySpark API does not respect the timeout.",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13601347",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    },
+    {
+      "id": "spark-13600889",
+      "title": "DataFrame.toPandas() and DataFrame.mapInPandas() have different data types",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13600889",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark"
+      ]
+    }
+  ],
+  "version_leads": [
+    {
+      "id": "spark-13602726",
+      "title": "Add TimestampNTZType to ColumnarRow/MutableColumnarRow",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602726",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    },
+    {
+      "id": "spark-13601593",
+      "title": "Fix compression option being overwritten in df.write.parquet in SparkConnect Python",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13601593",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    },
+    {
+      "id": "spark-13600688",
+      "title": "NullPointerException when saving a df with 'noop' format after joining wide dfs",
+      "resolution": "Not A Bug",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13600688",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    },
+    {
+      "id": "spark-13595035",
+      "title": "Named parameter invocation does not obey case--in-sensitivity rules for identifiers",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13595035",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    },
+    {
+      "id": "spark-13593923",
+      "title": "Fix change comment for char/varchar columns",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13593923",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    },
+    {
+      "id": "spark-13593733",
+      "title": "The outer query is broken when the subquery uses window function which receives time window as parameter",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13593733",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    },
+    {
+      "id": "spark-13593666",
+      "title": "Issues with optimization on adding input to state store in stream-stream join",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13593666",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    },
+    {
+      "id": "spark-13592390",
+      "title": "EventTimeWatermark to support TimestampNTZType",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13592390",
+      "shared_versions": [
+        "3.4.0"
+      ]
+    }
+  ],
+  "initial_decision": {
+    "next_step": "check_environment",
+    "evidence_ids": [
+      "spark-13524752"
+    ],
+    "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+    "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+    "requires_human_review": true,
+    "llm_selected_step": false
+  },
+  "review": {
+    "outcome": "needs_more_info",
+    "note": "Case-study review: current environment and reproduction details are not supplied; request them before reusing this lead."
+  },
+  "reloaded_decision": {
+    "next_step": "request_details",
+    "evidence_ids": [
+      "spark-13524752"
+    ],
+    "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+    "action": "Ask for Spark version, relevant stack trace and minimal reproduction steps.",
+    "requires_human_review": true,
+    "llm_selected_step": false
+  },
+  "initial_trace": [
+    {
+      "kind": "graph",
+      "tool": "search_historical_issues",
+      "purpose": "Find source reports matching the supplied symptom and optional affected version.",
+      "cypher": "MATCH (i:HistoricalIssue)\n            WHERE ($empty OR any(term IN $terms WHERE i.search_text CONTAINS term))\n              AND ($version = '' OR (i)-[:AFFECTS]->(:Version {name:$version}))\n            WITH i, reduce(score=0, term IN $terms | score + CASE WHEN toLower(i.title) CONTAINS term THEN 4 WHEN i.search_text CONTAINS term THEN 1 ELSE 0 END) AS score\n            RETURN i.id AS id, i.title AS title, i.priority AS priority, i.status AS status,\n                i.resolution AS resolution, i.url AS url, i.created AS created, score\n            ORDER BY score DESC, id DESC LIMIT 20",
+      "parameters": {
+        "terms": [
+          "dataframe.drop",
+          "should",
+          "handle",
+          "multi",
+          "columns",
+          "properly"
+        ],
+        "empty": false,
+        "version": ""
+      },
+      "rows": 20,
+      "duration_ms": 631.68,
+      "preview": [
+        {
+          "id": "spark-13524752",
+          "title": "DataFrame.drop should handle multi columns properly",
+          "priority": "Blocker",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13524752",
+          "created": "15/Feb/23 02:46",
+          "score": 24
+        },
+        {
+          "id": "spark-13523407",
+          "title": "DataFrame.drop should handle duplicated columns properly",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13523407",
+          "created": "07/Feb/23 06:19",
+          "score": 20
+        },
+        {
+          "id": "spark-13372543",
+          "title": "Get columns operation should handle ANSI interval column properly",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13372543",
+          "created": "15/Apr/21 06:29",
+          "score": 16
+        }
+      ],
+      "outcome": "Returned 20 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_issue_source",
+      "purpose": "Read the selected historical issue and its immutable CSV provenance.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:SOURCED_FROM]->(d:Dataset)\n            MATCH (i)-[:IN_PROJECT]->(p:Project)\n            RETURN i.id AS id, i.title AS title, i.description AS description, i.status AS status,\n              i.priority AS priority, i.resolution AS resolution, i.created AS created, i.resolved AS resolved,\n              i.url AS url, i.record AS record, p.name AS project,\n              d.url AS dataset_url, d.revision AS revision, d.license AS license",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 1,
+      "duration_ms": 17.92,
+      "preview": [
+        {
+          "id": "spark-13524752",
+          "title": "DataFrame.drop should handle multi columns properly",
+          "description": "{code:java}\r\nfrom pyspark.sql import Row\r\ndf1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\", \"name\"])\r\ndf2 = spark.createDataFrame([Row(height=80, name=\"Tom\"), Row(height=85, name=\"Bob\")])\r\ndf1.join(df2, df1.name == df2.name, 'inner').drop('name', 'age').show()\r\n{code}\r\n\r\nThis works in 3.3\r\n\r\n{code:java}\r\n+------+\r\n|height|\r\n+------+\r\n|    85|\r\n|    80|\r\n+------+\r\n{code}\r\n\r\nbut fails in 3.4\r\n\r\n\r\n{code:java}\r\n---------------------------------------------------------------------------\r\nAnalysisException                         Traceback (most recent call last)\r\nCell In[1], line 4\r\n      2 df1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\", \"name\"])\r\n      3 df2 = spark.createDataFrame([Row(height=80, name=\"Tom\"), Row(height=85, name=\"Bob\")])\r\n----> 4 df1.join(df2, df1.name == df2.name, 'inner').drop('name', 'age').show()\r\n\r\nFile ~/Dev/spark/python/pyspark/sql/dataframe.py:4913, in DataFrame.drop(self, *cols)\r\n   4911     jcols = [_to_java_column(c) for c in cols]\r\n   4912     first_column, *remaining_columns = jcols\r\n-> 4913     jdf = self._jdf.drop(first_column, self._jseq(remaining_columns))\r\n   4915 return DataFrame(jdf, self.",
+          "status": "Resolved",
+          "priority": "Blocker",
+          "resolution": "Fixed",
+          "created": "15/Feb/23 02:46",
+          "resolved": "24/Feb/23 00:03",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13524752",
+          "record": 3,
+          "project": "Apache Spark",
+          "dataset_url": "https://raw.githubusercontent.com/av9ash/gitbugs/eadf2d6794990a1aaa26d0ae15391f29f8969301/spark/spark_bugs.csv",
+          "revision": "eadf2d6794990a1aaa26d0ae15391f29f8969301",
+          "license": "CC BY 4.0"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_affected_versions",
+      "purpose": "Follow issue \u2192 affected version \u2192 project, using relationships imported from the CSV.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)-[:VERSION_OF]->(p:Project)\n            RETURN v.name AS version, p.name AS project ORDER BY version",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 1,
+      "duration_ms": 2.85,
+      "preview": [
+        {
+          "version": "3.4.0",
+          "project": "Apache Spark"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_shared_version_reports",
+      "purpose": "Follow two hops to other reports affecting the same version. This is context, not proof of a common cause.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)<-[:AFFECTS]-(other:HistoricalIssue)\n            WHERE other.id <> i.id\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, collect(DISTINCT v.name) AS shared_versions\n            ORDER BY id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 8,
+      "duration_ms": 23.84,
+      "preview": [
+        {
+          "id": "spark-13602726",
+          "title": "Add TimestampNTZType to ColumnarRow/MutableColumnarRow",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602726",
+          "shared_versions": [
+            "3.4.0"
+          ]
+        },
+        {
+          "id": "spark-13601593",
+          "title": "Fix compression option being overwritten in df.write.parquet in SparkConnect Python",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13601593",
+          "shared_versions": [
+            "3.4.0"
+          ]
+        },
+        {
+          "id": "spark-13600688",
+          "title": "NullPointerException when saving a df with 'noop' format after joining wide dfs",
+          "resolution": "Not A Bug",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13600688",
+          "shared_versions": [
+            "3.4.0"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_review_memory",
+      "purpose": "Recall this app\u2019s previous human reviews, separate from the historical source status.",
+      "cypher": "MATCH (r:Review)-[:BASED_ON]->(:HistoricalIssue {id:$id})\n            RETURN r.id AS id, r.note AS note, r.outcome AS outcome, r.created AS created ORDER BY created DESC LIMIT 20",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 0,
+      "duration_ms": 2.18,
+      "preview": [],
+      "outcome": "Returned 0 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_component_mentions",
+      "purpose": "Follow source-backed mentions of software components; inspect the supporting excerpt for each link.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[m:MENTIONS]->(c:Component)\n            RETURN c.id AS id, c.name AS name, m.excerpt AS excerpt, m.field AS field,\n                m.matched AS matched, m.rule AS rule ORDER BY name",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 2,
+      "duration_ms": 2.43,
+      "preview": [
+        {
+          "id": "pyspark",
+          "name": "Python / PySpark",
+          "excerpt": "{code:java} from pyspark.sql import Row df1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\",",
+          "field": "description",
+          "matched": "pyspark",
+          "rule": "component-mentions-v1"
+        },
+        {
+          "id": "sql",
+          "name": "Spark SQL / DataFrames",
+          "excerpt": "DataFrame.drop should handle multi columns properly",
+          "field": "title",
+          "matched": "DataFrame",
+          "rule": "component-mentions-v1"
+        }
+      ],
+      "outcome": "Returned 2 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_component_intersections",
+      "purpose": "Find reports that mention the same combination of components, beyond shared affected versions.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:MENTIONS]->(c:Component)<-[:MENTIONS]-(other:HistoricalIssue)\n            WHERE i.id <> other.id\n            WITH other, collect(DISTINCT c.name) AS shared_components\n            WHERE size(shared_components) >= 2\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, shared_components\n            ORDER BY size(shared_components) DESC, id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 8,
+      "duration_ms": 35.82,
+      "preview": [
+        {
+          "id": "spark-13603466",
+          "title": "Skip test_value_state_ttl_expiration in Coverage build",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13603466",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark"
+          ]
+        },
+        {
+          "id": "spark-13602926",
+          "title": "Spark SQL:  `SELECT col1 AS col1` can cause erroneous col1 duplicity in plan nodes",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602926",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark"
+          ]
+        },
+        {
+          "id": "spark-13602747",
+          "title": "connect createDataFrame schema logic bug",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602747",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "policy",
+      "tool": "choose_review_step",
+      "purpose": "Select a bounded human review step.",
+      "output": {
+        "next_step": "check_environment",
+        "evidence_ids": [
+          "spark-13524752"
+        ],
+        "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+        "action": "Confirm the current Spark version and reproduction steps against the historical report.",
+        "requires_human_review": true,
+        "llm_selected_step": false
+      },
+      "outcome": "Deterministic policy; no LLM call."
+    },
+    {
+      "kind": "memory",
+      "tool": "save_investigation_run",
+      "purpose": "Persist the executed tool trace and decision in FalkorDB.",
+      "outcome": "Saved RUN-87fdee8ca674; reopen it from previous runs."
+    }
+  ],
+  "after_trace": [
+    {
+      "kind": "graph",
+      "tool": "search_historical_issues",
+      "purpose": "Find source reports matching the supplied symptom and optional affected version.",
+      "cypher": "MATCH (i:HistoricalIssue)\n            WHERE ($empty OR any(term IN $terms WHERE i.search_text CONTAINS term))\n              AND ($version = '' OR (i)-[:AFFECTS]->(:Version {name:$version}))\n            WITH i, reduce(score=0, term IN $terms | score + CASE WHEN toLower(i.title) CONTAINS term THEN 4 WHEN i.search_text CONTAINS term THEN 1 ELSE 0 END) AS score\n            RETURN i.id AS id, i.title AS title, i.priority AS priority, i.status AS status,\n                i.resolution AS resolution, i.url AS url, i.created AS created, score\n            ORDER BY score DESC, id DESC LIMIT 20",
+      "parameters": {
+        "terms": [
+          "dataframe.drop",
+          "should",
+          "handle",
+          "multi",
+          "columns",
+          "properly"
+        ],
+        "empty": false,
+        "version": ""
+      },
+      "rows": 20,
+      "duration_ms": 645.91,
+      "preview": [
+        {
+          "id": "spark-13524752",
+          "title": "DataFrame.drop should handle multi columns properly",
+          "priority": "Blocker",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13524752",
+          "created": "15/Feb/23 02:46",
+          "score": 24
+        },
+        {
+          "id": "spark-13523407",
+          "title": "DataFrame.drop should handle duplicated columns properly",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13523407",
+          "created": "07/Feb/23 06:19",
+          "score": 20
+        },
+        {
+          "id": "spark-13372543",
+          "title": "Get columns operation should handle ANSI interval column properly",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13372543",
+          "created": "15/Apr/21 06:29",
+          "score": 16
+        }
+      ],
+      "outcome": "Returned 20 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_issue_source",
+      "purpose": "Read the selected historical issue and its immutable CSV provenance.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:SOURCED_FROM]->(d:Dataset)\n            MATCH (i)-[:IN_PROJECT]->(p:Project)\n            RETURN i.id AS id, i.title AS title, i.description AS description, i.status AS status,\n              i.priority AS priority, i.resolution AS resolution, i.created AS created, i.resolved AS resolved,\n              i.url AS url, i.record AS record, p.name AS project,\n              d.url AS dataset_url, d.revision AS revision, d.license AS license",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 1,
+      "duration_ms": 3.37,
+      "preview": [
+        {
+          "id": "spark-13524752",
+          "title": "DataFrame.drop should handle multi columns properly",
+          "description": "{code:java}\r\nfrom pyspark.sql import Row\r\ndf1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\", \"name\"])\r\ndf2 = spark.createDataFrame([Row(height=80, name=\"Tom\"), Row(height=85, name=\"Bob\")])\r\ndf1.join(df2, df1.name == df2.name, 'inner').drop('name', 'age').show()\r\n{code}\r\n\r\nThis works in 3.3\r\n\r\n{code:java}\r\n+------+\r\n|height|\r\n+------+\r\n|    85|\r\n|    80|\r\n+------+\r\n{code}\r\n\r\nbut fails in 3.4\r\n\r\n\r\n{code:java}\r\n---------------------------------------------------------------------------\r\nAnalysisException                         Traceback (most recent call last)\r\nCell In[1], line 4\r\n      2 df1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\", \"name\"])\r\n      3 df2 = spark.createDataFrame([Row(height=80, name=\"Tom\"), Row(height=85, name=\"Bob\")])\r\n----> 4 df1.join(df2, df1.name == df2.name, 'inner').drop('name', 'age').show()\r\n\r\nFile ~/Dev/spark/python/pyspark/sql/dataframe.py:4913, in DataFrame.drop(self, *cols)\r\n   4911     jcols = [_to_java_column(c) for c in cols]\r\n   4912     first_column, *remaining_columns = jcols\r\n-> 4913     jdf = self._jdf.drop(first_column, self._jseq(remaining_columns))\r\n   4915 return DataFrame(jdf, self.",
+          "status": "Resolved",
+          "priority": "Blocker",
+          "resolution": "Fixed",
+          "created": "15/Feb/23 02:46",
+          "resolved": "24/Feb/23 00:03",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13524752",
+          "record": 3,
+          "project": "Apache Spark",
+          "dataset_url": "https://raw.githubusercontent.com/av9ash/gitbugs/eadf2d6794990a1aaa26d0ae15391f29f8969301/spark/spark_bugs.csv",
+          "revision": "eadf2d6794990a1aaa26d0ae15391f29f8969301",
+          "license": "CC BY 4.0"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_affected_versions",
+      "purpose": "Follow issue \u2192 affected version \u2192 project, using relationships imported from the CSV.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)-[:VERSION_OF]->(p:Project)\n            RETURN v.name AS version, p.name AS project ORDER BY version",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 1,
+      "duration_ms": 3.17,
+      "preview": [
+        {
+          "version": "3.4.0",
+          "project": "Apache Spark"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_shared_version_reports",
+      "purpose": "Follow two hops to other reports affecting the same version. This is context, not proof of a common cause.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)<-[:AFFECTS]-(other:HistoricalIssue)\n            WHERE other.id <> i.id\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, collect(DISTINCT v.name) AS shared_versions\n            ORDER BY id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 8,
+      "duration_ms": 26.71,
+      "preview": [
+        {
+          "id": "spark-13602726",
+          "title": "Add TimestampNTZType to ColumnarRow/MutableColumnarRow",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602726",
+          "shared_versions": [
+            "3.4.0"
+          ]
+        },
+        {
+          "id": "spark-13601593",
+          "title": "Fix compression option being overwritten in df.write.parquet in SparkConnect Python",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13601593",
+          "shared_versions": [
+            "3.4.0"
+          ]
+        },
+        {
+          "id": "spark-13600688",
+          "title": "NullPointerException when saving a df with 'noop' format after joining wide dfs",
+          "resolution": "Not A Bug",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13600688",
+          "shared_versions": [
+            "3.4.0"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_review_memory",
+      "purpose": "Recall this app\u2019s previous human reviews, separate from the historical source status.",
+      "cypher": "MATCH (r:Review)-[:BASED_ON]->(:HistoricalIssue {id:$id})\n            RETURN r.id AS id, r.note AS note, r.outcome AS outcome, r.created AS created ORDER BY created DESC LIMIT 20",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 1,
+      "duration_ms": 4.11,
+      "preview": [
+        {
+          "id": "REVIEW-b41daf68b1",
+          "note": "Case-study review: current environment and reproduction details are not supplied; request them before reusing this lead.",
+          "outcome": "needs_more_info",
+          "created": "2026-10-17T19:55:43.184130+00:00"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_component_mentions",
+      "purpose": "Follow source-backed mentions of software components; inspect the supporting excerpt for each link.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[m:MENTIONS]->(c:Component)\n            RETURN c.id AS id, c.name AS name, m.excerpt AS excerpt, m.field AS field,\n                m.matched AS matched, m.rule AS rule ORDER BY name",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 2,
+      "duration_ms": 3.22,
+      "preview": [
+        {
+          "id": "pyspark",
+          "name": "Python / PySpark",
+          "excerpt": "{code:java} from pyspark.sql import Row df1 = spark.createDataFrame([(14, \"Tom\"), (23, \"Alice\"), (16, \"Bob\")], [\"age\",",
+          "field": "description",
+          "matched": "pyspark",
+          "rule": "component-mentions-v1"
+        },
+        {
+          "id": "sql",
+          "name": "Spark SQL / DataFrames",
+          "excerpt": "DataFrame.drop should handle multi columns properly",
+          "field": "title",
+          "matched": "DataFrame",
+          "rule": "component-mentions-v1"
+        }
+      ],
+      "outcome": "Returned 2 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_component_intersections",
+      "purpose": "Find reports that mention the same combination of components, beyond shared affected versions.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:MENTIONS]->(c:Component)<-[:MENTIONS]-(other:HistoricalIssue)\n            WHERE i.id <> other.id\n            WITH other, collect(DISTINCT c.name) AS shared_components\n            WHERE size(shared_components) >= 2\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, shared_components\n            ORDER BY size(shared_components) DESC, id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13524752"
+      },
+      "rows": 8,
+      "duration_ms": 49.74,
+      "preview": [
+        {
+          "id": "spark-13603466",
+          "title": "Skip test_value_state_ttl_expiration in Coverage build",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13603466",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark"
+          ]
+        },
+        {
+          "id": "spark-13602926",
+          "title": "Spark SQL:  `SELECT col1 AS col1` can cause erroneous col1 duplicity in plan nodes",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602926",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark"
+          ]
+        },
+        {
+          "id": "spark-13602747",
+          "title": "connect createDataFrame schema logic bug",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602747",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "policy",
+      "tool": "choose_review_step",
+      "purpose": "Select a bounded human review step.",
+      "output": {
+        "next_step": "request_details",
+        "evidence_ids": [
+          "spark-13524752"
+        ],
+        "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+        "action": "Ask for Spark version, relevant stack trace and minimal reproduction steps.",
+        "requires_human_review": true,
+        "llm_selected_step": false
+      },
+      "outcome": "Deterministic policy; no LLM call."
+    },
+    {
+      "kind": "policy",
+      "tool": "apply_review_memory",
+      "purpose": "Avoid repeating a previously rejected historical lead.",
+      "outcome": "Previous review was needs_more_info; request new evidence before repeating this lead."
+    },
+    {
+      "kind": "memory",
+      "tool": "save_investigation_run",
+      "purpose": "Persist the executed tool trace and decision in FalkorDB.",
+      "outcome": "Saved RUN-fbfbdb9660a2; reopen it from previous runs."
+    }
+  ],
+  "human_assessment": {
+    "status": "pending",
+    "evidence_relevant": null,
+    "step_acceptable": null,
+    "missing_information": null
+  },
+  "interpretation": "Observed application behavior, not independent human approval or a verified fix."
+}

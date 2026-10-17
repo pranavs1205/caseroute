@@ -1,0 +1,821 @@
+{
+  "category": "multi-component",
+  "mode": "graph_only",
+  "source": {
+    "id": "spark-13289604",
+    "title": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+    "description": "While writing a streaming dataframe created from Kafka source to a csv file gives following error in PySpark.\r\n\r\nNOTE : The same streaming dataframe is getting displayed in the console.\r\n\r\nsdf.writeStream.format(\"console\").start().awaitTermination()  // Working\r\n\r\nsdf.writeStream\\\r\n    .format(\"csv\")\\\r\n    .option(\"path\", \"C://output\")\\\r\n    .option(\"checkpointLocation\", \"C://Checkpoint\")\\\r\n    .outputMode(\"append\")\\\r\n    .start().awaitTermination()    // Not working\r\n\r\n\r\nError\r\n---------\r\n *File \"C:\\Spark\\python\\pyspark\\sql\\utils.py\", line 63, in deco\r\n    return f(*a, **kw)\r\n  File \"C:\\Spark\\python\\lib\\py4j-0.10.7-src.zip\\py4j\\protocol.py\", line 328, in get_return_value\r\npy4j.protocol.Py4JJavaError: An error occurred while calling o63.awaitTermination.\r\n: org.apache.spark.sql.streaming.StreamingQueryException: Expected e.g. {\"topicA\":{\"0\":23,\"1\":-1},\"topicB\":{\"0\":-2}}, got {\"logOffset\":1}\r\n=== Streaming Query ===\r\nIdentifier: [id = 6718625c-489e-44c8-b273-0da3429e97a8, runId = b64887ba-ca32-499e-9ab5-f839fd44ec26]\r\nCurrent Committed Offsets: {KafkaV2[Subscribe[test1]]: {\"logOffset\":1}}\r\nCurrent Available Offsets: {KafkaV2[Subscribe[test1]]: {\"logOffset\":1}}\r\n\r\nCurrent State: ACTIVE\r\nThread State: RUNNABLE*",
+    "status": "Resolved",
+    "priority": "Major",
+    "resolution": "Invalid",
+    "created": "04/Mar/20 18:48",
+    "resolved": "11/Mar/20 06:44",
+    "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13289604",
+    "record": 16401,
+    "project": "Apache Spark",
+    "dataset_url": "https://raw.githubusercontent.com/av9ash/gitbugs/eadf2d6794990a1aaa26d0ae15391f29f8969301/spark/spark_bugs.csv",
+    "revision": "eadf2d6794990a1aaa26d0ae15391f29f8969301",
+    "license": "CC BY 4.0"
+  },
+  "versions": [
+    {
+      "version": "2.4.5",
+      "project": "Apache Spark"
+    }
+  ],
+  "components": [
+    {
+      "id": "kafka",
+      "name": "Kafka",
+      "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+      "field": "title",
+      "matched": "Kafka",
+      "rule": "component-mentions-v1"
+    },
+    {
+      "id": "pyspark",
+      "name": "Python / PySpark",
+      "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+      "field": "title",
+      "matched": "pyspark",
+      "rule": "component-mentions-v1"
+    },
+    {
+      "id": "sql",
+      "name": "Spark SQL / DataFrames",
+      "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+      "field": "title",
+      "matched": "dataframe",
+      "rule": "component-mentions-v1"
+    },
+    {
+      "id": "streaming",
+      "name": "Streaming",
+      "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+      "field": "title",
+      "matched": "streaming",
+      "rule": "component-mentions-v1"
+    }
+  ],
+  "version_paths": [
+    {
+      "from_issue": "spark-13289604",
+      "version": "2.4.5",
+      "project": "Apache Spark"
+    }
+  ],
+  "component_leads": [
+    {
+      "id": "spark-13588050",
+      "title": "How to restart failed spark stream job from the failure point",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13588050",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "spark-13574505",
+      "title": ".sql() does not recognize watermark defined upstream",
+      "resolution": "Not A Bug",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13574505",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "spark-13540487",
+      "title": "pyspark sql",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13540487",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "spark-13526776",
+      "title": "Make Python the first code example tab in the Spark documentation",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13526776",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "spark-13513969",
+      "title": "GA dependencies test faild",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13513969",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "spark-13493450",
+      "title": "Exception when handling timestamp data in PySpark Structured Streaming",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13493450",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "spark-13486919",
+      "title": "Structured Streaming on Dataproc - suddenly giving error while writing to Kafka topic",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13486919",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "spark-13473915",
+      "title": "Eliminate build warnings - 'sbt 0.13 shell syntax is deprecated; use slash syntax instead'",
+      "resolution": "Fixed",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13473915",
+      "shared_components": [
+        "Spark SQL / DataFrames",
+        "Python / PySpark",
+        "Streaming",
+        "Kafka"
+      ]
+    }
+  ],
+  "version_leads": [
+    {
+      "id": "spark-13570308",
+      "title": "spark.files are not copied to Spark Executors in client session mode",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13570308",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    },
+    {
+      "id": "spark-13522792",
+      "title": "why executor memory used is shown greater than total available memory on spark ui",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13522792",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    },
+    {
+      "id": "spark-13485522",
+      "title": "spark\u9879\u76eebin/beeline\u5bf9\u4e8edistribute by sort by\u8bed\u53e5\u652f\u6301\u4e0d\u597d\uff0c\u8f93\u51fa\u7ed3\u679c\u9519\u8bef",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13485522",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    },
+    {
+      "id": "spark-13485321",
+      "title": "Spark-UI jobs status not updating under high concurrency scenario",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13485321",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    },
+    {
+      "id": "spark-13483681",
+      "title": "RunTimeException for ETL job",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13483681",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    },
+    {
+      "id": "spark-13481210",
+      "title": "limit(x,y) + \u5b50\u67e5\u8be2 \u51fa\u73b0\u6570\u636e\u4e22\u5931\u548c\u4e71\u5e8f\u95ee\u9898",
+      "resolution": "Invalid",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13481210",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    },
+    {
+      "id": "spark-13445069",
+      "title": "KafkaDataConsumer not support transional producer",
+      "resolution": "",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13445069",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    },
+    {
+      "id": "spark-13443977",
+      "title": "How do I read  parquet with python object",
+      "resolution": "Won't Do",
+      "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13443977",
+      "shared_versions": [
+        "2.4.5"
+      ]
+    }
+  ],
+  "initial_decision": {
+    "next_step": "investigate_component_boundary",
+    "evidence_ids": [
+      "spark-13289604"
+    ],
+    "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+    "action": "Isolate a minimal reproduction across these mentioned components: Kafka, Python / PySpark, Spark SQL / DataFrames, Streaming. Compare the source excerpts and connector/runtime versions before proposing a change.",
+    "requires_human_review": true,
+    "llm_selected_step": false
+  },
+  "review": {
+    "outcome": "needs_more_info",
+    "note": "Case-study review: current environment and reproduction details are not supplied; request them before reusing this lead."
+  },
+  "reloaded_decision": {
+    "next_step": "request_details",
+    "evidence_ids": [
+      "spark-13289604"
+    ],
+    "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+    "action": "Ask for Spark version, relevant stack trace and minimal reproduction steps.",
+    "requires_human_review": true,
+    "llm_selected_step": false
+  },
+  "initial_trace": [
+    {
+      "kind": "graph",
+      "tool": "search_historical_issues",
+      "purpose": "Find source reports matching the supplied symptom and optional affected version.",
+      "cypher": "MATCH (i:HistoricalIssue)\n            WHERE ($empty OR any(term IN $terms WHERE i.search_text CONTAINS term))\n              AND ($version = '' OR (i)-[:AFFECTS]->(:Version {name:$version}))\n            WITH i, reduce(score=0, term IN $terms | score + CASE WHEN toLower(i.title) CONTAINS term THEN 4 WHEN i.search_text CONTAINS term THEN 1 ELSE 0 END) AS score\n            RETURN i.id AS id, i.title AS title, i.priority AS priority, i.status AS status,\n                i.resolution AS resolution, i.url AS url, i.created AS created, score\n            ORDER BY score DESC, id DESC LIMIT 20",
+      "parameters": {
+        "terms": [
+          "error",
+          "writing",
+          "pyspark",
+          "streaming",
+          "dataframe",
+          "created",
+          "kafka",
+          "source"
+        ],
+        "empty": false,
+        "version": ""
+      },
+      "rows": 20,
+      "duration_ms": 929.3,
+      "preview": [
+        {
+          "id": "spark-13289604",
+          "title": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Invalid",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13289604",
+          "created": "04/Mar/20 18:48",
+          "score": 32
+        },
+        {
+          "id": "spark-13486919",
+          "title": "Structured Streaming on Dataproc - suddenly giving error while writing to Kafka topic",
+          "priority": "Major",
+          "status": "Open",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13486919",
+          "created": "18/Oct/22 22:05",
+          "score": 19
+        },
+        {
+          "id": "spark-13531847",
+          "title": "Error class resource file in Kafka connector is misplaced",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13531847",
+          "created": "07/Apr/23 10:17",
+          "score": 14
+        }
+      ],
+      "outcome": "Returned 20 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_issue_source",
+      "purpose": "Read the selected historical issue and its immutable CSV provenance.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:SOURCED_FROM]->(d:Dataset)\n            MATCH (i)-[:IN_PROJECT]->(p:Project)\n            RETURN i.id AS id, i.title AS title, i.description AS description, i.status AS status,\n              i.priority AS priority, i.resolution AS resolution, i.created AS created, i.resolved AS resolved,\n              i.url AS url, i.record AS record, p.name AS project,\n              d.url AS dataset_url, d.revision AS revision, d.license AS license",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 1,
+      "duration_ms": 3.16,
+      "preview": [
+        {
+          "id": "spark-13289604",
+          "title": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "description": "While writing a streaming dataframe created from Kafka source to a csv file gives following error in PySpark.\r\n\r\nNOTE : The same streaming dataframe is getting displayed in the console.\r\n\r\nsdf.writeStream.format(\"console\").start().awaitTermination()  // Working\r\n\r\nsdf.writeStream\\\r\n    .format(\"csv\")\\\r\n    .option(\"path\", \"C://output\")\\\r\n    .option(\"checkpointLocation\", \"C://Checkpoint\")\\\r\n    .outputMode(\"append\")\\\r\n    .start().awaitTermination()    // Not working\r\n\r\n\r\nError\r\n---------\r\n *File \"C:\\Spark\\python\\pyspark\\sql\\utils.py\", line 63, in deco\r\n    return f(*a, **kw)\r\n  File \"C:\\Spark\\python\\lib\\py4j-0.10.7-src.zip\\py4j\\protocol.py\", line 328, in get_return_value\r\npy4j.protocol.Py4JJavaError: An error occurred while calling o63.awaitTermination.\r\n: org.apache.spark.sql.streaming.StreamingQueryException: Expected e.g. {\"topicA\":{\"0\":23,\"1\":-1},\"topicB\":{\"0\":-2}}, got {\"logOffset\":1}\r\n=== Streaming Query ===\r\nIdentifier: [id = 6718625c-489e-44c8-b273-0da3429e97a8, runId = b64887ba-ca32-499e-9ab5-f839fd44ec26]\r\nCurrent Committed Offsets: {KafkaV2[Subscribe[test1]]: {\"logOffset\":1}}\r\nCurrent Available Offsets: {KafkaV2[Subscribe[test1]]: {\"logOffset\":1}}\r\n\r\nCurrent State: ACTI",
+          "status": "Resolved",
+          "priority": "Major",
+          "resolution": "Invalid",
+          "created": "04/Mar/20 18:48",
+          "resolved": "11/Mar/20 06:44",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13289604",
+          "record": 16401,
+          "project": "Apache Spark",
+          "dataset_url": "https://raw.githubusercontent.com/av9ash/gitbugs/eadf2d6794990a1aaa26d0ae15391f29f8969301/spark/spark_bugs.csv",
+          "revision": "eadf2d6794990a1aaa26d0ae15391f29f8969301",
+          "license": "CC BY 4.0"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_affected_versions",
+      "purpose": "Follow issue \u2192 affected version \u2192 project, using relationships imported from the CSV.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)-[:VERSION_OF]->(p:Project)\n            RETURN v.name AS version, p.name AS project ORDER BY version",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 1,
+      "duration_ms": 2.49,
+      "preview": [
+        {
+          "version": "2.4.5",
+          "project": "Apache Spark"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_shared_version_reports",
+      "purpose": "Follow two hops to other reports affecting the same version. This is context, not proof of a common cause.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)<-[:AFFECTS]-(other:HistoricalIssue)\n            WHERE other.id <> i.id\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, collect(DISTINCT v.name) AS shared_versions\n            ORDER BY id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 8,
+      "duration_ms": 4.91,
+      "preview": [
+        {
+          "id": "spark-13570308",
+          "title": "spark.files are not copied to Spark Executors in client session mode",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13570308",
+          "shared_versions": [
+            "2.4.5"
+          ]
+        },
+        {
+          "id": "spark-13522792",
+          "title": "why executor memory used is shown greater than total available memory on spark ui",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13522792",
+          "shared_versions": [
+            "2.4.5"
+          ]
+        },
+        {
+          "id": "spark-13485522",
+          "title": "spark\u9879\u76eebin/beeline\u5bf9\u4e8edistribute by sort by\u8bed\u53e5\u652f\u6301\u4e0d\u597d\uff0c\u8f93\u51fa\u7ed3\u679c\u9519\u8bef",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13485522",
+          "shared_versions": [
+            "2.4.5"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_review_memory",
+      "purpose": "Recall this app\u2019s previous human reviews, separate from the historical source status.",
+      "cypher": "MATCH (r:Review)-[:BASED_ON]->(:HistoricalIssue {id:$id})\n            RETURN r.id AS id, r.note AS note, r.outcome AS outcome, r.created AS created ORDER BY created DESC LIMIT 20",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 0,
+      "duration_ms": 2.4,
+      "preview": [],
+      "outcome": "Returned 0 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_component_mentions",
+      "purpose": "Follow source-backed mentions of software components; inspect the supporting excerpt for each link.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[m:MENTIONS]->(c:Component)\n            RETURN c.id AS id, c.name AS name, m.excerpt AS excerpt, m.field AS field,\n                m.matched AS matched, m.rule AS rule ORDER BY name",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 4,
+      "duration_ms": 2.65,
+      "preview": [
+        {
+          "id": "kafka",
+          "name": "Kafka",
+          "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "field": "title",
+          "matched": "Kafka",
+          "rule": "component-mentions-v1"
+        },
+        {
+          "id": "pyspark",
+          "name": "Python / PySpark",
+          "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "field": "title",
+          "matched": "pyspark",
+          "rule": "component-mentions-v1"
+        },
+        {
+          "id": "sql",
+          "name": "Spark SQL / DataFrames",
+          "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "field": "title",
+          "matched": "dataframe",
+          "rule": "component-mentions-v1"
+        }
+      ],
+      "outcome": "Returned 4 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_component_intersections",
+      "purpose": "Find reports that mention the same combination of components, beyond shared affected versions.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:MENTIONS]->(c:Component)<-[:MENTIONS]-(other:HistoricalIssue)\n            WHERE i.id <> other.id\n            WITH other, collect(DISTINCT c.name) AS shared_components\n            WHERE size(shared_components) >= 2\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, shared_components\n            ORDER BY size(shared_components) DESC, id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 8,
+      "duration_ms": 50.06,
+      "preview": [
+        {
+          "id": "spark-13588050",
+          "title": "How to restart failed spark stream job from the failure point",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13588050",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark",
+            "Streaming",
+            "Kafka"
+          ]
+        },
+        {
+          "id": "spark-13574505",
+          "title": ".sql() does not recognize watermark defined upstream",
+          "resolution": "Not A Bug",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13574505",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark",
+            "Streaming",
+            "Kafka"
+          ]
+        },
+        {
+          "id": "spark-13540487",
+          "title": "pyspark sql",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13540487",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark",
+            "Streaming",
+            "Kafka"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "policy",
+      "tool": "choose_review_step",
+      "purpose": "Select a bounded human review step.",
+      "output": {
+        "next_step": "investigate_component_boundary",
+        "evidence_ids": [
+          "spark-13289604"
+        ],
+        "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+        "action": "Isolate a minimal reproduction across these mentioned components: Kafka, Python / PySpark, Spark SQL / DataFrames, Streaming. Compare the source excerpts and connector/runtime versions before proposing a change.",
+        "requires_human_review": true,
+        "llm_selected_step": false
+      },
+      "outcome": "Deterministic policy; no LLM call."
+    },
+    {
+      "kind": "memory",
+      "tool": "save_investigation_run",
+      "purpose": "Persist the executed tool trace and decision in FalkorDB.",
+      "outcome": "Saved RUN-50e2f4cc825b; reopen it from previous runs."
+    }
+  ],
+  "after_trace": [
+    {
+      "kind": "graph",
+      "tool": "search_historical_issues",
+      "purpose": "Find source reports matching the supplied symptom and optional affected version.",
+      "cypher": "MATCH (i:HistoricalIssue)\n            WHERE ($empty OR any(term IN $terms WHERE i.search_text CONTAINS term))\n              AND ($version = '' OR (i)-[:AFFECTS]->(:Version {name:$version}))\n            WITH i, reduce(score=0, term IN $terms | score + CASE WHEN toLower(i.title) CONTAINS term THEN 4 WHEN i.search_text CONTAINS term THEN 1 ELSE 0 END) AS score\n            RETURN i.id AS id, i.title AS title, i.priority AS priority, i.status AS status,\n                i.resolution AS resolution, i.url AS url, i.created AS created, score\n            ORDER BY score DESC, id DESC LIMIT 20",
+      "parameters": {
+        "terms": [
+          "error",
+          "writing",
+          "pyspark",
+          "streaming",
+          "dataframe",
+          "created",
+          "kafka",
+          "source"
+        ],
+        "empty": false,
+        "version": ""
+      },
+      "rows": 20,
+      "duration_ms": 884.7,
+      "preview": [
+        {
+          "id": "spark-13289604",
+          "title": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Invalid",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13289604",
+          "created": "04/Mar/20 18:48",
+          "score": 32
+        },
+        {
+          "id": "spark-13486919",
+          "title": "Structured Streaming on Dataproc - suddenly giving error while writing to Kafka topic",
+          "priority": "Major",
+          "status": "Open",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13486919",
+          "created": "18/Oct/22 22:05",
+          "score": 19
+        },
+        {
+          "id": "spark-13531847",
+          "title": "Error class resource file in Kafka connector is misplaced",
+          "priority": "Major",
+          "status": "Resolved",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13531847",
+          "created": "07/Apr/23 10:17",
+          "score": 14
+        }
+      ],
+      "outcome": "Returned 20 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_issue_source",
+      "purpose": "Read the selected historical issue and its immutable CSV provenance.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:SOURCED_FROM]->(d:Dataset)\n            MATCH (i)-[:IN_PROJECT]->(p:Project)\n            RETURN i.id AS id, i.title AS title, i.description AS description, i.status AS status,\n              i.priority AS priority, i.resolution AS resolution, i.created AS created, i.resolved AS resolved,\n              i.url AS url, i.record AS record, p.name AS project,\n              d.url AS dataset_url, d.revision AS revision, d.license AS license",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 1,
+      "duration_ms": 2.63,
+      "preview": [
+        {
+          "id": "spark-13289604",
+          "title": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "description": "While writing a streaming dataframe created from Kafka source to a csv file gives following error in PySpark.\r\n\r\nNOTE : The same streaming dataframe is getting displayed in the console.\r\n\r\nsdf.writeStream.format(\"console\").start().awaitTermination()  // Working\r\n\r\nsdf.writeStream\\\r\n    .format(\"csv\")\\\r\n    .option(\"path\", \"C://output\")\\\r\n    .option(\"checkpointLocation\", \"C://Checkpoint\")\\\r\n    .outputMode(\"append\")\\\r\n    .start().awaitTermination()    // Not working\r\n\r\n\r\nError\r\n---------\r\n *File \"C:\\Spark\\python\\pyspark\\sql\\utils.py\", line 63, in deco\r\n    return f(*a, **kw)\r\n  File \"C:\\Spark\\python\\lib\\py4j-0.10.7-src.zip\\py4j\\protocol.py\", line 328, in get_return_value\r\npy4j.protocol.Py4JJavaError: An error occurred while calling o63.awaitTermination.\r\n: org.apache.spark.sql.streaming.StreamingQueryException: Expected e.g. {\"topicA\":{\"0\":23,\"1\":-1},\"topicB\":{\"0\":-2}}, got {\"logOffset\":1}\r\n=== Streaming Query ===\r\nIdentifier: [id = 6718625c-489e-44c8-b273-0da3429e97a8, runId = b64887ba-ca32-499e-9ab5-f839fd44ec26]\r\nCurrent Committed Offsets: {KafkaV2[Subscribe[test1]]: {\"logOffset\":1}}\r\nCurrent Available Offsets: {KafkaV2[Subscribe[test1]]: {\"logOffset\":1}}\r\n\r\nCurrent State: ACTI",
+          "status": "Resolved",
+          "priority": "Major",
+          "resolution": "Invalid",
+          "created": "04/Mar/20 18:48",
+          "resolved": "11/Mar/20 06:44",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13289604",
+          "record": 16401,
+          "project": "Apache Spark",
+          "dataset_url": "https://raw.githubusercontent.com/av9ash/gitbugs/eadf2d6794990a1aaa26d0ae15391f29f8969301/spark/spark_bugs.csv",
+          "revision": "eadf2d6794990a1aaa26d0ae15391f29f8969301",
+          "license": "CC BY 4.0"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_affected_versions",
+      "purpose": "Follow issue \u2192 affected version \u2192 project, using relationships imported from the CSV.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)-[:VERSION_OF]->(p:Project)\n            RETURN v.name AS version, p.name AS project ORDER BY version",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 1,
+      "duration_ms": 2.29,
+      "preview": [
+        {
+          "version": "2.4.5",
+          "project": "Apache Spark"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_shared_version_reports",
+      "purpose": "Follow two hops to other reports affecting the same version. This is context, not proof of a common cause.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:AFFECTS]->(v:Version)<-[:AFFECTS]-(other:HistoricalIssue)\n            WHERE other.id <> i.id\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, collect(DISTINCT v.name) AS shared_versions\n            ORDER BY id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 8,
+      "duration_ms": 4.04,
+      "preview": [
+        {
+          "id": "spark-13570308",
+          "title": "spark.files are not copied to Spark Executors in client session mode",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13570308",
+          "shared_versions": [
+            "2.4.5"
+          ]
+        },
+        {
+          "id": "spark-13522792",
+          "title": "why executor memory used is shown greater than total available memory on spark ui",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13522792",
+          "shared_versions": [
+            "2.4.5"
+          ]
+        },
+        {
+          "id": "spark-13485522",
+          "title": "spark\u9879\u76eebin/beeline\u5bf9\u4e8edistribute by sort by\u8bed\u53e5\u652f\u6301\u4e0d\u597d\uff0c\u8f93\u51fa\u7ed3\u679c\u9519\u8bef",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13485522",
+          "shared_versions": [
+            "2.4.5"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "read_review_memory",
+      "purpose": "Recall this app\u2019s previous human reviews, separate from the historical source status.",
+      "cypher": "MATCH (r:Review)-[:BASED_ON]->(:HistoricalIssue {id:$id})\n            RETURN r.id AS id, r.note AS note, r.outcome AS outcome, r.created AS created ORDER BY created DESC LIMIT 20",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 1,
+      "duration_ms": 2.18,
+      "preview": [
+        {
+          "id": "REVIEW-f159c24d69",
+          "note": "Case-study review: current environment and reproduction details are not supplied; request them before reusing this lead.",
+          "outcome": "needs_more_info",
+          "created": "2026-10-17T19:55:39.290883+00:00"
+        }
+      ],
+      "outcome": "Returned 1 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "follow_component_mentions",
+      "purpose": "Follow source-backed mentions of software components; inspect the supporting excerpt for each link.",
+      "cypher": "MATCH (:HistoricalIssue {id:$id})-[m:MENTIONS]->(c:Component)\n            RETURN c.id AS id, c.name AS name, m.excerpt AS excerpt, m.field AS field,\n                m.matched AS matched, m.rule AS rule ORDER BY name",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 4,
+      "duration_ms": 2.63,
+      "preview": [
+        {
+          "id": "kafka",
+          "name": "Kafka",
+          "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "field": "title",
+          "matched": "Kafka",
+          "rule": "component-mentions-v1"
+        },
+        {
+          "id": "pyspark",
+          "name": "Python / PySpark",
+          "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "field": "title",
+          "matched": "pyspark",
+          "rule": "component-mentions-v1"
+        },
+        {
+          "id": "sql",
+          "name": "Spark SQL / DataFrames",
+          "excerpt": "Error in writing a pyspark streaming dataframe created from Kafka source to a csv file",
+          "field": "title",
+          "matched": "dataframe",
+          "rule": "component-mentions-v1"
+        }
+      ],
+      "outcome": "Returned 4 evidence record(s)."
+    },
+    {
+      "kind": "graph",
+      "tool": "find_component_intersections",
+      "purpose": "Find reports that mention the same combination of components, beyond shared affected versions.",
+      "cypher": "MATCH (i:HistoricalIssue {id:$id})-[:MENTIONS]->(c:Component)<-[:MENTIONS]-(other:HistoricalIssue)\n            WHERE i.id <> other.id\n            WITH other, collect(DISTINCT c.name) AS shared_components\n            WHERE size(shared_components) >= 2\n            RETURN other.id AS id, other.title AS title, other.resolution AS resolution,\n                other.url AS url, shared_components\n            ORDER BY size(shared_components) DESC, id DESC LIMIT 8",
+      "parameters": {
+        "id": "spark-13289604"
+      },
+      "rows": 8,
+      "duration_ms": 41.6,
+      "preview": [
+        {
+          "id": "spark-13588050",
+          "title": "How to restart failed spark stream job from the failure point",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13588050",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark",
+            "Streaming",
+            "Kafka"
+          ]
+        },
+        {
+          "id": "spark-13574505",
+          "title": ".sql() does not recognize watermark defined upstream",
+          "resolution": "Not A Bug",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13574505",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark",
+            "Streaming",
+            "Kafka"
+          ]
+        },
+        {
+          "id": "spark-13540487",
+          "title": "pyspark sql",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13540487",
+          "shared_components": [
+            "Spark SQL / DataFrames",
+            "Python / PySpark",
+            "Streaming",
+            "Kafka"
+          ]
+        }
+      ],
+      "outcome": "Returned 8 evidence record(s)."
+    },
+    {
+      "kind": "policy",
+      "tool": "choose_review_step",
+      "purpose": "Select a bounded human review step.",
+      "output": {
+        "next_step": "request_details",
+        "evidence_ids": [
+          "spark-13289604"
+        ],
+        "summary": "Compare the current Spark version and reproduction steps with the historical source before considering its recorded outcome.",
+        "action": "Ask for Spark version, relevant stack trace and minimal reproduction steps.",
+        "requires_human_review": true,
+        "llm_selected_step": false
+      },
+      "outcome": "Deterministic policy; no LLM call."
+    },
+    {
+      "kind": "policy",
+      "tool": "apply_review_memory",
+      "purpose": "Avoid repeating a previously rejected historical lead.",
+      "outcome": "Previous review was needs_more_info; request new evidence before repeating this lead."
+    },
+    {
+      "kind": "memory",
+      "tool": "save_investigation_run",
+      "purpose": "Persist the executed tool trace and decision in FalkorDB.",
+      "outcome": "Saved RUN-394f3143ab13; reopen it from previous runs."
+    }
+  ],
+  "human_assessment": {
+    "status": "pending",
+    "evidence_relevant": null,
+    "step_acceptable": null,
+    "missing_information": null
+  },
+  "interpretation": "Observed application behavior, not independent human approval or a verified fix."
+}
