@@ -2,7 +2,11 @@
 
 A local investigation agent with FalkorDB as its context and memory layer. Built for **Track 01: Agents That Act on Connected Data**. The real-data workflow uses **20,275 historical Apache Spark reports** from GitBugs (18.67 MB CSV, CC BY 4.0). The separate checkout-company ownership lab remains fictional.
 
-[Watch/download the working demo](https://github.com/pranavs1205/caseroute/releases/download/demo-v1/caseroute-demo.webm) ? [Real-report assessment](evaluation/real/REPORT.md) ? [Release](https://github.com/pranavs1205/caseroute/releases/tag/demo-v1)
+[Watch/download the working demo](https://github.com/pranavs1205/caseroute/releases/download/demo-v1/caseroute-demo.webm) | [Real-report assessment](evaluation/real/REPORT.md) | [Release](https://github.com/pranavs1205/caseroute/releases/tag/demo-v1)
+
+## Graph-guidance improvement
+
+[Failure analysis and implementation](GRAPH_IMPROVEMENTS.md): technical-identifier paths, degree-discounted graph retrieval, source sufficiency gates and constrained LLM actions are implemented. The original 20-case baseline is preserved. An explicitly **in-sample development replay** now matches 18/20 prewritten action IDs and requests 7/8 required clarifications; this is not independent accuracy. The UI exposes ranked source paths and excerpts. All 36 backend tests, a real browser flow, a fresh full import and a live AnyAPI smoke check pass.
 
 ## Run
 
@@ -38,7 +42,7 @@ Data attribution: **GitBugs / Apache Spark**, Avinash Patil, [GitBugs repository
 
 ## LLM mode
 
-Graph-only mode makes no model calls. Checking **Use LLM planning and next-step selection** makes two calls: interpret the report into a search plan, then choose a bounded review step from the returned graph evidence. Evidence IDs are constrained to supplied records and checked server-side. Factual UI text comes from source records rather than free-form generated diagnoses. The graph still controls evidence, memory and permissible actions.
+Graph-only mode makes no model calls. Checking **Use LLM planning and next-step selection** normally makes two calls: interpret the report into a search plan, then choose a bounded review step from the returned graph evidence. Evidence IDs are constrained to supplied records and checked server-side. Factual UI text comes from source records rather than free-form generated diagnoses. The graph still controls evidence, memory and permissible actions. Evidence gates can skip the decision call and require clarification; the planning call may still run.
 
 **AnyAPI is the selected provider**, as requested. Its exact model ID is recorded in `llm_config.json` after authenticated model discovery. Put `ANYAPI_API_KEY` (or `ANY_API_KEY`) in the ignored local `.env` or environment; never paste it into chat or commit it. The parser reads only named settings without executing or interpolating file contents. `ANYAPI_MODEL` / `CASE_LLM_MODEL` override the chosen model; `CASE_LLM_PROVIDER` overrides the provider. Only enabling LLM mode sends bounded report and graph evidence to the configured provider.
 
@@ -90,13 +94,14 @@ HistoricalIssue -SOURCED_FROM-> Dataset
 HistoricalIssue -IN_PROJECT-> Project
 HistoricalIssue -AFFECTS-> Version
 HistoricalIssue -MENTIONS {excerpt, field, rule}-> Component
+HistoricalIssue -HAS_SIGNAL {matched, excerpt, field, rule, weight}-> EvidenceSignal
 Review -BASED_ON-> HistoricalIssue
 InvestigationRun -EXAMINED-> HistoricalIssue
 ```
 
 Runs store serialized source/evidence/decision/query-receipt snapshots; the canvas final action is a projection of the saved decision, not an independently stored dependency edge. The agent follows issue ? version/component ? other issue and reads prior reviews before choosing a next step.
 
-The graph directly controls the team and available check. There is no in-memory routing fallback. A missing graph produces an explicit error. Cypher lives in `graph.py`, `seed.py`, `real_cases.py`, `import_real_data.py`, `components.py` and `landscape.py`; user values are query parameters. Impact is bounded to three service hops and runs with `ro_query`.
+The graph directly controls the team and available check. There is no in-memory routing fallback. A missing graph produces an explicit error. Cypher lives in `graph.py`, `seed.py`, `real_cases.py`, `import_real_data.py`, `components.py`, `evidence_graph.py` and `landscape.py`; user values are query parameters. Impact is bounded to three service hops and runs with `ro_query`.
 
 ## Verify
 
@@ -114,8 +119,8 @@ Integration tests require live FalkorDB. Each run creates and deletes a uniquely
 
 This is a single-company local prototype. Ownership and recommendation sources older than 90 days (or missing valid dates) produce a review warning. Conflicting ownership blocks routing. Multi-tenant authentication, duplicate clustering, multi-agent coordination and independently held-out evaluation are not implemented. A passed check is recorded as an attempt; it does not automatically resolve a case. A human must interpret the result.
 
-Public repository: https://github.com/pranavs1205/caseroute. Clean Windows setup, 26 backend tests, three case studies and the AI-assisted real-report baseline are complete. See [submission checklist](submission/CHECKLIST.md) for the working video and final form requirements. No real-case accuracy/speed advantage over a baseline is established. Track 02 and Track 03 are not claimed by this prototype.
+Public repository: https://github.com/pranavs1205/caseroute. Clean Windows setup, 36 backend tests, three case studies and the AI-assisted real-report baseline are complete. See [submission checklist](submission/CHECKLIST.md) for the working video and final form requirements. No real-case accuracy/speed advantage over a baseline is established. Track 02 and Track 03 are not claimed by this prototype.
 
-Current verification and limits are in `VERIFICATION.md`. Assessment integrity tests enforce prelabels and preserve failed runs. Run `python evaluate.py` for the 24-scenario synthetic policy benchmark; results are saved to `evaluation/results.json`. It compares against static feature/service lookup from the same fixture corpus, not an independent held-out language-routing benchmark. Optional browser checks: install Playwright, install Chromium with `python -m playwright install chromium`, run the server, then run `python tests/browser_check.py`.
+Current verification and limits are in `VERIFICATION.md`. Existing imports should run `python evidence_graph.py` to build/update the derived index; fresh imports do so automatically. Assessment integrity tests enforce prelabels and preserve failed runs. Run `python evaluate.py` for the 24-scenario synthetic policy benchmark; results are saved to `evaluation/results.json`. It compares against static feature/service lookup from the same fixture corpus, not an independent held-out language-routing benchmark. Optional browser checks: install Playwright, install Chromium with `python -m playwright install chromium`, run the server, then run `python tests/browser_check.py`.
 
 AI assistance: OpenAI Codex assisted with planning, implementation and tests. Review and amend this disclosure to reflect all team contributions. Third-party dependencies retain their respective licenses; this repository has not yet selected a project license.

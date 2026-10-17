@@ -137,3 +137,5 @@ if __name__ == '__main__':
         load(Store(), path)
         from components import enrich
         enrich(Store(), records(path))
+        from evidence_graph import enrich as enrich_evidence
+        print('Technical identifier links:', enrich_evidence(Store(), records(path)))

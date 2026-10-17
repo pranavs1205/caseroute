@@ -19,6 +19,7 @@ from components import enrich
 from graph import Store
 from import_real_data import download, load, records
 from seed import seed
+from evidence_graph import enrich as enrich_evidence
 from playwright.sync_api import sync_playwright, expect
 
 ISSUE='spark-13289604'
@@ -35,6 +36,7 @@ def main():
     try:
         with contextlib.redirect_stdout(io.StringIO()):
             seed(store);source=download();load(store,source,manifest_path=None);enrich(store,records(source))
+            enrich_evidence(store,records(source))
         with socket.socket() as listener:
             listener.bind(('127.0.0.1',0));port=listener.getsockname()[1]
         base=f'http://127.0.0.1:{port}'

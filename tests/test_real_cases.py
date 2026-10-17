@@ -21,6 +21,7 @@ class RealEvidenceFlows(unittest.TestCase):
             CREATE (other:HistoricalIssue {id:'test-2', title:'Unrelated symptom on same version', resolution:'Duplicate', url:'https://example.com/2'})
             CREATE (i)-[:AFFECTS]->(v), (other)-[:AFFECTS]->(v), (i)-[:IN_PROJECT]->(p), (i)-[:SOURCED_FROM]->(d)''')
         cls.real = RealCases(cls.store)
+        cls.store.write("MATCH (i:HistoricalIssue {id:'test-1'}) SET i.description='Python compatibility investigation: reproduce the failing application with the current runtime and Spark release, then compare the original error and dependency configuration.'")
 
     @classmethod
     def tearDownClass(cls):
@@ -33,7 +34,7 @@ class RealEvidenceFlows(unittest.TestCase):
         context = self.real.context('test-1', trace)
         self.assertEqual(context['related'][0]['id'], 'test-2')
         self.assertEqual(context['related'][0]['shared_versions'], ['3.4.0'])
-        self.assertEqual(len(trace), 6)
+        self.assertEqual(len(trace), 7)
         self.assertTrue(all(s['cypher'] and s['duration_ms'] >= 0 for s in trace))
         self.assertEqual(context['issue']['resolution'], 'Fixed')
         self.assertNotIn('owner', context['issue'])
@@ -58,7 +59,9 @@ class RealEvidenceFlows(unittest.TestCase):
 
     def test_llm_cannot_cite_unknown_issue(self):
         outputs = [SearchPlan(terms=['pyspark'], version=None), Decision(next_step='check_environment', evidence_ids=['invented'])]
-        with patch('llm.generate', side_effect=outputs), self.assertRaises(LLMUnavailable):
+        context = self.real.context('test-1')
+        context['memory'] = []
+        with patch.object(self.real,'context',return_value=context), patch('llm.generate', side_effect=outputs), self.assertRaises(LLMUnavailable):
             investigate(self.real, 'pyspark failure', True, 'test-1')
 
     def test_llm_cannot_invent_affected_version(self):

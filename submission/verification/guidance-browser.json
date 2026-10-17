@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "issue": "spark-13559808",
+  "policy": "graph-guidance-v3",
+  "ranked_reports": 8,
+  "primary_components": [
+    "Python / PySpark",
+    "Spark SQL / DataFrames"
+  ],
+  "next_step": "check_environment",
+  "model_calls": 0,
+  "browser_errors": []
+}

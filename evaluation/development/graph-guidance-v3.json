@@ -1,0 +1,2075 @@
+{
+  "policy": "graph-guidance-v3",
+  "created": "2026-10-17T20:18:45.150633+00:00",
+  "condition": "graph-only in-sample development replay",
+  "caveat": "Not held-out, independent or LLM quality evaluation. Original 20-case artifacts remain unchanged.",
+  "baseline_hashes": {
+    "plan.json": "ef401c474d4452bc555610ac5c6eae572025f563efa63e2f9767030c53086627",
+    "labels.csv": "3db2dca026bb1b26df29596cb96cba70722275c2182ae8841545bacac14b02e3",
+    "labels.lock.json": "eee08562d085a9a51d0632b343743baf198cfb114542fb00f3086c4f6649df8b",
+    "graph_predictions.json": "b678d811f463db3104eb087280d71395e750d80ea953658d504398249a330468",
+    "post_review_graph.csv": "56a2d3af28f1aa57d79df82a200034e7952d5743d3254026209ac8088c24b52c",
+    "summary.json": "d35afe5d1a3a303c106ec5bb59e6242cca263a5e4f5ce07316ca1c526865ede3"
+  },
+  "completed": 20,
+  "action_enum_agreement": 18,
+  "required_abstentions": 8,
+  "requested_required_abstentions": 7,
+  "results": [
+    {
+      "case_id": "R01",
+      "issue_id": "spark-13425256",
+      "action": "investigate_component_boundary",
+      "reasons": [
+        "At least three components have title/prose evidence beyond incidental stack frames."
+      ],
+      "primary_components": [
+        "Kafka",
+        "Spark SQL / DataFrames",
+        "Streaming"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13305346",
+          "title": "Flaky test: org.apache.spark.sql.kafka010.KafkaMicroBatchV1SourceSuite",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13305346",
+          "description": "https://amplab.cs.berkeley.edu/jenkins/view/Spark%20QA%20Test/job/spark-master-test-sbt-hadoop-2.7-hive-1.2/668/testReport/\r\n\r\nKafkaMicroBatchV1SourceSuite.subscribing topic by pattern with topic deletions\r\n{code}\r\nsbt.ForkMain$ForkError: org.scalatest.exceptions.TestFailedException: \r\nTimed out waiting for stream: The code passed to eventually never returned normally. Attempted 304 times over 1.0008425216666668 minutes. Last failure message: KafkaTestUtils.this.zkClient.isTopicMarkedForDeletion(topic) was true topic is still marked for deletion.\r\norg.scalatest.concurrent.Eventually.tryTryAgain$1(Eventually.scala:432)\r\n\torg.scalatest.concurrent.Eventually.eventually(Eventually.scala:439)\r\n\torg.scalatest.concurrent.Eventually.eventually$(Eventually.scala:391)\r\n\torg.scalatest.concurrent.Eventually$.eventually(Eventually.scala:479)\r\n\torg.scalatest.concurrent.Eventually.eventually(Eventually",
+          "graph_score": 1.95476527461216,
+          "paths": [
+            {
+              "signal": "KafkaSourceV1",
+              "degree": 2,
+              "source_excerpt": "Stream state: {KafkaSourceV1[Subscribe[topic-41]]: {\"topic-41\":{\"2\":1,\"1\":11,\"0\":21}}}",
+              "candidate_excerpt": "Stream state: {KafkaSourceV1[SubscribePattern[topic-31-.*]]: {}}",
+              "contribution": 0.5
+            },
+            {
+              "signal": "kafka010.KafkaMicroBatchSourceSuiteBase",
+              "degree": 2,
+              "source_excerpt": "+- MapElements org.apache.spark.sql.kafka010.KafkaMicroBatchSourceSuiteBase$$Lambda$6114/1322446561@4df69693, class scala.Tuple2, [StructField(_1,StringType,true), StructField(_2,StringType,true)], obj#7454: int",
+              "candidate_excerpt": "org.apache.spark.sql.kafka010.KafkaMicroBatchSourceSuiteBase.$anonfun$new$20(KafkaMicroBatchSourceSuite.scala:379)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "KafkaMicroBatchSourceSuite.scala",
+              "degree": 3,
+              "source_excerpt": "[https://github.com/apache/spark/blob/master/external/kafka-0-10-sql/src/test/scala/org/apache/spark/sql/kafka010/KafkaMicroBatchSourceSuite.scala#L460]",
+              "candidate_excerpt": "org.apache.spark.sql.kafka010.KafkaMicroBatchSourceSuiteBase.$anonfun$new$20(KafkaMicroBatchSourceSuite.scala:379)",
+              "contribution": 0.333333333333333
+            },
+            {
+              "signal": "java8.JFunction0",
+              "degree": 5,
+              "source_excerpt": "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)",
+              "candidate_excerpt": "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)",
+              "contribution": 0.2
+            },
+            {
+              "signal": "AssertOnQuery",
+              "degree": 6,
+              "source_excerpt": "AssertOnQuery(<condition>, )",
+              "candidate_excerpt": "AssertOnQuery(<condition>, )",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "DeserializeToObject",
+              "degree": 7,
+              "source_excerpt": "+- DeserializeToObject newInstance(class scala.Tuple2), obj#7453: scala.Tuple2",
+              "candidate_excerpt": "+- DeserializeToObject newInstance(class scala.Tuple2), obj#8106: scala.Tuple2",
+              "contribution": 0.142857142857143
+            },
+            {
+              "signal": "ExistingRDD",
+              "degree": 16,
+              "source_excerpt": "+- *(1) Scan ExistingRDD kafka[key#7501,value#7502,topic#7503,partition#7504,offset#7505L,timestamp#7506,timestampType#7507] (StreamTest.scala:466)",
+              "candidate_excerpt": "+- *(1) Scan ExistingRDD kafka[key#8183,value#8184,topic#8185,partition#8186,offset#8187L,timestamp#8188,timestampType#8189]",
+              "contribution": 0.0625
+            },
+            {
+              "signal": "CheckAnswer",
+              "degree": 29,
+              "source_excerpt": "CheckAnswer: [1],[10],[100],[101],[102],[103],[104],[105],[106],[107],[11],[108],[109],[110],[111],[12],[13],[14],[15]",
+              "candidate_excerpt": "CheckAnswer: [2],[3],[4]",
+              "contribution": 0.0344827586206897
+            },
+            {
+              "signal": "exceptions.TestFailedException",
+              "degree": 67,
+              "source_excerpt": "org.scalatest.exceptions.TestFailedException:",
+              "candidate_excerpt": "sbt.ForkMain$ForkError: org.scalatest.exceptions.TestFailedException:",
+              "contribution": 0.0149253731343284
+            }
+          ]
+        },
+        {
+          "id": "spark-13509735",
+          "title": "Avoid empty latest KafkaSourceOffset",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13509735",
+          "description": "We found the offsetLog recorded an empty offset `{}` for the KafkaSource:\r\n\r\n!image-2022-12-04-03-11-11-428.png!\r\nIt occurs only once but this empty offset will cause the data duplication.\r\n\r\n{*}Root Cause{*}:\r\n\r\nThe root cause is that Kafka consumer may get empty partitions in extreme cases like getting partitions while Kafka cluster is reassigning partitions.\r\n{code:scala}\r\n// org.apache.spark.sql.kafka010.KafkaOffsetReaderConsumer\r\n\u00a0 private def partitionsAssignedToConsumer(\r\n\u00a0 \u00a0 \u00a0 body: ju.Set[TopicPartition] => Map[TopicPartition, Long],\r\n\u00a0 \u00a0 \u00a0 fetchingEarliestOffset: Boolean = false)\r\n\u00a0 \u00a0 : Map[TopicPartition, Long] = uninterruptibleThreadRunner.runUninterruptibly {\r\n\r\n\u00a0 \u00a0 withRetriesWithoutInterrupt {\r\n\u00a0 \u00a0 \u00a0 // Poll to get the latest assigned partitions\r\n\u00a0 \u00a0 \u00a0 consumer.poll(0)\r\n\u00a0 \u00a0 \u00a0 val partitions = consumer.assignment() // partitions may be empty\r\n\r\n\u00a0 \u00a0 \u00a0 if (!fetchingEarliestOf",
+          "graph_score": 1.5,
+          "paths": [
+            {
+              "signal": "KafkaSource",
+              "degree": 2,
+              "source_excerpt": "Fix KafkaSource/KafkaMicroBatch flaky test due to non-deterministic timing",
+              "candidate_excerpt": "We found the offsetLog recorded an empty offset `{}` for the KafkaSource:",
+              "contribution": 1.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13310115",
+          "title": "Flaky test: StreamingDeduplicationSuite.test no-data flag",
+          "resolution": "Duplicate",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13310115",
+          "description": "Test failed: https://amplab.cs.berkeley.edu/jenkins/job/SparkPullRequestBuilder/123621/\r\n\r\n{code:java}\r\n[info]   with spark.sql.streaming.noDataMicroBatches.enabled = false \r\n[info]   Assert on query failed: : \r\n[info]   Assert on query failed: \r\n[info]   \r\n[info]   == Progress ==\r\n[info]      StartStream(ProcessingTimeTrigger(0),org.apache.spark.util.SystemClock@372edb19,Map(spark.sql.streaming.noDataMicroBatches.enabled -> false),null)\r\n[info]      AddData to MemoryStream[value#437541]: 10,11,12,13,14,15\r\n[info]      CheckAnswer: [10],[11],[12],[13],[14],[15]\r\n[info]      AssertOnQuery(<condition>, Check total state rows = List(6), updated state rows = List(6))\r\n[info]      AddData to MemoryStream[value#437541]: 25\r\n[info]      CheckNewAnswer: [25]\r\n[info]      AssertOnQuery(<condition>, Check total state rows = List(7), updated state rows = List(1))\r\n[info]   => AssertOnQuery(<conditi",
+          "graph_score": 1.16051924286613,
+          "paths": [
+            {
+              "signal": "MicroBatchExecution.runActivatedStream",
+              "degree": 2,
+              "source_excerpt": "org.apache.spark.sql.execution.streaming.MicroBatchExecution.runActivatedStream(MicroBatchExecution.scala:222)",
+              "candidate_excerpt": "[info]   org.apache.spark.sql.execution.streaming.MicroBatchExecution.runActivatedStream(MicroBatchExecution.scala:185)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "CheckNewAnswer",
+              "degree": 3,
+              "source_excerpt": "=> CheckNewAnswer:",
+              "candidate_excerpt": "[info]      CheckNewAnswer: [25]",
+              "contribution": 0.333333333333333
+            },
+            {
+              "signal": "AssertOnQuery",
+              "degree": 6,
+              "source_excerpt": "AssertOnQuery(<condition>, )",
+              "candidate_excerpt": "[info]      AssertOnQuery(<condition>, Check total state rows = List(6), updated state rows = List(6))",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "MicroBatchExecution.scala",
+              "degree": 9,
+              "source_excerpt": "org.apache.spark.sql.execution.streaming.MicroBatchExecution.runActivatedStream(MicroBatchExecution.scala:222)",
+              "candidate_excerpt": "[info]   org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runActivatedStream$1(MicroBatchExecution.scala:241)",
+              "contribution": 0.111111111111111
+            },
+            {
+              "signal": "CheckAnswer",
+              "degree": 29,
+              "source_excerpt": "CheckAnswer: [1],[10],[100],[101],[102],[103],[104],[105],[106],[107],[11],[108],[109],[110],[111],[12],[13],[14],[15]",
+              "candidate_excerpt": "[info]      CheckAnswer: [10],[11],[12],[13],[14],[15]",
+              "contribution": 0.0344827586206897
+            },
+            {
+              "signal": "exceptions.TestFailedException",
+              "degree": 67,
+              "source_excerpt": "org.scalatest.exceptions.TestFailedException:",
+              "candidate_excerpt": "[info]   org.scalatest.exceptions.TestFailedException:",
+              "contribution": 0.0149253731343284
+            }
+          ]
+        },
+        {
+          "id": "spark-13320672",
+          "title": "Flaky Test: KafkaSourceStressSuite.stress test with multiple topics and partitions",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13320672",
+          "description": "{{KafkaSourceStressSuite.stress test with multiple topics and partitions}} seems flaky in GitHub Actions build:\r\nhttps://github.com/apache/spark/pull/29335/checks?check_run_id=940205463\r\n\r\n{code}\r\nKafkaSourceStressSuite:\r\n- stress test with multiple topics and partitions *** FAILED *** (2 minutes, 7 seconds)\r\n  Timed out waiting for stream: The code passed to failAfter did not complete within 30 seconds.\r\n  java.lang.Thread.getStackTrace(Thread.java:1559)\r\n  \torg.scalatest.concurrent.TimeLimits.failAfterImpl(TimeLimits.scala:234)\r\n  \torg.scalatest.concurrent.TimeLimits.failAfterImpl$(TimeLimits.scala:233)\r\n  \torg.apache.spark.sql.kafka010.KafkaSourceTest.failAfterImpl(KafkaMicroBatchSourceSuite.scala:53)\r\n  \torg.scalatest.concurrent.TimeLimits.failAfter(TimeLimits.scala:230)\r\n  \torg.scalatest.concurrent.TimeLimits.failAfter$(TimeLimits.scala:229)\r\n  \torg.apache.spark.sql.kafka010.KafkaSo",
+          "graph_score": 0.73448275862069,
+          "paths": [
+            {
+              "signal": "KafkaMicroBatchSourceSuite.scala",
+              "degree": 3,
+              "source_excerpt": "[https://github.com/apache/spark/blob/master/external/kafka-0-10-sql/src/test/scala/org/apache/spark/sql/kafka010/KafkaMicroBatchSourceSuite.scala#L460]",
+              "candidate_excerpt": "org.apache.spark.sql.kafka010.KafkaSourceTest.failAfterImpl(KafkaMicroBatchSourceSuite.scala:53)",
+              "contribution": 0.333333333333333
+            },
+            {
+              "signal": "java8.JFunction0",
+              "degree": 5,
+              "source_excerpt": "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)",
+              "candidate_excerpt": "scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)",
+              "contribution": 0.2
+            },
+            {
+              "signal": "AssertOnQuery",
+              "degree": 6,
+              "source_excerpt": "AssertOnQuery(<condition>, )",
+              "candidate_excerpt": "AssertOnQuery(<condition>, )",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "CheckAnswer",
+              "degree": 29,
+              "source_excerpt": "CheckAnswer: [1],[10],[100],[101],[102],[103],[104],[105],[106],[107],[11],[108],[109],[110],[111],[12],[13],[14],[15]",
+              "candidate_excerpt": "CheckAnswer:",
+              "contribution": 0.0344827586206897
+            }
+          ]
+        },
+        {
+          "id": "spark-13601076",
+          "title": "Support pushing DeserializeToObject through Union",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13601076",
+          "description": "When migrating some RDD code to Dataset we noticed a significant performance degradation. The degradation was caused by an extra serialize/deserialize round trip.\r\n\r\nConsider the following plan\r\n{code:java}\r\nval ds1 = spark.createDataset(Seq((1,2)))\r\nval ds2 = sc.parallelize(Seq((1,2))).toDS().filter(_._1 > 1)\r\nds1.union(ds2).map(identity).explain(){code}\r\n{code:java}\r\n== Physical Plan ==\r\n*(2) SerializeFromObject [knownnotnull(assertnotnull(input[0, scala.Tuple2, true]))._1 AS _1#353, knownnotnull(assertnotnull(input[0, scala.Tuple2, true]))._2 AS _2#354]\r\n+- *(2) MapElements $line43.$read$$iw$$Lambda$4181/0x00007f3d4d10ae10@24287e1f, obj#352: scala.Tuple2\r\n\u00a0 \u00a0+- *(2) DeserializeToObject newInstance(class scala.Tuple2), obj#351: scala.Tuple2\r\n\u00a0 \u00a0 \u00a0 +- Union\r\n\u00a0 \u00a0 \u00a0 \u00a0 \u00a0:- LocalTableScan [_1#318, _2#319]\r\n\u00a0 \u00a0 \u00a0 \u00a0 \u00a0+- *(1) SerializeFromObject [knownnotnull(assertnotnull(input[0, scala.Tuple",
+          "graph_score": 0.695238095238095,
+          "paths": [
+            {
+              "signal": "DeserializeToObject",
+              "degree": 7,
+              "source_excerpt": "+- DeserializeToObject newInstance(class scala.Tuple2), obj#7453: scala.Tuple2",
+              "candidate_excerpt": "Support pushing DeserializeToObject through Union",
+              "contribution": 0.428571428571429
+            },
+            {
+              "signal": "MapElements",
+              "degree": 6,
+              "source_excerpt": "+- MapElements org.apache.spark.sql.kafka010.KafkaMicroBatchSourceSuiteBase$$Lambda$6114/1322446561@4df69693, class scala.Tuple2, [StructField(_1,StringType,true), StructField(_2,StringType,true)], obj#7454: int",
+              "candidate_excerpt": "+- *(2) MapElements $line43.$read$$iw$$Lambda$4181/0x00007f3d4d10ae10@24287e1f, obj#352: scala.Tuple2",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "newInstance",
+              "degree": 10,
+              "source_excerpt": "+- DeserializeToObject newInstance(class scala.Tuple2), obj#7453: scala.Tuple2",
+              "candidate_excerpt": "+- *(2) DeserializeToObject newInstance(class scala.Tuple2), obj#351: scala.Tuple2",
+              "contribution": 0.1
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-044009164989",
+      "latency_ms": 1047.53
+    },
+    {
+      "case_id": "R02",
+      "issue_id": "spark-13299616",
+      "action": "check_environment",
+      "reasons": [
+        "Confirm source-specific environment and reproduction before reusing this historical lead."
+      ],
+      "primary_components": [
+        "Parquet",
+        "Spark SQL / DataFrames"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13325216",
+          "title": "FileOutputCommitter warns \"No Output found for attempt\"",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13325216",
+          "description": "Hi team,\r\n\r\nThis is my first time to report an issue here.\r\n\r\nWe submitted and ran the spark job on the cluster.\u00a0\r\n\r\nWe found that one of the\u00a0parquet output partition is missing in the output directory. We checked the spark job log, all the tasks status are showing success. The output record size matches expected number.\r\n\r\nHowever, we checked the container log, found that there was a warning says\u00a0*No Output found for attempt_20200819094307_0003_m_000002_11*, which stopped moving the output from taskAttemptPath to output directory. As a result, we are missing some of the output rows.\r\n\r\nRe-run the job helped to solve the issue, however the report is critical for us. It is appreciated if you can advise the cause for the issue.\r\n\r\n\u00a0\r\n\r\nBelow are the container logs:\r\n\r\n\u00a0\r\n{code:java}\r\n20/08/19 09:44:57 INFO output.FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders unde",
+          "graph_score": 0.666666666666667,
+          "paths": [
+            {
+              "signal": "output.FileOutputCommitter",
+              "degree": 3,
+              "source_excerpt": "[20-Apr-2020 11:42:27.967]\u00a0 INFO [boundedElastic-2 o.a.h.mapreduce.lib.output.FileOutputCommitter:108] q: - File Output Committer Algorithm version is 1",
+              "candidate_excerpt": "20/08/19 09:44:57 INFO output.FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false",
+              "contribution": 0.333333333333333
+            },
+            {
+              "signal": "hadoop.ParquetOutputCommitter",
+              "degree": 3,
+              "source_excerpt": "[20-Apr-2020 11:42:27.877]\u00a0 INFO [boundedElastic-2 o.a.s.s.e.datasources.parquet.ParquetFileFormat:57] q: - Using default output committer for Parquet: org.apache.parquet.hadoop.ParquetOutputCommitter",
+              "candidate_excerpt": "20/08/19 09:44:57 INFO datasources.SQLHadoopMapReduceCommitProtocol: Using user defined output committer class parquet.hadoop.ParquetOutputCommitter",
+              "contribution": 0.333333333333333
+            }
+          ]
+        },
+        {
+          "id": "spark-13372217",
+          "title": "Spark 3.1.1 is slower than 3.0.2 by 4-5 times",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13372217",
+          "description": "Hi,\r\n\r\nThe following snippet code runs 4-5 times slower when it's used in Apache Spark or PySpark 3.1.1 compare to Apache Spark or PySpark 3.0.2:\r\n\r\n\u00a0\r\n{code:java}\r\nspark = SparkSession.builder \\\r\n\u00a0 \u00a0 \u00a0 \u00a0 .master(\"local[*]\") \\\r\n\u00a0 \u00a0 \u00a0 \u00a0 .config(\"spark.driver.memory\", \"16G\") \\\r\n\u00a0 \u00a0 \u00a0 \u00a0 .config(\"spark.driver.maxResultSize\", \"0\") \\\r\n\u00a0 \u00a0 \u00a0 \u00a0 .config(\"spark.serializer\",\r\n\"org.apache.spark.serializer.KryoSerializer\") \\\r\n\u00a0 \u00a0 \u00a0 \u00a0 .config(\"spark.kryoserializer.buffer.max\", \"2000m\") \\\r\n\u00a0 \u00a0 \u00a0 \u00a0 .getOrCreate()\r\n\r\nToys = spark.read \\\r\n\u00a0 .parquet('./toys-cleaned').repartition(12)\r\n\r\n# tokenize the text\r\nregexTokenizer = RegexTokenizer(inputCol=\"reviewText\",\r\noutputCol=\"all_words\", pattern=\"\\\\W\")\r\ntoys_with_words = regexTokenizer.transform(Toys)\r\n\r\n# remove stop words\r\nremover = StopWordsRemover(inputCol=\"all_words\", outputCol=\"words\")\r\ntoys_with_tokens = remover.transform(toys_with_words).drop(\"all_wor",
+          "graph_score": 0.552763413057531,
+          "paths": [
+            {
+              "signal": "buffer.max",
+              "degree": 4,
+              "source_excerpt": ".config(\"spark.kryoserializer.buffer.max\", \"1g\")",
+              "candidate_excerpt": ".config(\"spark.kryoserializer.buffer.max\", \"2000m\") \\",
+              "contribution": 0.25
+            },
+            {
+              "signal": "spark.serializer",
+              "degree": 7,
+              "source_excerpt": ".config(\"spark.serializer\", \"org.apache.spark.serializer.KryoSerializer\")",
+              "candidate_excerpt": ".config(\"spark.serializer\",",
+              "contribution": 0.142857142857143
+            },
+            {
+              "signal": "serializer.KryoSerializer",
+              "degree": 8,
+              "source_excerpt": ".config(\"spark.serializer\", \"org.apache.spark.serializer.KryoSerializer\")",
+              "candidate_excerpt": "\"org.apache.spark.serializer.KryoSerializer\") \\",
+              "contribution": 0.125
+            },
+            {
+              "signal": "driver.memory",
+              "degree": 34,
+              "source_excerpt": ".config(\"spark.driver.memory\", \"8g\")",
+              "candidate_excerpt": ".config(\"spark.driver.memory\", \"16G\") \\",
+              "contribution": 0.0294117647058824
+            },
+            {
+              "signal": "getOrCreate",
+              "degree": 182,
+              "source_excerpt": ".getOrCreate();",
+              "candidate_excerpt": ".getOrCreate()",
+              "contribution": 0.00549450549450549
+            }
+          ]
+        },
+        {
+          "id": "spark-13315352",
+          "title": "Spark SQL throw  Illegal character exception when load certain abnormal path of HDFS",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13315352",
+          "description": "In the distributed hdfs storage system\uff0cSpace and other special\u00a0character\u00a0are allowed in the path\uff1a\r\n{code:java}\r\nhdfs://ns1/tmp2/hive-staging/hadoop_hive_2020-07-06_17-31-29_139_7042265710400397740-1/-ext-10000/test_table=2020-06-17\u00a018%3A00%3A00/part-00000-84396c4e-ba05-4936-afc7-db46c4251bfa.c000\r\n\r\n{code}\r\nWhen we load data by using\r\n{code:java}\r\norg.apache.spark.sql.execution.datasources.parquet.ParquetFileFormat\r\norg.apache.spark.sql.execution.datasources.orcOrcFileFormat.scala\r\norg.apache.spark.sql.hive.orc.OrcFileFormat\u00a0{code}\r\n, exception may throw as below:\r\n{code:java}\r\nCaused by: java.net.URISyntaxException: Illegal character in path at index 136: hdfs://ns1/tmp2/hive-staging/hadoop_hive_2020-07-06_17-31-29_139_7042265710400397740-1/-ext-10000/test_table=2020-06-17 18%3A00%3A00/part-00000-84396c4e-ba05-4936-afc7-db46c4251bfa.c000\r\nat java.net.URI$Parser.fail(URI.java:2848)\r\nat j",
+          "graph_score": 0.5,
+          "paths": [
+            {
+              "signal": "parquet.ParquetFileFormat",
+              "degree": 2,
+              "source_excerpt": "[20-Apr-2020 11:42:27.877]\u00a0 INFO [boundedElastic-2 o.a.s.s.e.datasources.parquet.ParquetFileFormat:57] q: - Using default output committer for Parquet: org.apache.parquet.hadoop.ParquetOutputCommitter",
+              "candidate_excerpt": "org.apache.spark.sql.execution.datasources.parquet.ParquetFileFormat",
+              "contribution": 0.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13403118",
+          "title": "Stop task result getter properly on spark context stopping",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13403118",
+          "description": "org.apache.spark.scheduler.TaskSchedulerImpl#stop doesn't handle exception properly. If one component throws exceptions on stopping, the exception is thrown and\u00a0TaskSchedulerImpl.stop() will not be executed completely.\r\n\r\nFor example if backend.stop() fails, then\u00a0taskResultGetter.stop() won't be executed. The result is that after a couple of restart of the spark context, there will be a lot of '\r\n\r\ntask-result-getter' threads retained.\r\n\r\n\u00a0\r\n\r\n!image-2021-09-24-18-50-57-072.png!\r\n\r\n!image-2021-09-24-18-51-03-837.png!",
+          "graph_score": 0.5,
+          "paths": [
+            {
+              "signal": "scheduler.TaskSchedulerImpl",
+              "degree": 2,
+              "source_excerpt": "[20-Apr-2020 11:42:34.981]\u00a0 INFO [dag-scheduler-event-loop org.apache.spark.scheduler.TaskSchedulerImpl:57] q: - Adding task set 0.0 with 1 tasks",
+              "candidate_excerpt": "org.apache.spark.scheduler.TaskSchedulerImpl#stop doesn't handle exception properly. If one component throws exceptions on stopping, the exception is thrown and\u00a0TaskSchedulerImpl.stop() will not be executed completely.",
+              "contribution": 0.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13546171",
+          "title": "java.lang.OutOfMemoryError: Requested array size exceeds VM limit",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13546171",
+          "description": "We get the following error from our Pyspark application in Production env:\r\n\r\n_java.lang.OutOfMemoryError: Requested array size exceeds VM limit_\r\n\r\nI simplified the code we used and shared it below so you can easily investigate the issue.\r\n\r\nWe use Pyspark to read 900 MB text file which has one record. We use foreach function to iterate over the Datafreme and apply some high order function. The error occurs once foreach action is triggered. I think the issue is related to the integer data type of the bytes array used to hold the serialized dataframe. Since the dataframe record was too big, it seems the serialized record exceeded the max integer value, hence the error occurred.\u00a0\r\n\r\nNote that the same error happens when using foreachBatch function with writeStream.\u00a0\r\n\r\nOur prod data has many records larger than 100 MB.\u00a0 Appreciate your help to provide a fix or a solution to that issue.\r\n\r",
+          "graph_score": 0.476648351648352,
+          "paths": [
+            {
+              "signal": "lang.OutOfMemoryError",
+              "degree": 26,
+              "source_excerpt": "Exception in thread \"dispatcher-event-loop-1\" java.lang.OutOfMemoryError",
+              "candidate_excerpt": "java.lang.OutOfMemoryError: Requested array size exceeds VM limit",
+              "contribution": 0.346153846153846
+            },
+            {
+              "signal": "serializer.KryoSerializer",
+              "degree": 8,
+              "source_excerpt": ".config(\"spark.serializer\", \"org.apache.spark.serializer.KryoSerializer\")",
+              "candidate_excerpt": "spark-submit --master yarn --conf spark.serializer=org.apache.spark.serializer.KryoSerializer\u00a0 --num-executors 15 --executor-cores 4 --executor-memory 20g --driver-memory 20g --name haitham_job --deploy-mode cluster big_file_process.py",
+              "contribution": 0.125
+            },
+            {
+              "signal": "getOrCreate",
+              "degree": 182,
+              "source_excerpt": ".getOrCreate();",
+              "candidate_excerpt": "spark=SparkSession.builder.enableHiveSupport().getOrCreate()",
+              "contribution": 0.00549450549450549
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-585045146697",
+      "latency_ms": 675.51
+    },
+    {
+      "case_id": "R03",
+      "issue_id": "spark-13587019",
+      "action": "check_environment",
+      "reasons": [
+        "An explicit missing-class/module error calls for dependency and classpath checks before broad component isolation."
+      ],
+      "primary_components": [
+        "Hive",
+        "ORC",
+        "Spark SQL / DataFrames"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13297537",
+          "title": "ThriftServerQueryTestSuite: Sharing test data and test tables among multiple test cases.",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13297537",
+          "description": "ThriftServerQueryTestSuite spend 17 minutes time to test.\r\nI checked the code and found ThriftServerQueryTestSuite load test data repeatedly.",
+          "graph_score": 1.5,
+          "paths": [
+            {
+              "signal": "ThriftServerQueryTestSuite",
+              "degree": 6,
+              "source_excerpt": "ThriftServerQueryTestSuite failed during the Maven daily test",
+              "candidate_excerpt": "ThriftServerQueryTestSuite: Sharing test data and test tables among multiple test cases.",
+              "contribution": 1.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13337697",
+          "title": "Fix Flaky Test: ThriftServerQueryTestSuite. subquery_scalar_subquery_scalar_subquery_select_sql",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13337697",
+          "description": "- https://amplab.cs.berkeley.edu/jenkins/job/SparkPullRequestBuilder/130369/testReport/org.apache.spark.sql.hive.thriftserver/ThriftServerQueryTestSuite/subquery_scalar_subquery_scalar_subquery_select_sql/\r\n\r\n{code}\r\n[info] - subquery/scalar-subquery/scalar-subquery-select.sql *** FAILED *** (3 seconds, 877 milliseconds)\r\n[info]   Expected \"[1]0\t2017-05-04 01:01:0...\", but got \"[]0\t2017-05-04 01:01:0...\" Result did not match for query #3\r\n[info]   SELECT (SELECT min(t3d) FROM t3) min_t3d,\r\n[info]          (SELECT max(t2h) FROM t2) max_t2h\r\n[info]   FROM   t1\r\n[info]   WHERE  t1a = 'val1c' (ThriftServerQueryTestSuite.scala:197)\r\n{code}",
+          "graph_score": 1.5,
+          "paths": [
+            {
+              "signal": "ThriftServerQueryTestSuite",
+              "degree": 6,
+              "source_excerpt": "ThriftServerQueryTestSuite failed during the Maven daily test",
+              "candidate_excerpt": "Fix Flaky Test: ThriftServerQueryTestSuite. subquery_scalar_subquery_scalar_subquery_select_sql",
+              "contribution": 1.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13509873",
+          "title": "Add `bouncy-castle` test dependencies to `sql/core` module for Hadoop 3.4.0",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13509873",
+          "description": "on hadoop trunk (but not the 3.3.x line), spark builds fail with a CNFE\r\n\r\n{code}\r\nnet.alchim31.maven:scala-maven-plugin:4.7.2:testCompile: org/bouncycastle/jce/provider/BouncyCastleProvider\r\n\r\n{code}\r\n\r\nfull stack\r\n\r\n{code}\r\n[ERROR] Failed to execute goal net.alchim31.maven:scala-maven-plugin:4.7.2:testCompile (scala-test-compile-first) on project spark-sql_2.12: Execution scala-test-compile-first of goal net.alchim31.maven:scala-maven-plugin:4.7.2:testCompile failed: A required class was missing while executing net.alchim31.maven:scala-maven-plugin:4.7.2:testCompile: org/bouncycastle/jce/provider/BouncyCastleProvider\r\n[ERROR] -----------------------------------------------------\r\n[ERROR] realm =    plugin>net.alchim31.maven:scala-maven-plugin:4.7.2\r\n[ERROR] strategy = org.codehaus.plexus.classworlds.strategy.SelfFirstStrategy\r\n[ERROR] urls[0] = file:/Users/stevel/.m2/repository/net/alc",
+          "graph_score": 0.833333333333333,
+          "paths": [
+            {
+              "signal": "provider.BouncyCastleProvider",
+              "degree": 2,
+              "source_excerpt": "22946  Caused by: java.lang.ClassNotFoundException: org.bouncycastle.jce.provider.BouncyCastleProvider",
+              "candidate_excerpt": "[ERROR] : org.bouncycastle.jce.provider.BouncyCastleProvider",
+              "contribution": 0.5
+            },
+            {
+              "signal": "BouncyCastleProvider",
+              "degree": 3,
+              "source_excerpt": "22913  org.apache.hive.service.cli.HiveSQLException: Error running query: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 8542.0 failed 1 times, most recent failure: Lost task 0.0 in stage 8542.0 (TID 8594) (localhost executor driver): java.lang.NoClassDefFoundError: org/bouncycastle/jce/provider/BouncyCastleProvider",
+              "candidate_excerpt": "net.alchim31.maven:scala-maven-plugin:4.7.2:testCompile: org/bouncycastle/jce/provider/BouncyCastleProvider",
+              "contribution": 0.333333333333333
+            }
+          ]
+        },
+        {
+          "id": "spark-13309720",
+          "title": "Apply SharedThriftServer to all ThriftServer related tests",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13309720",
+          "description": "To add \r\n{code:java}\r\nHiveThriftBinaryServerSuite\r\nHiveThriftCleanUpScratchDirSuite\r\nHiveThriftHttpServerSuite\r\nJdbcConnectionUriSuite\r\nSingleSessionSuite\r\nSparkMetadataOperationSuite\r\nSparkThriftServerProtocolVersionsSuite\r\nUISeleniumSuite\r\n{code}\r\n\r\nexist ones\r\n\r\n{code:java}\r\nThriftServerQueryTestSuite\r\nThriftServerWithSparkContextSuite\r\n{code}",
+          "graph_score": 0.5,
+          "paths": [
+            {
+              "signal": "ThriftServerQueryTestSuite",
+              "degree": 6,
+              "source_excerpt": "ThriftServerQueryTestSuite failed during the Maven daily test",
+              "candidate_excerpt": "ThriftServerQueryTestSuite",
+              "contribution": 0.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13427373",
+          "title": "Fix /sql/hive-thriftserver/org.apache.spark.sql.hive.thriftserver.ThriftServerQueryTestSuite under ANSI mode",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13427373",
+          "description": "ThriftServerQueryTestSuite will fail on {{timestampNTZ/timestamp.sql}} , when ANSI mode is on by default. It is because the {{timestampNTZ/timestamp.sql}} should only work with ANSI off according to the golden result file, but ThriftServerQueryTestSuite or the timestamp.sql test doesn't override the default ANSI setting.",
+          "graph_score": 0.5,
+          "paths": [
+            {
+              "signal": "ThriftServerQueryTestSuite",
+              "degree": 6,
+              "source_excerpt": "ThriftServerQueryTestSuite failed during the Maven daily test",
+              "candidate_excerpt": "ThriftServerQueryTestSuite will fail on {{timestampNTZ/timestamp.sql}} , when ANSI mode is on by default. It is because the {{timestampNTZ/timestamp.sql}} should only work with ANSI off according to the golden result file, but ThriftServerQueryTestSuite or the timestamp.sql test doesn't override the default ANSI setting.",
+              "contribution": 0.5
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-7dc2645b75f2",
+      "latency_ms": 948.3
+    },
+    {
+      "case_id": "R04",
+      "issue_id": "spark-13559808",
+      "action": "check_environment",
+      "reasons": [
+        "Confirm source-specific environment and reproduction before reusing this historical lead."
+      ],
+      "primary_components": [
+        "Python / PySpark",
+        "Spark SQL / DataFrames"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13517240",
+          "title": "mlflow doctest fails for pandas API on SPark",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13517240",
+          "description": "{code}\r\nFile \"/__w/spark/spark/python/pyspark/pandas/mlflow.py\", line 172, in pyspark.pandas.mlflow.load_model\r\nFailed example:\r\n    prediction_df\r\nException raised:\r\n    Traceback (most recent call last):\r\n      File \"/usr/lib/python3.9/doctest.py\", line 1336, in __run\r\n        exec(compile(example.source, filename, \"single\",\r\n      File \"<doctest pyspark.pandas.mlflow.load_model[18]>\", line 1, in <module>\r\n        prediction_df\r\n      File \"/__w/spark/spark/python/pyspark/pandas/frame.py\", line 13322, in __repr__\r\n        pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))\r\n      File \"/__w/spark/spark/python/pyspark/pandas/frame.py\", line 13313, in _get_or_create_repr_pandas_cache\r\n        self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}\r\n      File \"/__w/spark/spark/python/pyspark/pandas/frame.py\", line 13308, in _to_internal_panda",
+          "graph_score": 4.04767187371797,
+          "paths": [
+            {
+              "signal": "predict_fn",
+              "degree": 2,
+              "source_excerpt": "result = predict_fn(pdf, params)",
+              "candidate_excerpt": "result = predict_fn(pdf)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "loaded_model.predict",
+              "degree": 2,
+              "source_excerpt": "return loaded_model.predict(pdf, params=params)",
+              "candidate_excerpt": "return loaded_model.predict(pdf)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "batch_predict_fn",
+              "degree": 2,
+              "source_excerpt": "yield _predict_row_batch(batch_predict_fn, row_batch_args)",
+              "candidate_excerpt": "yield _predict_row_batch(batch_predict_fn, row_batch_args)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "accept_sparse",
+              "degree": 2,
+              "source_excerpt": "X = self._validate_data(X, accept_sparse=[\"csr\", \"csc\", \"coo\"], reset=False)",
+              "candidate_excerpt": "X = self._validate_data(X, accept_sparse=[\"csr\", \"csc\", \"coo\"], reset=False)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "_predict_row_batch",
+              "degree": 2,
+              "source_excerpt": "yield _predict_row_batch(batch_predict_fn, row_batch_args)",
+              "candidate_excerpt": "yield _predict_row_batch(batch_predict_fn, row_batch_args)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "_internal.to_pandas_frame",
+              "degree": 4,
+              "source_excerpt": "return self._internal.to_pandas_frame",
+              "candidate_excerpt": "return self._internal.to_pandas_frame",
+              "contribution": 0.25
+            },
+            {
+              "signal": "max_display_count",
+              "degree": 5,
+              "source_excerpt": "pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))",
+              "candidate_excerpt": "pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))",
+              "contribution": 0.2
+            },
+            {
+              "signal": "_repr_pandas_cache",
+              "degree": 5,
+              "source_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "candidate_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "contribution": 0.2
+            },
+            {
+              "signal": "_jdf.collectToPython",
+              "degree": 6,
+              "source_excerpt": "sock_info = self._jdf.collectToPython()",
+              "candidate_excerpt": "sock_info = self._jdf.collectToPython()",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "_to_internal_pandas",
+              "degree": 6,
+              "source_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "candidate_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "attr_name",
+              "degree": 6,
+              "source_excerpt": "setattr(self, attr_name, fn(self))",
+              "candidate_excerpt": "setattr(self, attr_name, fn(self))",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "init_stream_yield_batches",
+              "degree": 8,
+              "source_excerpt": "return ArrowStreamSerializer.dump_stream(self, init_stream_yield_batches(), stream)",
+              "candidate_excerpt": "return ArrowStreamSerializer.dump_stream(self, init_stream_yield_batches(), stream)",
+              "contribution": 0.125
+            },
+            {
+              "signal": "ArrowStreamSerializer.dump_stream",
+              "degree": 8,
+              "source_excerpt": "return ArrowStreamSerializer.dump_stream(self, init_stream_yield_batches(), stream)",
+              "candidate_excerpt": "return ArrowStreamSerializer.dump_stream(self, init_stream_yield_batches(), stream)",
+              "contribution": 0.125
+            },
+            {
+              "signal": "out_iter",
+              "degree": 14,
+              "source_excerpt": "serializer.dump_stream(out_iter, outfile)",
+              "candidate_excerpt": "serializer.dump_stream(out_iter, outfile)",
+              "contribution": 0.0714285714285714
+            },
+            {
+              "signal": "get_return_value",
+              "degree": 31,
+              "source_excerpt": "return_value = get_return_value(",
+              "candidate_excerpt": "return_value = get_return_value(",
+              "contribution": 0.032258064516129
+            },
+            {
+              "signal": "example.source",
+              "degree": 45,
+              "source_excerpt": "exec(compile(example.source, filename, \"single\",",
+              "candidate_excerpt": "exec(compile(example.source, filename, \"single\",",
+              "contribution": 0.0222222222222222
+            },
+            {
+              "signal": "ValueError",
+              "degree": 51,
+              "source_excerpt": "raise ValueError(message)",
+              "candidate_excerpt": "raise ValueError(message)",
+              "contribution": 0.0196078431372549
+            },
+            {
+              "signal": "DataFrame",
+              "degree": 464,
+              "source_excerpt": "pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))",
+              "candidate_excerpt": "pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))",
+              "contribution": 0.0021551724137931
+            }
+          ]
+        },
+        {
+          "id": "spark-13503310",
+          "title": "Fix doctest for new version mlfow",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13503310",
+          "description": "**********************************************************************\r\nFile \"/__w/spark/spark/python/pyspark/pandas/mlflow.py\", line 168, in pyspark.pandas.mlflow.load_model\r\nFailed example:\r\n    run_info = client.list_run_infos(exp_id)[-1]\r\nException raised:\r\n    Traceback (most recent call last):\r\n      File \"/usr/lib/python3.9/doctest.py\", line 1336, in __run\r\n        exec(compile(example.source, filename, \"single\",\r\n      File \"<doctest pyspark.pandas.mlflow.load_model[14]>\", line 1, in <module>\r\n        run_info = client.list_run_infos(exp_id)[-1]\r\n    AttributeError: 'MlflowClient' object has no attribute 'list_run_infos'\r\n**********************************************************************\r\nFile \"/__w/spark/spark/python/pyspark/pandas/mlflow.py\", line 169, in pyspark.pandas.mlflow.load_model\r\nFailed example:\r\n    model = load_model(\"runs:/{run_id}/model\".format(run_id=run_info.",
+          "graph_score": 1.02222222222222,
+          "paths": [
+            {
+              "signal": "mlflow.load_model",
+              "degree": 3,
+              "source_excerpt": "Fix pyspark.pandas.mlflow.load_model test (Python 3.12)",
+              "candidate_excerpt": "8 of  26 in pyspark.pandas.mlflow.load_model",
+              "contribution": 1.0
+            },
+            {
+              "signal": "example.source",
+              "degree": 45,
+              "source_excerpt": "exec(compile(example.source, filename, \"single\",",
+              "candidate_excerpt": "exec(compile(example.source, filename, \"single\",",
+              "contribution": 0.0222222222222222
+            }
+          ]
+        },
+        {
+          "id": "spark-13423001",
+          "title": "Fix DataFrame select subset with duplicated columns",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13423001",
+          "description": "pandas\r\n{code:java}\r\n>>> pdf\r\n\u00a0 \u00a0a\r\n0 \u00a01\r\n1 \u00a02\r\n2 \u00a03\r\n3 \u00a04\r\n>>> pdf[['a', 'a']]\r\n\u00a0 \u00a0a \u00a0a\r\n0 \u00a01 \u00a01\r\n1 \u00a02 \u00a02\r\n2 \u00a03 \u00a03\r\n3 \u00a04 \u00a04 {code}\r\npandas on spark\r\n{code:java}\r\n>>> psdf\r\n\u00a0 \u00a0a\r\n0 \u00a01\r\n1 \u00a02\r\n2 \u00a03\r\n3 \u00a04\r\n>>> psdf[['a', 'a']]\r\nTraceback (most recent call last):\r\n\u00a0 File \"<stdin>\", line 1, in <module>\r\n\u00a0 File \"/u02/spark/python/pyspark/pandas/frame.py\", line 12077, in __repr__\r\n\u00a0 \u00a0 pdf = self._get_or_create_repr_pandas_cache(max_display_count)\r\n\u00a0 File \"/u02/spark/python/pyspark/pandas/frame.py\", line 12068, in _get_or_create_repr_pandas_cache\r\n\u00a0 \u00a0 self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}\r\n\u00a0 File \"/u02/spark/python/pyspark/pandas/frame.py\", line 12063, in _to_internal_pandas\r\n\u00a0 \u00a0 return self._internal.to_pandas_frame\r\n\u00a0 File \"/u02/spark/python/pyspark/pandas/utils.py\", line 576, in wrapped_lazy_property\r\n\u00a0 \u00a0 setattr(self, attr_name, fn(self))\r\n\u00a0 File \"/u02/spark",
+          "graph_score": 1.00940669371197,
+          "paths": [
+            {
+              "signal": "_internal.to_pandas_frame",
+              "degree": 4,
+              "source_excerpt": "return self._internal.to_pandas_frame",
+              "candidate_excerpt": "return self._internal.to_pandas_frame",
+              "contribution": 0.25
+            },
+            {
+              "signal": "max_display_count",
+              "degree": 5,
+              "source_excerpt": "pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))",
+              "candidate_excerpt": "pdf = self._get_or_create_repr_pandas_cache(max_display_count)",
+              "contribution": 0.2
+            },
+            {
+              "signal": "_repr_pandas_cache",
+              "degree": 5,
+              "source_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "candidate_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "contribution": 0.2
+            },
+            {
+              "signal": "_to_internal_pandas",
+              "degree": 6,
+              "source_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "candidate_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "attr_name",
+              "degree": 6,
+              "source_excerpt": "setattr(self, attr_name, fn(self))",
+              "candidate_excerpt": "setattr(self, attr_name, fn(self))",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "ValueError",
+              "degree": 51,
+              "source_excerpt": "raise ValueError(message)",
+              "candidate_excerpt": "raise ValueError(",
+              "contribution": 0.0196078431372549
+            },
+            {
+              "signal": "DataFrame",
+              "degree": 464,
+              "source_excerpt": "pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))",
+              "candidate_excerpt": "Fix DataFrame select subset with duplicated columns",
+              "contribution": 0.00646551724137931
+            }
+          ]
+        },
+        {
+          "id": "spark-13419821",
+          "title": "[PYSPARK] Fix mlflow doctest",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13419821",
+          "description": "{code:java}\r\n**********************************************************************\r\n1324File \"/__w/spark/spark/python/pyspark/pandas/mlflow.py\", line 149, in pyspark.pandas.mlflow.load_model\r\n1325Failed example:\r\n1326    mlflow.set_experiment(\"my_experiment\")\r\n1327Expected nothing\r\n1328Got:\r\n1329    <Experiment: artifact_location='file:///__w/spark/spark/python/target/5d5d5841-43b7-41c4-bc0a-1c5763b355ca/tmpfhad7kycpandas_on_spark_mlflow/0', experiment_id='0', lifecycle_stage='active', name='my_experiment', tags={}>\r\n1330**********************************************************************\r\n1331   1 of  26 in pyspark.pandas.mlflow.load_model\r\n1332***Test Failed*** 1 failures. {code}",
+          "graph_score": 1.0,
+          "paths": [
+            {
+              "signal": "mlflow.load_model",
+              "degree": 3,
+              "source_excerpt": "Fix pyspark.pandas.mlflow.load_model test (Python 3.12)",
+              "candidate_excerpt": "1324File \"/__w/spark/spark/python/pyspark/pandas/mlflow.py\", line 149, in pyspark.pandas.mlflow.load_model",
+              "contribution": 1.0
+            }
+          ]
+        },
+        {
+          "id": "spark-13472381",
+          "title": "DatetimeIndex error during pyspark session",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13472381",
+          "description": "{code:java}\r\nUsing Python version 3.8.13 (default, Jun 29 2022 11:50:19)\r\nSpark context Web UI available at http://172.25.179.45:4042\r\nSpark context available as 'sc' (master = local[*], app id = local-1658283215853).\r\nSparkSession available as 'spark'.\r\n>>> from pyspark import pandas as ps\r\nWARNING:root:'PYARROW_IGNORE_TIMEZONE' environment variable was not set. It is required to set this environment variable to '1' in both driver and executor sides if you use pyarrow>=2.0.0. pandas-on-Spark will set it for you but it does not work if there is a Spark context already launched.\r\n>>> ps.DatetimeIndex(['1970-01-01', '1970-01-01', '1970-01-01'])\r\n/home/spark/spark/python/pyspark/pandas/internal.py:1573: FutureWarning: iteritems is deprecated and will be removed in a future version. Use .items instead.\r\n\u00a0 fields = [\r\n/home/spark/spark/python/pyspark/sql/pandas/conversion.py:486: FutureWarnin",
+          "graph_score": 0.983333333333333,
+          "paths": [
+            {
+              "signal": "_internal.to_pandas_frame",
+              "degree": 4,
+              "source_excerpt": "return self._internal.to_pandas_frame",
+              "candidate_excerpt": "return self._internal.to_pandas_frame",
+              "contribution": 0.25
+            },
+            {
+              "signal": "max_display_count",
+              "degree": 5,
+              "source_excerpt": "pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))",
+              "candidate_excerpt": "pindex = self._psdf._get_or_create_repr_pandas_cache(max_display_count).index",
+              "contribution": 0.2
+            },
+            {
+              "signal": "_repr_pandas_cache",
+              "degree": 5,
+              "source_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "candidate_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "contribution": 0.2
+            },
+            {
+              "signal": "_to_internal_pandas",
+              "degree": 6,
+              "source_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "candidate_excerpt": "self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}",
+              "contribution": 0.166666666666667
+            },
+            {
+              "signal": "attr_name",
+              "degree": 6,
+              "source_excerpt": "setattr(self, attr_name, fn(self))",
+              "candidate_excerpt": "setattr(self, attr_name, fn(self))",
+              "contribution": 0.166666666666667
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-52495307fd32",
+      "latency_ms": 1050.83
+    },
+    {
+      "case_id": "R05",
+      "issue_id": "spark-13558274",
+      "action": "investigate_component_boundary",
+      "reasons": [
+        "At least three components have title/prose evidence beyond incidental stack frames."
+      ],
+      "primary_components": [
+        "Spark Connect",
+        "Spark SQL / DataFrames",
+        "Streaming"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13484350",
+          "title": "DAGScheduler should fail job until all related running tasks have been killed",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13484350",
+          "description": "*Issue Description*\r\nThe staging directory within table location is not removed when {{CTAS}} fails sometimes.\r\nIt is a trouble if the new table is a Managed Table when we want to recreate it.\r\n\r\n*Root Cause*\r\nSchedulerBackend kills tasks via {{KillTask}} message which is asynchronous, so we may have failed a job but the tasks are still running and create the tmp file. Even if the running tasks will failed and delete the generated file finally, but the temporary directory was left.\r\n\r\n*Solution*\r\nBefore killing a job, we should make sure that all related running tasks have been killed.\r\n\r\n*How to Reproduce*\r\n\r\nStep 1: create a source table and insert data to make the file number exceeds 20 on HDFS\r\n{code:sql}\r\n-- create source table\r\nCREATE TABLE IF NOT EXISTS default.test_wechar\r\n(name string)\r\nPARTITIONED BY (grass_date date)\r\nSTORED AS PARQUET\r\n\r\n-- insert data 24 times\r\ninsert into d",
+          "graph_score": 0.5,
+          "paths": [
+            {
+              "signal": "temp_view",
+              "degree": 2,
+              "source_excerpt": "df.createOrReplaceTempView(\"temp_view\")",
+              "candidate_excerpt": "lateral view explode(sequence(1,2000)) as temp_view;",
+              "contribution": 0.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13602907",
+          "title": "Fix the state schema for FlatMapGroupsWithState in spark connect when there is no initial state",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13602907",
+          "description": "In spark connect, when there is no initial state, we derived the state schema from the input:\r\n * create the initialDs from the original input: [https://github.com/apache/spark/blob/master/sql/connect/server/src/main/scala/org/apache/spark/sql/connect/planner/SparkConnectPlanner.scala#L679-L689]\r\n * derived the state expression encoder from this `initialDs` which is incorrect: [https://github.com/apache/spark/blob/master/sql/connect/server/src/main/scala/org/apache/spark/sql/connect/planner/SparkConnectPlanner.scala#L729]\r\n\r\n\u00a0\r\n\r\nOur unit tests fail to cover this case because it doesn't do the state update: [https://github.com/apache/spark/blob/master/connector/connect/client/jvm/src/test/scala/org/apache/spark/sql/streaming/FlatMapGroupsWithStateStreamingSuite.scala#L55-L59]\r\n\r\nafter changing the `stateFunc` to the following\r\n{code:java}\r\nval stateFunc =\r\n  (key: String, values: Iterato",
+          "graph_score": 0.5,
+          "paths": [
+            {
+              "signal": "SparkConnectPlanner.scala",
+              "degree": 2,
+              "source_excerpt": "The root cause is that Connect server triggers physical plan on a streaming Dataframe [in SparkConnectPlanner.scala|https://github.com/apache/spark/blob/334d952f9555cbfad8ef84987d6f978eb6b37b9b/connector/connect/server/src/main/scala/org/apache/spark/sql/connect/planner/SparkConnectPlanner.scala#L2591]. Better to avoid that entirely, but at least for streaming it should be avoided since it cannot be done with a batch execution engine.",
+              "candidate_excerpt": "* create the initialDs from the original input: [https://github.com/apache/spark/blob/master/sql/connect/server/src/main/scala/org/apache/spark/sql/connect/planner/SparkConnectPlanner.scala#L679-L689]",
+              "contribution": 0.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13319506",
+          "title": "Check the Distinct by assuming it as Aggregate for Structured Streaming",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13319506",
+          "description": "We want to fix 2 things here:\r\n\r\n1. Give better error message for Distinct related operations in append mode that doesn't have a watermark\r\n\r\nCheck the following example:\u00a0\r\n{code:java}\r\nval s1 = spark.readStream.format(\"rate\").option(\"rowsPerSecond\", 1).load().createOrReplaceTempView(\"s1\")\r\nval s2 = spark.readStream.format(\"rate\").option(\"rowsPerSecond\", 1).load().createOrReplaceTempView(\"s2\")\r\nval unionRes = spark.sql(\"select s1.value , s1.timestamp from s1 union select s2.value, s2.timestamp from s2\")\r\nunionResult.writeStream.option(\"checkpointLocation\", ${pathA}).start(${pathB}){code}\r\nWe'll get the following confusing exception:\r\n{code:java}\r\njava.util.NoSuchElementException: None.get\r\n\tat scala.None$.get(Option.scala:529)\r\n\tat scala.None$.get(Option.scala:527)\r\n\tat org.apache.spark.sql.execution.streaming.StateStoreSaveExec.$anonfun$doExecute$9(statefulOperators.scala:346)\r\n\tat scal",
+          "graph_score": 0.10369532428356,
+          "paths": [
+            {
+              "signal": "readStream.format",
+              "degree": 17,
+              "source_excerpt": "df = spark.readStream.format(\"rate\").option(\"numPartitions\", \"1\").load()",
+              "candidate_excerpt": "val s1 = spark.readStream.format(\"rate\").option(\"rowsPerSecond\", 1).load().createOrReplaceTempView(\"s1\")",
+              "contribution": 0.0588235294117647
+            },
+            {
+              "signal": "df.createOrReplaceTempView",
+              "degree": 24,
+              "source_excerpt": "df.createOrReplaceTempView(\"temp_view\")",
+              "candidate_excerpt": "df.createOrReplaceTempView(\"deduptest\")",
+              "contribution": 0.0416666666666667
+            },
+            {
+              "signal": "spark.sql",
+              "degree": 312,
+              "source_excerpt": "view_df = spark.sql(\"SELECT * FROM temp_view\") // FAILS{code}",
+              "candidate_excerpt": "val unionRes = spark.sql(\"select s1.value , s1.timestamp from s1 union select s2.value, s2.timestamp from s2\")",
+              "contribution": 0.00320512820512821
+            }
+          ]
+        },
+        {
+          "id": "spark-13577449",
+          "title": "Stream-stream join with windowed+watermarked dropDuplicates suppresses all rows",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13577449",
+          "description": "When applying a streaming dropDuplicates-with-watermark to\u00a0 a self-referential stream-stream left-join with watermark, the dropDuplicates drops all rows.\u00a0 If the watermark is eliminated from the dropDuplicates, the query behaves as expected.\r\n\r\n\u00a0\r\n\r\nThe code below demonstrates the error:\r\n\r\n\u00a0\r\n{code:java}\r\nfrom pyspark.sql.functions import window, lit, col, current_timestamp # Added on 4/30 in response to difficulty reproducing\r\n# \r\n# 1. Generate the test data\r\n#\r\nsize = 1000\r\nstep_secs = 300\r\nevent_offset_secs = 240\r\n# Add some lines to not left join\r\nskips = set()\r\nskips.add(3)\r\nskips.add(18)\r\nskips.add(800)\r\n\r\ndef lit_ts(secs):\r\n\u00a0 \u00a0 return datetime.datetime.fromtimestamp(secs)\r\n\r\ndata = []\r\nbase_time = time.time()\r\nfor x in range(size):\r\n\u00a0 \u00a0 ts = base_time + (step_secs * x)\r\n\u00a0 \u00a0 data.append({\"event_id\": f\"one_{x}\", \"join_id\": x, \"ts\": lit_ts(ts)})\r\n\u00a0 \u00a0 if x not in skips:\r\n\u00a0 \u00a0 \u00a0 \u00a0 data",
+          "graph_score": 0.100490196078431,
+          "paths": [
+            {
+              "signal": "readStream.format",
+              "degree": 17,
+              "source_excerpt": "df = spark.readStream.format(\"rate\").option(\"numPartitions\", \"1\").load()",
+              "candidate_excerpt": "sdf = spark.readStream.format(\"delta\").load(path).withWatermark('ts', '15 minutes')",
+              "contribution": 0.0588235294117647
+            },
+            {
+              "signal": "df.createOrReplaceTempView",
+              "degree": 24,
+              "source_excerpt": "df.createOrReplaceTempView(\"temp_view\")",
+              "candidate_excerpt": "df.createOrReplaceTempView(\"test_data\")",
+              "contribution": 0.0416666666666667
+            }
+          ]
+        },
+        {
+          "id": "spark-13439325",
+          "title": "java.util.NoSuchElementException: key not found: numPartitions",
+          "resolution": "Won't Fix",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13439325",
+          "description": "When running function spark.sql(\"sql\").isEmpty, the logs print {*}_java.util.NoSuchElementException: key not found: numPartitions_{*}.\r\n\r\nMy sql like:\r\n\r\n\u00a0\r\n{code:java}\r\n// hr is a partition column\r\nselect * from (select col1, '24' as hr from table1\r\n               union all select col1, '2' as hr from table2\r\n               union all select col1, hr from table3) df1\r\ninner join (select col1, '24' as hr from table4\r\n            union all select col1, '2' as hr from table5\r\n            union all select col1, hr from table6) df2\r\non df1.col1=df2.col1\r\n{code}\r\n\u00a0\r\n\r\n*exception:*\r\n\r\nCaused by: java.util.NoSuchElementException: key not found: numPartitions\r\n\u00a0 \u00a0 at scala.collection.MapLike.default(MapLike.scala:235)\r\n\u00a0 \u00a0 at scala.collection.MapLike.default$(MapLike.scala:234)\r\n\u00a0 \u00a0 at scala.collection.AbstractMap.default(Map.scala:63)\r\n\u00a0 \u00a0 at scala.collection.MapLike.apply(MapLike.scala:144)\r\n\u00a0 ",
+          "graph_score": 0.0821524966261808,
+          "paths": [
+            {
+              "signal": "numPartitions",
+              "degree": 38,
+              "source_excerpt": "df = spark.readStream.format(\"rate\").option(\"numPartitions\", \"1\").load()",
+              "candidate_excerpt": "java.util.NoSuchElementException: key not found: numPartitions",
+              "contribution": 0.0789473684210526
+            },
+            {
+              "signal": "spark.sql",
+              "degree": 312,
+              "source_excerpt": "view_df = spark.sql(\"SELECT * FROM temp_view\") // FAILS{code}",
+              "candidate_excerpt": "When running function spark.sql(\"sql\").isEmpty, the logs print {*}_java.util.NoSuchElementException: key not found: numPartitions_{*}.",
+              "contribution": 0.00320512820512821
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-dbe0ab9793bc",
+      "latency_ms": 955.43
+    },
+    {
+      "case_id": "R06",
+      "issue_id": "spark-13369944",
+      "action": "request_details",
+      "reasons": [
+        "Source description is absent, short or adds too little beyond its title."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": true,
+      "ranked_evidence": [],
+      "run_id": "RUN-c5323b2c493f",
+      "latency_ms": 250.84
+    },
+    {
+      "case_id": "R07",
+      "issue_id": "spark-13541049",
+      "action": "request_details",
+      "reasons": [
+        "Source description is absent, short or adds too little beyond its title."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": true,
+      "ranked_evidence": [
+        {
+          "id": "spark-13447728",
+          "title": "Add a CheckError() method to SparkFunSuite",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13447728",
+          "description": "We want to standardize on a generic way to QA error messages without impeding the ability to enhance/rework error messages.\r\nCheckError() allows for efficient asserting on the \"payload\":\r\n * Errorclass, subclass\r\n * SQLState\r\n * Parameters (both names and values)\r\n\r\n\u00a0\r\n\r\nIt does not test the actual English text. Which is the feature",
+          "graph_score": 0.126760563380282,
+          "paths": [
+            {
+              "signal": "checkError",
+              "degree": 71,
+              "source_excerpt": "Use checkError() to check Exception in *DDL*Suite",
+              "candidate_excerpt": "Add a CheckError() method to SparkFunSuite",
+              "contribution": 0.126760563380282
+            }
+          ]
+        },
+        {
+          "id": "spark-13474494",
+          "title": "Check query context by checkError()",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13474494",
+          "description": "Extend the checkError() function to check `QueryContext` in Spark exceptions.",
+          "graph_score": 0.126760563380282,
+          "paths": [
+            {
+              "signal": "checkError",
+              "degree": 71,
+              "source_excerpt": "Use checkError() to check Exception in *DDL*Suite",
+              "candidate_excerpt": "Check query context by checkError()",
+              "contribution": 0.126760563380282
+            }
+          ]
+        },
+        {
+          "id": "spark-13474541",
+          "title": "Switch validateParsingError onto checkError",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13474541",
+          "description": "Re-implement validateParsingError() using checkError",
+          "graph_score": 0.126760563380282,
+          "paths": [
+            {
+              "signal": "checkError",
+              "degree": 71,
+              "source_excerpt": "Use checkError() to check Exception in *DDL*Suite",
+              "candidate_excerpt": "Switch validateParsingError onto checkError",
+              "contribution": 0.126760563380282
+            }
+          ]
+        },
+        {
+          "id": "spark-13486507",
+          "title": "Use checkError() to intercept ParseException",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13486507",
+          "description": "Port the following test suites onto checkError():\r\n- SQLViewSuite\r\n- JDBCTableCatalogSuite",
+          "graph_score": 0.126760563380282,
+          "paths": [
+            {
+              "signal": "checkError",
+              "degree": 71,
+              "source_excerpt": "Use checkError() to check Exception in *DDL*Suite",
+              "candidate_excerpt": "Use checkError() to intercept ParseException",
+              "contribution": 0.126760563380282
+            }
+          ]
+        },
+        {
+          "id": "spark-13492514",
+          "title": "Refactor `AnalysisTest#assertAnalysisErrorClass` by reusing the `SparkFunSuite#checkError`",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13492514",
+          "description": "",
+          "graph_score": 0.126760563380282,
+          "paths": [
+            {
+              "signal": "checkError",
+              "degree": 71,
+              "source_excerpt": "Use checkError() to check Exception in *DDL*Suite",
+              "candidate_excerpt": "Refactor `AnalysisTest#assertAnalysisErrorClass` by reusing the `SparkFunSuite#checkError`",
+              "contribution": 0.126760563380282
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-8173999cadc7",
+      "latency_ms": 1067.68
+    },
+    {
+      "case_id": "R08",
+      "issue_id": "spark-13405309",
+      "action": "request_details",
+      "reasons": [
+        "Source description is absent, short or adds too little beyond its title."
+      ],
+      "primary_components": [
+        "Python / PySpark",
+        "Spark SQL / DataFrames"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": true,
+      "ranked_evidence": [
+        {
+          "id": "spark-13558947",
+          "title": "Improve test coverage of udf.py",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13558947",
+          "description": "",
+          "graph_score": 1.8,
+          "paths": [
+            {
+              "signal": "udf.py",
+              "degree": 5,
+              "source_excerpt": "Inline type hints for python/pyspark/sql/udf.py",
+              "candidate_excerpt": "Improve test coverage of udf.py",
+              "contribution": 1.8
+            }
+          ]
+        },
+        {
+          "id": "spark-13363589",
+          "title": "Support null in conversions to and from Arrow",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13363589",
+          "description": "Looks like a regression from or related to SPARK-33489.\r\n\r\nI got the following running spark 3.1.1. with koalas 1.7.0\r\n{code:java}\r\nTypeError                                 Traceback (most recent call last)\r\n/var/scratch/miniconda3/lib/python3.8/site-packages/pyspark/sql/udf.py in returnType(self)\r\n    100             try:\r\n--> 101                 to_arrow_type(self._returnType_placeholder)\r\n    102             except TypeError:\r\n\r\n/var/scratch/miniconda3/lib/python3.8/site-packages/pyspark/sql/pandas/types.py in to_arrow_type(dt)\r\n     75     else:\r\n---> 76         raise TypeError(\"Unsupported type in conversion to Arrow: \" + str(dt))\r\n     77     return arrow_type\r\n\r\nTypeError: Unsupported type in conversion to Arrow: NullType\r\n{code}",
+          "graph_score": 0.6,
+          "paths": [
+            {
+              "signal": "udf.py",
+              "degree": 5,
+              "source_excerpt": "Inline type hints for python/pyspark/sql/udf.py",
+              "candidate_excerpt": "/var/scratch/miniconda3/lib/python3.8/site-packages/pyspark/sql/udf.py in returnType(self)",
+              "contribution": 0.6
+            }
+          ]
+        },
+        {
+          "id": "spark-13533121",
+          "title": "Migrate UDF errors into error class",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13533121",
+          "description": "Migrate pyspark/sql/udf.py errors into error class",
+          "graph_score": 0.6,
+          "paths": [
+            {
+              "signal": "udf.py",
+              "degree": 5,
+              "source_excerpt": "Inline type hints for python/pyspark/sql/udf.py",
+              "candidate_excerpt": "Migrate pyspark/sql/udf.py errors into error class",
+              "contribution": 0.6
+            }
+          ]
+        },
+        {
+          "id": "spark-13546614",
+          "title": "Add documentation for type casting rules in Python UDFs/UDTFs",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13546614",
+          "description": "In addition to type mappings between Spark data types and Python data types (SPARK-44733), we should add the type casting rules for regular and arrow-optimized Python UDFs/UDTFs.\u00a0\r\n\r\nWe currently have this table in code:\r\n * Arrow: [https://github.com/apache/spark/blob/master/python/pyspark/sql/pandas/functions.py#L311-L329]\r\n * Python UDF:\u00a0[https://github.com/apache/spark/blob/master/python/pyspark/sql/udf.py#L101-L116]\r\n\r\nWe should add a proper documentation page for the type casting rules.",
+          "graph_score": 0.6,
+          "paths": [
+            {
+              "signal": "udf.py",
+              "degree": 5,
+              "source_excerpt": "Inline type hints for python/pyspark/sql/udf.py",
+              "candidate_excerpt": "* Python UDF:\u00a0[https://github.com/apache/spark/blob/master/python/pyspark/sql/udf.py#L101-L116]",
+              "contribution": 0.6
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-145b661077b8",
+      "latency_ms": 1076.5
+    },
+    {
+      "case_id": "R09",
+      "issue_id": "spark-13516136",
+      "action": "request_details",
+      "reasons": [
+        "Source description is absent, short or adds too little beyond its title."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": true,
+      "ranked_evidence": [],
+      "run_id": "RUN-641169e29a45",
+      "latency_ms": 858.56
+    },
+    {
+      "case_id": "R10",
+      "issue_id": "spark-13595781",
+      "action": "request_details",
+      "reasons": [
+        "Source description is absent, short or adds too little beyond its title."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": true,
+      "ranked_evidence": [
+        {
+          "id": "spark-13541243",
+          "title": "Enable dynamicPartitionOverwrite in SaveAsHiveFile for insert overwrite",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13541243",
+          "description": "Currently in InsertIntoHiveTable.scala , there is no way to pass dynamicPartitionOverwrite to true , when calling\u00a0 saveAsHiveFile . When dynamicPartitioOverwrite is true , spark will use\u00a0 built-in FileCommitProtocol instead of Hadoop FileOutputCommitter , which is more performant.\u00a0\r\n\r\n\u00a0\r\n\r\nHere is the solution .\u00a0\r\n\r\nWhen inserting overwrite into Hive table\r\n\r\n\u00a0\r\n\r\nCurrent code\u00a0\r\n\r\n\u00a0\r\n{code:java}\r\nval writtenParts = saveAsHiveFile(\r\n  sparkSession = sparkSession,\r\n  plan = child,\r\n  hadoopConf = hadoopConf,\r\n  fileFormat = fileFormat,\r\n  outputLocation = tmpLocation.toString,\r\n  partitionAttributes = partitionColumns,\r\n  bucketSpec = bucketSpec,\r\n  options = options)\r\n \u00a0 \u00a0 \u00a0 {code}\r\n\u00a0\r\n\r\n\u00a0\r\n\r\nProposed code.\u00a0\u00a0\r\n\r\nenableDynamicPartitionOverwrite\u00a0\r\n{code:java}\r\nval USE_FILECOMMITPROTOCOL_DYNAMIC_PARTITION_OVERWRITE =\r\n\u00a0 \u00a0 buildConf(\"spark.sql.hive.filecommit.dynamicPartitionOverwrite\"){code}",
+          "graph_score": 1.5,
+          "paths": [
+            {
+              "signal": "outputPath",
+              "degree": 2,
+              "source_excerpt": "\"Throws exception if outputPath tries to overwrite inputpath.\" But some scenes are not recognized.",
+              "candidate_excerpt": "outputPath = outputLocation,",
+              "contribution": 1.5
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-c7fe3b6710ab",
+      "latency_ms": 913.46
+    },
+    {
+      "case_id": "R11",
+      "issue_id": "spark-13429850",
+      "action": "check_environment",
+      "reasons": [
+        "Confirm source-specific environment and reproduction before reusing this historical lead."
+      ],
+      "primary_components": [
+        "Spark SQL / DataFrames"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13567272",
+          "title": "Recover `to_timestamp('366', 'DD')` test case in `datetime-parsing-invalid.sql`",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13567272",
+          "description": "",
+          "graph_score": 0.75,
+          "paths": [
+            {
+              "signal": "invalid.sql",
+              "degree": 4,
+              "source_excerpt": "We should run\u00a0datetime-parsing-invalid.sql under ANSI mode in\u00a0SQLQueryTestSuite for improving test coverage.",
+              "candidate_excerpt": "Recover `to_timestamp('366', 'DD')` test case in `datetime-parsing-invalid.sql`",
+              "contribution": 0.75
+            }
+          ]
+        },
+        {
+          "id": "spark-13405845",
+          "title": "Manual disabled format `B` for `date_format` function to compatibility with Java 8 behavior.",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13405845",
+          "description": "The `date_format` function has some behavioral differences\u00a0when using JDK 8 and JDK 17 as following:\r\n\r\nthe result of\u00a0{{select date_format('2018-11-17 13:33:33.333', 'B')}}\u00a0in\u00a0{{datetime-formatting-invalid.sql}}\u00a0with Java 8 is:\r\n{code:java}\r\n-- !query\r\nselect date_format('2018-11-17 13:33:33.333', 'B')\r\n-- !query schema\r\nstruct<>\r\n-- !query output\r\njava.lang.IllegalArgumentException\r\nUnknown pattern letter: B\r\n{code}\r\nand with Java 17 the result is:\r\n{code:java}\r\n- datetime-formatting-invalid.sql *** FAILED ***\r\n  datetime-formatting-invalid.sql\r\n  Expected \"struct<[]>\", but got \"struct<[date_format(2018-11-17 13:33:33.333, B):string]>\" Schema did not match for query #34\r\n  select date_format('2018-11-17 13:33:33.333', 'B'): -- !query\r\n  select date_format('2018-11-17 13:33:33.333', 'B')\r\n  -- !query schema\r\n  struct<date_format(2018-11-17 13:33:33.333, B):string>\r\n  -- !query output\r\n  ",
+          "graph_score": 0.25,
+          "paths": [
+            {
+              "signal": "invalid.sql",
+              "degree": 4,
+              "source_excerpt": "We should run\u00a0datetime-parsing-invalid.sql under ANSI mode in\u00a0SQLQueryTestSuite for improving test coverage.",
+              "candidate_excerpt": "the result of\u00a0{{select date_format('2018-11-17 13:33:33.333', 'B')}}\u00a0in\u00a0{{datetime-formatting-invalid.sql}}\u00a0with Java 8 is:",
+              "contribution": 0.25
+            }
+          ]
+        },
+        {
+          "id": "spark-13419434",
+          "title": "Revisit codes in Scala tests",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13419434",
+          "description": "{code}\r\ncore/src/test/scala/org/apache/spark/deploy/SparkSubmitSuite.scala:  // TODO(SPARK-9603): Building a package is flaky on Jenkins Maven builds.\r\ncore/src/test/scala/org/apache/spark/deploy/SparkSubmitTestUtils.scala:      // This test suite has some weird behaviors when executed on Jenkins:\r\ncore/src/test/scala/org/apache/spark/deploy/SparkSubmitTestUtils.scala:      // 1. Sometimes it gets extremely slow out of unknown reason on Jenkins.  Here we add a\r\ncore/src/test/scala/org/apache/spark/deploy/master/MasterSuite.scala:      // is only 2, while on Jenkins it's 32. For this specific test, 2 available processors, which\r\nexternal/kafka-0-10-sql/src/test/scala/org/apache/spark/sql/kafka010/KafkaDontFailOnDataLossSuite.scala: * when running on a slow Jenkins machine) before records start to be removed. To make sure a test\r\nproject/SparkBuild.scala:      // with Jenkins flakiness.\r\nr",
+          "graph_score": 0.25,
+          "paths": [
+            {
+              "signal": "invalid.sql",
+              "degree": 4,
+              "source_excerpt": "We should run\u00a0datetime-parsing-invalid.sql under ANSI mode in\u00a0SQLQueryTestSuite for improving test coverage.",
+              "candidate_excerpt": "sql/core/src/test/resources/sql-tests/inputs/datetime-parsing-invalid.sql:-- in java 8 this case is invalid, but valid in java 11, disabled for jenkins",
+              "contribution": 0.25
+            }
+          ]
+        },
+        {
+          "id": "spark-13281565",
+          "title": "Remove query index from the golden files of SQLQueryTestSuite",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13281565",
+          "description": "Because the SQLQueryTestSuite's golden files have the query index for each query, removal of any query statement [except the last one] will generate many unneeded difference.",
+          "graph_score": 0.1,
+          "paths": [
+            {
+              "signal": "SQLQueryTestSuite",
+              "degree": 30,
+              "source_excerpt": "We should run\u00a0datetime-parsing-invalid.sql under ANSI mode in\u00a0SQLQueryTestSuite for improving test coverage.",
+              "candidate_excerpt": "Remove query index from the golden files of SQLQueryTestSuite",
+              "contribution": 0.1
+            }
+          ]
+        },
+        {
+          "id": "spark-13294597",
+          "title": "SQLQueryTestSuite: Sharing test data and test tables among multiple test cases.",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13294597",
+          "description": "SQLQueryTestSuite spend 35 minutes time to test.\r\nI checked the code and found SQLQueryTestSuite load test data repeatedly.",
+          "graph_score": 0.1,
+          "paths": [
+            {
+              "signal": "SQLQueryTestSuite",
+              "degree": 30,
+              "source_excerpt": "We should run\u00a0datetime-parsing-invalid.sql under ANSI mode in\u00a0SQLQueryTestSuite for improving test coverage.",
+              "candidate_excerpt": "SQLQueryTestSuite: Sharing test data and test tables among multiple test cases.",
+              "contribution": 0.1
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-1e7afd81adaf",
+      "latency_ms": 1018.19
+    },
+    {
+      "case_id": "R12",
+      "issue_id": "spark-13600132",
+      "action": "review_recorded_resolution",
+      "reasons": [
+        "Title indicates maintenance/enhancement; inspect the original change rather than treating it as an incident."
+      ],
+      "primary_components": [
+        "Spark SQL / DataFrames"
+      ],
+      "action_enum_agreement": false,
+      "must_abstain": true,
+      "ranked_evidence": [
+        {
+          "id": "spark-13544859",
+          "title": "Add support for pandas-on-Spark DataFrame assertDataFrameEqual",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13544859",
+          "description": "SPIP: https://docs.google.com/document/d/1OkyBn3JbEHkkQgSQ45Lq82esXjr9rm2Vj7Ih_4zycRc/edit#heading=h.f5f0u2riv07v",
+          "graph_score": 0.366465517241379,
+          "paths": [
+            {
+              "signal": "assertDataFrameEqual",
+              "degree": 25,
+              "source_excerpt": "Replace assertEqual with assertDataFrameEqual",
+              "candidate_excerpt": "Add support for pandas-on-Spark DataFrame assertDataFrameEqual",
+              "contribution": 0.36
+            },
+            {
+              "signal": "DataFrame",
+              "degree": 464,
+              "source_excerpt": "only checks row values but doesn\u2019t validate the DataFrame\u2019s schema.",
+              "candidate_excerpt": "Add support for pandas-on-Spark DataFrame assertDataFrameEqual",
+              "contribution": 0.00646551724137931
+            }
+          ]
+        },
+        {
+          "id": "spark-13546066",
+          "title": "Add support for pandas DataFrame assertDataFrameEqual",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13546066",
+          "description": "",
+          "graph_score": 0.366465517241379,
+          "paths": [
+            {
+              "signal": "assertDataFrameEqual",
+              "degree": 25,
+              "source_excerpt": "Replace assertEqual with assertDataFrameEqual",
+              "candidate_excerpt": "Add support for pandas DataFrame assertDataFrameEqual",
+              "contribution": 0.36
+            },
+            {
+              "signal": "DataFrame",
+              "degree": 464,
+              "source_excerpt": "only checks row values but doesn\u2019t validate the DataFrame\u2019s schema.",
+              "candidate_excerpt": "Add support for pandas DataFrame assertDataFrameEqual",
+              "contribution": 0.00646551724137931
+            }
+          ]
+        },
+        {
+          "id": "spark-13540111",
+          "title": "Add assertDataFrameEqual util function",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13540111",
+          "description": "SPIP: https://docs.google.com/document/d/1OkyBn3JbEHkkQgSQ45Lq82esXjr9rm2Vj7Ih_4zycRc/edit#heading=h.f5f0u2riv07v",
+          "graph_score": 0.36,
+          "paths": [
+            {
+              "signal": "assertDataFrameEqual",
+              "degree": 25,
+              "source_excerpt": "Replace assertEqual with assertDataFrameEqual",
+              "candidate_excerpt": "Add assertDataFrameEqual util function",
+              "contribution": 0.36
+            }
+          ]
+        },
+        {
+          "id": "spark-13541617",
+          "title": "Customize diff log in assertDataFrameEqual error message format",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13541617",
+          "description": "SPIP: https://docs.google.com/document/d/1OkyBn3JbEHkkQgSQ45Lq82esXjr9rm2Vj7Ih_4zycRc/edit#heading=h.f5f0u2riv07v",
+          "graph_score": 0.36,
+          "paths": [
+            {
+              "signal": "assertDataFrameEqual",
+              "degree": 25,
+              "source_excerpt": "Replace assertEqual with assertDataFrameEqual",
+              "candidate_excerpt": "Customize diff log in assertDataFrameEqual error message format",
+              "contribution": 0.36
+            }
+          ]
+        },
+        {
+          "id": "spark-13543337",
+          "title": "Expose assertDataFrameEqual in pyspark.testing.utils",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13543337",
+          "description": "SPIP: https://docs.google.com/document/d/1OkyBn3JbEHkkQgSQ45Lq82esXjr9rm2Vj7Ih_4zycRc/edit#heading=h.f5f0u2riv07v",
+          "graph_score": 0.36,
+          "paths": [
+            {
+              "signal": "assertDataFrameEqual",
+              "degree": 25,
+              "source_excerpt": "Replace assertEqual with assertDataFrameEqual",
+              "candidate_excerpt": "Expose assertDataFrameEqual in pyspark.testing.utils",
+              "contribution": 0.36
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-96c57efc172e",
+      "latency_ms": 409.43
+    },
+    {
+      "case_id": "R13",
+      "issue_id": "spark-13401712",
+      "action": "check_environment",
+      "reasons": [
+        "Confirm source-specific environment and reproduction before reusing this historical lead."
+      ],
+      "primary_components": [
+        "Shuffle"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13277142",
+          "title": "Fix wrong log for FetchFailed task's successful speculation",
+          "resolution": "Incomplete",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13277142",
+          "description": "Steps to reproduce the bug:\r\n\r\n1. Spark speculation is enabled.\r\n\r\n2. For a running task {{X.0}}, a speculative task {{X.1}} is launched.\r\n\r\n3. Then this speculative task {{X.1}} failed by FetchFailedException, and {{successful(index)}} is set to true\r\n{code:scala}\r\n  def TaskSetManager#handleFailedTask(tid: Long, state: TaskState, reason: TaskFailedReason) {\r\n    ...\r\n    val failureException: Option[Throwable] = reason match {\r\n      case fetchFailed: FetchFailed =>\r\n        logWarning(failureReason)\r\n        if (!successful(index)) {\r\n          successful(index) = true\r\n          tasksSuccessful += 1\r\n        }\r\n    ...\r\n{code}\r\n4. When the origin running task {{X.0}} finished successfully, it found {{successful(index) == true}}, then output log: {{Ignoring task-finished event ....}}\r\n{code:scala}\r\n  def TaskSetManager#handleSuccessfulTask(tid: Long, result: DirectTaskResult[_]): Unit",
+          "graph_score": 0.550607287449393,
+          "paths": [
+            {
+              "signal": "FetchFailed",
+              "degree": 19,
+              "source_excerpt": "Handle DNS failures in Executor without causing FetchFailed",
+              "candidate_excerpt": "Fix wrong log for FetchFailed task's successful speculation",
+              "contribution": 0.473684210526316
+            },
+            {
+              "signal": "FetchFailedException",
+              "degree": 13,
+              "source_excerpt": "1. Stage won't be resubmitted due to FetchFailedException",
+              "candidate_excerpt": "3. Then this speculative task {{X.1}} failed by FetchFailedException, and {{successful(index)}} is set to true",
+              "contribution": 0.0769230769230769
+            }
+          ]
+        },
+        {
+          "id": "spark-13481692",
+          "title": "Abort result stage directly when it failed caused by FetchFailed",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13481692",
+          "description": "Here's a very serious bug\uff1a\r\n\r\nWhen result stage failed caused by FetchFailedException,\u00a0 the previous condition to determine whether result stage retries are allowed is {color:#ff0000}numMissingPartitions < resultStage.numTasks{color}.\u00a0\r\n\r\n\u00a0\r\n\r\nIf this condition holds on retry, but the other tasks at the current result stage are not killed, when result stage was resubmit, it would got wrong partitions to recalculation.\r\n{code:java}\r\n//\u00a0DAGScheduler#submitMissingTasks\r\n\u00a0\r\n// Figure out the indexes of partition ids to compute.\r\nval partitionsToCompute: Seq[Int] = stage.findMissingPartitions() {code}\r\nIt is possible that the number of partitions to be recalculated is smaller than the actual number of partitions at result stage",
+          "graph_score": 0.550607287449393,
+          "paths": [
+            {
+              "signal": "FetchFailed",
+              "degree": 19,
+              "source_excerpt": "Handle DNS failures in Executor without causing FetchFailed",
+              "candidate_excerpt": "Abort result stage directly when it failed caused by FetchFailed",
+              "contribution": 0.473684210526316
+            },
+            {
+              "signal": "FetchFailedException",
+              "degree": 13,
+              "source_excerpt": "1. Stage won't be resubmitted due to FetchFailedException",
+              "candidate_excerpt": "When result stage failed caused by FetchFailedException,\u00a0 the previous condition to determine whether result stage retries are allowed is {color:#ff0000}numMissingPartitions < resultStage.numTasks{color}.",
+              "contribution": 0.0769230769230769
+            }
+          ]
+        },
+        {
+          "id": "spark-13313890",
+          "title": "[SHS] Failed to parse FetchFailed TaskEndReason from event log produce by Spark 2.4",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13313890",
+          "description": "When read event log produced by Spark 2.4.4, parsing TaskEndReason failed to due to missing field \"Map Index\".",
+          "graph_score": 0.473684210526316,
+          "paths": [
+            {
+              "signal": "FetchFailed",
+              "degree": 19,
+              "source_excerpt": "Handle DNS failures in Executor without causing FetchFailed",
+              "candidate_excerpt": "[SHS] Failed to parse FetchFailed TaskEndReason from event log produce by Spark 2.4",
+              "contribution": 0.473684210526316
+            }
+          ]
+        },
+        {
+          "id": "spark-13557363",
+          "title": "Consistent FetchFailed/NoSuchFileExceptions when decommissioning is enabled",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13557363",
+          "description": "Decommissioning causes FetchFailures with NoSuchFileException due to multiple tasks on the same partition from different stage attempts sharing a single MapStatus object. Is there any workaround/config flag that I\u2019m missing that will fix the issue or is this rather a bug?\r\n\r\n*Example*\r\nHere are same tasks from different stage attempts for the same partition:\r\n{code:java}\r\nINFO [2023-11-07T17:50:03.399091Z] org.apache.spark.scheduler.TaskSetManager: Starting task 16.0 in stage 11.1 (TID 1810) (10.0.158.211, executor 5, partition 81, PROCESS_LOCAL, 4743 bytes) taskResourceAssignments Map()\r\nINFO [2023-11-07T17:51:20.229168Z] org.apache.spark.scheduler.TaskSetManager: Starting task 13.0 in stage 11.2 (TID 1836) (10.0.187.67, executor 6, partition 81, PROCESS_LOCAL, 4743 bytes) taskResourceAssignments Map() {code}\r\nThe latest mapStatus.location for partition 81 will be the latest succeeded t",
+          "graph_score": 0.473684210526316,
+          "paths": [
+            {
+              "signal": "FetchFailed",
+              "degree": 19,
+              "source_excerpt": "Handle DNS failures in Executor without causing FetchFailed",
+              "candidate_excerpt": "Consistent FetchFailed/NoSuchFileExceptions when decommissioning is enabled",
+              "contribution": 0.473684210526316
+            }
+          ]
+        },
+        {
+          "id": "spark-13562078",
+          "title": "The stage that retries due to FetchFailed will cause the downstream skewJoin AQE become ineffective",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13562078",
+          "description": "In our production environment, a SQL statement containing a Union all was executed. Due to a FetchFailed issue in Stage 24.0 of the first Union subquery, after rerunning some stages, Stage 46.0, which was supposed to follow the Skew Join rule, is now unable to take effect.",
+          "graph_score": 0.473684210526316,
+          "paths": [
+            {
+              "signal": "FetchFailed",
+              "degree": 19,
+              "source_excerpt": "Handle DNS failures in Executor without causing FetchFailed",
+              "candidate_excerpt": "The stage that retries due to FetchFailed will cause the downstream skewJoin AQE become ineffective",
+              "contribution": 0.473684210526316
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-1eb7f569382b",
+      "latency_ms": 595.43
+    },
+    {
+      "case_id": "R14",
+      "issue_id": "spark-13601116",
+      "action": "check_environment",
+      "reasons": [
+        "Confirm source-specific environment and reproduction before reusing this historical lead."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13598079",
+          "title": "Intermittent ReattachableExecuteSuite failure",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13598079",
+          "description": "[info] org.apache.spark.sql.connect.execution.ReattachableExecuteSuite *** ABORTED *** (30 seconds, 322 milliseconds)\r\n[info]   java.lang.AssertionError: assertion failed\r\n[info]   at scala.Predef$.assert(Predef.scala:264)\r\n[info]   at org.apache.spark.sql.connect.service.SparkConnectSessionManager.invalidateAllSessions(SparkConnectSessionManager.scala:293)\r\n[info]   at org.apache.spark.sql.connect.SparkConnectServerTest.clearAllExecutions(SparkConnectServerTest.scala:83)\r\n[info]   at org.apache.spark.sql.connect.SparkConnectServerTest.clearAllExecutions$(SparkConnectServerTest.scala:80)\r\n[info]   at org.apache.spark.sql.connect.execution.ReattachableExecuteSuite.clearAllExecutions(ReattachableExecuteSuite.scala:31)\r\n[info]   at org.apache.spark.sql.connect.SparkConnectServerTest.afterEach(SparkConnectServerTest.scala:76)\r\n[info]   at org.apache.spark.sql.connect.SparkConnectServerTest.a",
+          "graph_score": 4.5,
+          "paths": [
+            {
+              "signal": "ReattachableExecuteSuite",
+              "degree": 2,
+              "source_excerpt": "[3.5] Sporadic ReattachableExecuteSuite failure",
+              "candidate_excerpt": "Intermittent ReattachableExecuteSuite failure",
+              "contribution": 4.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13597213",
+          "title": "Connect operation stuck in `ReadyForExecution` even though query has finished",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13597213",
+          "description": "Using PySpark Connect to run `writeTo(...).overwritePartitions(...)` commands, I frequently see that for large queries, the client often gets stuck and never returns although the SQL query is shown as successfully finished in the Spark UI, and the data has been correctly written.\r\n\r\nThis seems due to the operation staying stuck in `ReadyForExecution`, even though the SQL query has finished. Then, the gRPC observer is never notified, and thus a response is never sent to the client.\r\n\r\nEven after the SQL query has finished, the following logs keep occuring over and over again:\r\n\r\n{{INFO ExecuteGrpcResponseSender: Starting for opId=8ee873b7-32b9-4eb6-963f-21318e2aebcf, reattachable=true, lastConsumedStreamIndex=0}}\r\n{{TRACE ExecuteGrpcResponseSender: Trying to get next response with index=1.}}\r\n{{TRACE ExecuteGrpcResponseSender: Acquired executionObserver lock.}}\r\n{{TRACE ExecuteGrpcRespons",
+          "graph_score": 0.521739130434783,
+          "paths": [
+            {
+              "signal": "operationId",
+              "degree": 2,
+              "source_excerpt": "operationId: 594ad2ad-d569-49b2-8daa-c5721972f1b3 with status Analyzed",
+              "candidate_excerpt": "{{\u00a0 \u00a0 \u00a0 \u00a0 operationId: 8ee873b7-32b9-4eb6-963f-21318e2aebcf with status ReadyForExecution}}",
+              "contribution": 0.5
+            },
+            {
+              "signal": "lang.IllegalStateException",
+              "degree": 46,
+              "source_excerpt": "java.lang.IllegalStateException:",
+              "candidate_excerpt": "{{java.lang.IllegalStateException:\u00a0}}",
+              "contribution": 0.0217391304347826
+            }
+          ]
+        },
+        {
+          "id": "spark-13551172",
+          "title": "Scala 2.13 daily  test failed",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13551172",
+          "description": "* [https://github.com/apache/spark/actions/runs/6215331575/job/16868131377]\r\n\r\n{code:java}\r\n[info] - abandoned query gets INVALID_HANDLE.OPERATION_ABANDONED error *** FAILED *** (157 milliseconds)\r\n19991[info]   Expected exception org.apache.spark.SparkException to be thrown, but java.lang.StackOverflowError was thrown (ReattachableExecuteSuite.scala:172)\r\n19992[info]   org.scalatest.exceptions.TestFailedException:\r\n19993[info]   at org.scalatest.Assertions.newAssertionFailedException(Assertions.scala:472)\r\n19994[info]   at org.scalatest.Assertions.newAssertionFailedException$(Assertions.scala:471)\r\n19995[info]   at org.scalatest.funsuite.AnyFunSuite.newAssertionFailedException(AnyFunSuite.scala:1564)\r\n19996[info]   at org.scalatest.Assertions.intercept(Assertions.scala:756)\r\n19997[info]   at org.scalatest.Assertions.intercept$(Assertions.scala:746)\r\n19998[info]   at org.scalatest.funsui",
+          "graph_score": 0.514925373134328,
+          "paths": [
+            {
+              "signal": "ReattachableExecuteSuite.scala",
+              "degree": 2,
+              "source_excerpt": "[info]   \"UNKNOWN\" did not contain \"INVALID_HANDLE.SESSION_NOT_FOUND\" (ReattachableExecuteSuite.scala:74)",
+              "candidate_excerpt": "19991[info]   Expected exception org.apache.spark.SparkException to be thrown, but java.lang.StackOverflowError was thrown (ReattachableExecuteSuite.scala:172)",
+              "contribution": 0.5
+            },
+            {
+              "signal": "exceptions.TestFailedException",
+              "degree": 67,
+              "source_excerpt": "[info]   org.scalatest.exceptions.TestFailedException:",
+              "candidate_excerpt": "19992[info]   org.scalatest.exceptions.TestFailedException:",
+              "contribution": 0.0149253731343284
+            }
+          ]
+        },
+        {
+          "id": "spark-13280812",
+          "title": "SparkFunSuite.LogAppender throws java.lang.IllegalStateException",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13280812",
+          "description": "The\u00a0LogAppender has a limit for the number of logged events. By default, it is 100 entries. All tests that use LogAppender finish successfully with this limit but sometimes one of the tests fails with the exception like:\r\n{code:java}\r\njava.lang.IllegalStateException: Number of events reached the limit of 100 while logging CSV header matches to schema w/ enforceSchema.\r\n\tat org.apache.spark.SparkFunSuite$LogAppender.append(SparkFunSuite.scala:200)\r\n\tat org.apache.log4j.AppenderSkeleton.doAppend(AppenderSkeleton.java:251)\r\n\tat org.apache.log4j.helpers.AppenderAttachableImpl.appendLoopOnAppenders(AppenderAttachableImpl.java:66)\r\n\tat org.apache.log4j.Category.callAppenders(Category.java:206)\r\n\tat org.apache.log4j.Category.forcedLog(Category.java:391)\r\n\tat org.apache.log4j.Category.log(Category.java:856)\u00a0\r\n{code}\r\nFor example, the CSV test *\"SPARK-23786: warning should be printed if CSV heade",
+          "graph_score": 0.0652173913043478,
+          "paths": [
+            {
+              "signal": "lang.IllegalStateException",
+              "degree": 46,
+              "source_excerpt": "java.lang.IllegalStateException:",
+              "candidate_excerpt": "SparkFunSuite.LogAppender throws java.lang.IllegalStateException",
+              "contribution": 0.0652173913043478
+            }
+          ]
+        },
+        {
+          "id": "spark-13535322",
+          "title": "GET /history/<appId>/1/jobs/ failed: java.lang.IllegalStateException: DB is closed",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13535322",
+          "description": "!image-2023-05-08-11-33-13-634.png!",
+          "graph_score": 0.0652173913043478,
+          "paths": [
+            {
+              "signal": "lang.IllegalStateException",
+              "degree": 46,
+              "source_excerpt": "java.lang.IllegalStateException:",
+              "candidate_excerpt": "GET /history/<appId>/1/jobs/ failed: java.lang.IllegalStateException: DB is closed",
+              "contribution": 0.0652173913043478
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-36ba28971773",
+      "latency_ms": 601.91
+    },
+    {
+      "case_id": "R15",
+      "issue_id": "spark-13561452",
+      "action": "review_recorded_resolution",
+      "reasons": [
+        "Title indicates maintenance/enhancement; inspect the original change rather than treating it as an incident."
+      ],
+      "primary_components": [
+        "Kubernetes"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13284239",
+          "title": "Failed mount warning from kubernetes and support the \"optional\" mount.",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13284239",
+          "description": "1)https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#configmapvolumesource-v1-core\r\n\r\nKubernetes allows an optional field indicating, that if the mount for this config map fails, then it is not reattempted nor the pod is declared to be failed.\r\n\r\nIn our current code base, we try to mount the volumes and create them later, it works because, kubernetes reattempts failed mounting attempt, because the `optional` field is `false` by default.\r\n\r\nBut, if this optional field is set to true, then that mount will not take place at all. Because, when the mount is performed the volume is not created - so mount fails. And this time the mount is not reattempted because the optional field is set as true.",
+          "graph_score": 0.0476190476190476,
+          "paths": [
+            {
+              "signal": "kubernetes.io",
+              "degree": 21,
+              "source_excerpt": "Like https://kubernetes.io/docs/reference/using-api/health-checks/, we need to provide `/readyz` API.",
+              "candidate_excerpt": "1)https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#configmapvolumesource-v1-core",
+              "contribution": 0.0476190476190476
+            }
+          ]
+        },
+        {
+          "id": "spark-13294943",
+          "title": "Shared Volume Spark Kubernetes",
+          "resolution": "Incomplete",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13294943",
+          "description": "Please change the deployment script for the workers to support one Shared Volume with the driver. E.g. a possible implementation:\r\nhttps://kubernetes.io/docs/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume/\r\n\r\nAtm. If a driver runs in Kubernetes it is not possible to share a volume between the driver and the workers. \r\nEnabling a shared volume between Driver and Workers would allow the use of sc.textFile(file:///path/file.txt) to be used without any need of HDFS or S3 Storage (Which in fact is a huge benefit)",
+          "graph_score": 0.0476190476190476,
+          "paths": [
+            {
+              "signal": "kubernetes.io",
+              "degree": 21,
+              "source_excerpt": "Like https://kubernetes.io/docs/reference/using-api/health-checks/, we need to provide `/readyz` API.",
+              "candidate_excerpt": "https://kubernetes.io/docs/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume/",
+              "contribution": 0.0476190476190476
+            }
+          ]
+        },
+        {
+          "id": "spark-13328980",
+          "title": "Add config for driver readiness timeout before executors start",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13328980",
+          "description": "We are using v1beta2-1.1.2-2.4.5 version of operator with spark-2.4.4\r\n\r\nspark executors keeps getting killed with exit code 1 and we are seeing following exception in the executor which goes to error state. Once this error happens, driver doesn't restart executor.\u00a0\r\n\r\n\u00a0\r\n\r\nException in thread \"main\" java.lang.reflect.UndeclaredThrowableException\r\nat org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1713)\r\nat org.apache.spark.deploy.SparkHadoopUtil.runAsSparkUser(SparkHadoopUtil.scala:64)\r\nat org.apache.spark.executor.CoarseGrainedExecutorBackend$.run(CoarseGrainedExecutorBackend.scala:188)\r\nat org.apache.spark.executor.CoarseGrainedExecutorBackend$.main(CoarseGrainedExecutorBackend.scala:281)\r\nat org.apache.spark.executor.CoarseGrainedExecutorBackend.main(CoarseGrainedExecutorBackend.scala)\r\nCaused by: org.apache.spark.SparkException: Exception thrown in awa",
+          "graph_score": 0.0476190476190476,
+          "paths": [
+            {
+              "signal": "kubernetes.io",
+              "degree": 21,
+              "source_excerpt": "Like https://kubernetes.io/docs/reference/using-api/health-checks/, we need to provide `/readyz` API.",
+              "candidate_excerpt": "Tolerations: \u00a0 \u00a0 node.kubernetes.io/not-ready:NoExecute for 300s",
+              "contribution": 0.0476190476190476
+            }
+          ]
+        },
+        {
+          "id": "spark-13379270",
+          "title": "Mark K8s secrets and config maps as immutable",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13379270",
+          "description": "Kubernetes supports marking secrets and config maps as immutable to gain performance.\u00a0\r\n\r\n[https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-immutable]\r\n\r\n[https://kubernetes.io/docs/concepts/configuration/secret/#secret-immutable]\r\n\r\nFor K8s clusters that run many thousands of Spark applications, this can yield significant reduction in load on the kube-apiserver.\r\n\r\nFrom the K8s docs:\r\n{quote}For clusters that extensively use Secrets (at least tens of thousands of unique Secret to Pod mounts), preventing changes to their data has the following advantages:\r\n * protects you from accidental (or unwanted) updates that could cause applications outages\r\n * improves performance of your cluster by significantly reducing load on kube-apiserver, by closing watches for secrets marked as immutable.{quote}\r\n\u00a0\r\n\r\nFor any secrets and config maps we create in Spark that are immutab",
+          "graph_score": 0.0476190476190476,
+          "paths": [
+            {
+              "signal": "kubernetes.io",
+              "degree": 21,
+              "source_excerpt": "Like https://kubernetes.io/docs/reference/using-api/health-checks/, we need to provide `/readyz` API.",
+              "candidate_excerpt": "[https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-immutable]",
+              "contribution": 0.0476190476190476
+            }
+          ]
+        },
+        {
+          "id": "spark-13386864",
+          "title": "Support auto-assigning labels to less important pods (e.g. decommissioning pods)",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13386864",
+          "description": "To allow for folks to use pod disruption budgets or replicasets we should indicate which pods Spark cares about \"the least\", those would be pods that are otherwise exiting soon.\r\n\r\n\u00a0\r\n\r\nWith PDBs the user would create a PDB representing the label of decommissioning executors and this could have a higher number of unavailable than the PDB for the \"regular\" execs. For people using replicasets in 1.21 we could also set a label of \"controller.kubernetes.io/pod-deletion-cost\" (see [https://github.com/kubernetes/kubernetes/pull/99163]\u00a0) to hint to the controller that a pod is less important to us.",
+          "graph_score": 0.0476190476190476,
+          "paths": [
+            {
+              "signal": "kubernetes.io",
+              "degree": 21,
+              "source_excerpt": "Like https://kubernetes.io/docs/reference/using-api/health-checks/, we need to provide `/readyz` API.",
+              "candidate_excerpt": "With PDBs the user would create a PDB representing the label of decommissioning executors and this could have a higher number of unavailable than the PDB for the \"regular\" execs. For people using replicasets in 1.21 we could also set a label of \"controller.kubernetes.io/pod-deletion-cost\" (see [https://github.com/kubernetes/kubernetes/pull/99163]\u00a0) to hint to the controller that a pod is less important to us.",
+              "contribution": 0.0476190476190476
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-18229200437f",
+      "latency_ms": 792.27
+    },
+    {
+      "case_id": "R16",
+      "issue_id": "spark-13537110",
+      "action": "request_details",
+      "reasons": [
+        "Source description is absent, short or adds too little beyond its title."
+      ],
+      "primary_components": [
+        "Spark Connect"
+      ],
+      "action_enum_agreement": true,
+      "must_abstain": true,
+      "ranked_evidence": [],
+      "run_id": "RUN-52cb846a17c6",
+      "latency_ms": 1367.1
+    },
+    {
+      "case_id": "R17",
+      "issue_id": "spark-13555751",
+      "action": "check_environment",
+      "reasons": [
+        "Confirm source-specific environment and reproduction before reusing this historical lead."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13414120",
+          "title": "udaf doesnt work with nullable (or option of) case class result",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13414120",
+          "description": "i have a need to have a dataframe aggregation return a nullable case class. there seems to be no way to get this to work. the suggestion to wrap the result in an option doesnt work either.\r\n\r\nfirst attempt using nulls:\r\n{code:java}\r\ncase class SumAndProduct(sum: Double, product: Double)\r\n\r\nval sumAndProductAgg = new Aggregator[Double, SumAndProduct, SumAndProduct] {\r\n\u00a0 def zero: SumAndProduct = null\r\n\u00a0 def reduce(b: SumAndProduct, a: Double): SumAndProduct =\r\n\u00a0 \u00a0 if (b == null) {\r\n\u00a0 \u00a0 \u00a0 SumAndProduct(a, a)\r\n\u00a0 \u00a0 } else {\r\n\u00a0 \u00a0 \u00a0 SumAndProduct(b.sum + a, b.product * a)\r\n\u00a0 \u00a0 }\r\n\u00a0 def merge(b1: SumAndProduct, b2: SumAndProduct): SumAndProduct =\r\n\u00a0 \u00a0 if (b1 == null) {\r\n\u00a0 \u00a0 \u00a0 b2\r\n\u00a0 \u00a0 } else if (b2 == null) {\r\n\u00a0 \u00a0 \u00a0 b1\r\n\u00a0 \u00a0 } else {\r\n\u00a0 \u00a0 \u00a0 SumAndProduct(b1.sum + b2.sum, b1.product * b2.product)\r\n\u00a0 \u00a0 }\r\n\u00a0 def finish(r: SumAndProduct): SumAndProduct = r\r\n\u00a0 def bufferEncoder: Encoder[SumAndProduct]",
+          "graph_score": 0.333333333333333,
+          "paths": [
+            {
+              "signal": "scala.Int",
+              "degree": 3,
+              "source_excerpt": "[warn] Applicable -Wconf / @nowarn filters for this warning: msg=<part of the message>, cat=deprecation, site=org.apache.spark.rdd.PipedRDDSuite, origin=scala.Int.+, version=2.13.0",
+              "candidate_excerpt": "If the schema is inferred from a Scala tuple/case class, or a Java bean, please try to use scala.Option[_] or other nullable types (e.g. java.lang.Integer instead of int/scala.Int).",
+              "contribution": 0.333333333333333
+            }
+          ]
+        },
+        {
+          "id": "spark-13479920",
+          "title": "Upgrading to Spark 3 is giving NullPointerException",
+          "resolution": "Not A Problem",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13479920",
+          "description": "Getting below error while upgrading to Spark3\r\n\r\n\u00a0\r\n\r\njava.lang.RuntimeException: Error while decoding: java.lang.NullPointerException: Null value appeared in non-nullable field:\r\n- array element class: \"scala.Long\"\r\n- root class: \"scala.collection.Seq\"\r\nIf the schema is inferred from a Scala tuple/case class, or a Java bean, please try to use scala.Option[_] or other nullable types (e.g. java.lang.Integer instead of int/scala.Int).\r\nmapobjects(lambdavariable(MapObject, LongType, true, -1), assertnotnull(lambdavariable(MapObject, LongType, true, -1)), input[0, array<bigint>, true], Some(interface scala.collection.Seq))\r\n\u00a0 \u00a0 at org.apache.spark.sql.errors.QueryExecutionErrors$.expressionDecodingError(QueryExecutionErrors.scala:1047)\r\n\u00a0 \u00a0 at org.apache.spark.sql.catalyst.encoders.ExpressionEncoder$Deserializer.apply(ExpressionEncoder.scala:184)\r\n\u00a0 \u00a0 at org.apache.spark.sql.catalyst.express",
+          "graph_score": 0.333333333333333,
+          "paths": [
+            {
+              "signal": "scala.Int",
+              "degree": 3,
+              "source_excerpt": "[warn] Applicable -Wconf / @nowarn filters for this warning: msg=<part of the message>, cat=deprecation, site=org.apache.spark.rdd.PipedRDDSuite, origin=scala.Int.+, version=2.13.0",
+              "candidate_excerpt": "If the schema is inferred from a Scala tuple/case class, or a Java bean, please try to use scala.Option[_] or other nullable types (e.g. java.lang.Integer instead of int/scala.Int).",
+              "contribution": 0.333333333333333
+            }
+          ]
+        },
+        {
+          "id": "spark-13320799",
+          "title": "Let sql/catalyst module tests pass for Scala 2.13",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13320799",
+          "description": "sql/catalyst module has following compile errors with scala-2.13 profile:\r\n{code:java}\r\n[ERROR] [Error] /Users/yangjie01/SourceCode/git/spark-mine/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/analysis/Analyzer.scala:1284: type mismatch;\r\n found   : scala.collection.mutable.ArrayBuffer[(org.apache.spark.sql.catalyst.expressions.Attribute, org.apache.spark.sql.catalyst.expressions.Attribute)]\r\n required: Seq[(org.apache.spark.sql.catalyst.expressions.Attribute, org.apache.spark.sql.catalyst.expressions.Attribute)]\r\n[INFO] [Info] : scala.collection.mutable.ArrayBuffer[(org.apache.spark.sql.catalyst.expressions.Attribute, org.apache.spark.sql.catalyst.expressions.Attribute)] <: Seq[(org.apache.spark.sql.catalyst.expressions.Attribute, org.apache.spark.sql.catalyst.expressions.Attribute)]?\r\n[INFO] [Info] : false\r\n[ERROR] [Error] /Users/baidu/SourceCode/git/spark-mine/sql/catalyst",
+          "graph_score": 0.0285714285714286,
+          "paths": [
+            {
+              "signal": "SourceCode",
+              "degree": 35,
+              "source_excerpt": "[warn] /Users/yangjie01/SourceCode/git/spark-mine-sbt/core/src/test/scala/org/apache/spark/rdd/PipedRDDSuite.scala:127:42: method + in class Int is deprecated (since 2.13.0): Adding a number and a String is deprecated. Use the string interpolation `s\"$num$str\"`",
+              "candidate_excerpt": "[ERROR] [Error] /Users/yangjie01/SourceCode/git/spark-mine/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/analysis/Analyzer.scala:1284: type mismatch;",
+              "contribution": 0.0285714285714286
+            }
+          ]
+        },
+        {
+          "id": "spark-13387723",
+          "title": "Cannot run leveldb related UTs on Mac OS of M1 architecture",
+          "resolution": "Duplicate",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13387723",
+          "description": "When run leveldb related UTs on Mac OS of M1 architecture, there are some test failed as follows:\r\n{code:java}\r\n[INFO] Running org.apache.spark.util.kvstore.LevelDBSuite\r\n[ERROR] Tests run: 10, Failures: 0, Errors: 10, Skipped: 0, Time elapsed: 0.18 s <<< FAILURE! - in org.apache.spark.util.kvstore.LevelDBSuite\r\n[ERROR] org.apache.spark.util.kvstore.LevelDBSuite.testMultipleTypesWriteReadDelete\u00a0 Time elapsed: 0.146 s\u00a0 <<< ERROR!\r\njava.lang.UnsatisfiedLinkError:\u00a0\r\nCould not load library. Reasons: [no leveldbjni64-1.8 in java.library.path, no leveldbjni-1.8 in java.library.path, no leveldbjni in java.library.path, /Users/yangjie01/SourceCode/git/spark-mine-12/common/kvstore/target/tmp/libleveldbjni-64-1-7259526109351494242.8: dlopen(/Users/yangjie01/SourceCode/git/spark-mine-12/common/kvstore/target/tmp/libleveldbjni-64-1-7259526109351494242.8, 1): no suitable image found.\u00a0 Did find:\r\n\t/Us",
+          "graph_score": 0.0285714285714286,
+          "paths": [
+            {
+              "signal": "SourceCode",
+              "degree": 35,
+              "source_excerpt": "[warn] /Users/yangjie01/SourceCode/git/spark-mine-sbt/core/src/test/scala/org/apache/spark/rdd/PipedRDDSuite.scala:127:42: method + in class Int is deprecated (since 2.13.0): Adding a number and a String is deprecated. Use the string interpolation `s\"$num$str\"`",
+              "candidate_excerpt": "Could not load library. Reasons: [no leveldbjni64-1.8 in java.library.path, no leveldbjni-1.8 in java.library.path, no leveldbjni in java.library.path, /Users/yangjie01/SourceCode/git/spark-mine-12/common/kvstore/target/tmp/libleveldbjni-64-1-7259526109351494242.8: dlopen(/Users/yangjie01/SourceCode/git/spark-mine-12/common/kvstore/target/tmp/libleveldbjni-64-1-7259526109351494242.8, 1): no suitable image found.\u00a0 Did find:",
+              "contribution": 0.0285714285714286
+            }
+          ]
+        },
+        {
+          "id": "spark-13486991",
+          "title": "Clean up deprecated api usage in SparkThrowableSuite",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13486991",
+          "description": "{code:java}\r\n[WARNING] /Users/yangjie01/SourceCode/git/spark-mine/core/src/test/scala/org/apache/spark/SparkThrowableSuite.scala:77: [deprecation @ org.apache.spark.SparkThrowableSuite.<local SparkThrowableSuite>.errorClassFileContents | origin=org.apache.commons.io.IOUtils.toString | version=] method toString in class IOUtils is deprecated\r\n[WARNING] /Users/yangjie01/SourceCode/git/spark-mine/core/src/test/scala/org/apache/spark/SparkThrowableSuite.scala:104: [deprecation @ org.apache.spark.SparkThrowableSuite.<local SparkThrowableSuite>.errorClassReadMeContents | origin=org.apache.commons.io.IOUtils.toString | version=] method toString in class IOUtils is deprecated\r\n[WARNING] /Users/yangjie01/SourceCode/git/spark-mine/core/src/test/scala/org/apache/spark/SparkThrowableSuite.scala:325: [deprecation @ org.apache.spark.SparkThrowableSuite.<local SparkThrowableSuite>.$anonfun | origin=org",
+          "graph_score": 0.0285714285714286,
+          "paths": [
+            {
+              "signal": "SourceCode",
+              "degree": 35,
+              "source_excerpt": "[warn] /Users/yangjie01/SourceCode/git/spark-mine-sbt/core/src/test/scala/org/apache/spark/rdd/PipedRDDSuite.scala:127:42: method + in class Int is deprecated (since 2.13.0): Adding a number and a String is deprecated. Use the string interpolation `s\"$num$str\"`",
+              "candidate_excerpt": "[WARNING] /Users/yangjie01/SourceCode/git/spark-mine/core/src/test/scala/org/apache/spark/SparkThrowableSuite.scala:77: [deprecation @ org.apache.spark.SparkThrowableSuite.<local SparkThrowableSuite>.errorClassFileContents | origin=org.apache.commons.io.IOUtils.toString | version=] method toString in class IOUtils is deprecated",
+              "contribution": 0.0285714285714286
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-43bb148d9788",
+      "latency_ms": 970.11
+    },
+    {
+      "case_id": "R18",
+      "issue_id": "spark-13439294",
+      "action": "check_environment",
+      "reasons": [
+        "Confirm source-specific environment and reproduction before reusing this historical lead."
+      ],
+      "primary_components": [
+        "Python / PySpark",
+        "Spark SQL / DataFrames"
+      ],
+      "action_enum_agreement": false,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13434781",
+          "title": "Add PYSPARK_PANDAS_USAGE_LOGGER environment variable as an alias of KOALAS_USAGE_LOGGER",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13434781",
+          "description": "There's one place missing about the renaming Koalas to pandas API on Spark (POS). We should add an alias for this.",
+          "graph_score": 1.5,
+          "paths": [
+            {
+              "signal": "PYSPARK_PANDAS_USAGE_LOGGER",
+              "degree": 2,
+              "source_excerpt": "$ PYSPARK_PANDAS_USAGE_LOGGER=pyspark.pandas.usage_logging.usage_logger ./bin/pyspark",
+              "candidate_excerpt": "Add PYSPARK_PANDAS_USAGE_LOGGER environment variable as an alias of KOALAS_USAGE_LOGGER",
+              "contribution": 1.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13377775",
+          "title": "Window group-key and pandas inconsistent",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13377775",
+          "description": "Not completely sure whether this is a bug or a configuration/usage issue:\r\n\r\nWe are seeing inconsistent timezone-treatment when using a windowed group by aggregation in combiation with a pandas udf.\r\n\r\nA minimal example:\r\n\r\n\u00a0\r\n{code:java}\r\n// code placeholder\r\n\r\ndef a_udf(group_key, pdf: pd.DataFrame) -> pd.DataFrame:\r\n    w_start = group_key[0][\"start\"]\r\n    w_end = group_key[0][\"end\"]\r\n\r\n    print(f\"Pandas   : {pdf['window_start'].iloc[0]} to {pdf['window_end'].iloc[0]}\")\r\n    print(f\"Group key: {w_start} to {w_end}\")\r\n    print(f\"Data     : {pdf['time'].min()} to {pdf['time'].max()}\")\r\n\r\n    assert (pdf[\"time\"] >= w_start).all()\r\n    assert (pdf[\"time\"] < w_end).all()        \r\n\r\n    # some result\r\n\r\n    return pd.DataFrame.from_records([{\"result\": 1}])\r\n\r\n\r\ndf = spark.createDataFrame([(datetime.datetime(2020, 1, 1, 12, 30, 0),)], schema=[\"time\"])\r\n\r\nw = window(\"time\", \"60 minutes\")\r\nd",
+          "graph_score": 0.333333333333333,
+          "paths": [
+            {
+              "signal": "DataFrame.from_records",
+              "degree": 3,
+              "source_excerpt": "A function `DataFrame.from_records(data, index, exclude, columns, coerce_float, nrows)` was failed after 2007.430 ms: 0",
+              "candidate_excerpt": "return pd.DataFrame.from_records([{\"result\": 1}])",
+              "contribution": 0.333333333333333
+            }
+          ]
+        },
+        {
+          "id": "spark-13517240",
+          "title": "mlflow doctest fails for pandas API on SPark",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13517240",
+          "description": "{code}\r\nFile \"/__w/spark/spark/python/pyspark/pandas/mlflow.py\", line 172, in pyspark.pandas.mlflow.load_model\r\nFailed example:\r\n    prediction_df\r\nException raised:\r\n    Traceback (most recent call last):\r\n      File \"/usr/lib/python3.9/doctest.py\", line 1336, in __run\r\n        exec(compile(example.source, filename, \"single\",\r\n      File \"<doctest pyspark.pandas.mlflow.load_model[18]>\", line 1, in <module>\r\n        prediction_df\r\n      File \"/__w/spark/spark/python/pyspark/pandas/frame.py\", line 13322, in __repr__\r\n        pdf = cast(\"DataFrame\", self._get_or_create_repr_pandas_cache(max_display_count))\r\n      File \"/__w/spark/spark/python/pyspark/pandas/frame.py\", line 13313, in _get_or_create_repr_pandas_cache\r\n        self, \"_repr_pandas_cache\", {n: self.head(n + 1)._to_internal_pandas()}\r\n      File \"/__w/spark/spark/python/pyspark/pandas/frame.py\", line 13308, in _to_internal_panda",
+          "graph_score": 0.333333333333333,
+          "paths": [
+            {
+              "signal": "DataFrame.from_records",
+              "degree": 3,
+              "source_excerpt": "A function `DataFrame.from_records(data, index, exclude, columns, coerce_float, nrows)` was failed after 2007.430 ms: 0",
+              "candidate_excerpt": "pdf = pd.DataFrame.from_records(self.collect(), columns=self.columns)",
+              "contribution": 0.333333333333333
+            }
+          ]
+        },
+        {
+          "id": "spark-13478747",
+          "title": "ps.DataFrame should support MultiIndex with a Distributed Dataset",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13478747",
+          "description": "",
+          "graph_score": 0.136363636363636,
+          "paths": [
+            {
+              "signal": "ps.DataFrame",
+              "degree": 22,
+              "source_excerpt": ">>> psdf = ps.DataFrame({\"a\": [1,2,3], \"b\": [4,5,6]})",
+              "candidate_excerpt": "ps.DataFrame should support MultiIndex with a Distributed Dataset",
+              "contribution": 0.136363636363636
+            }
+          ]
+        },
+        {
+          "id": "spark-13479829",
+          "title": "ps.DataFrame(data, index) should support the same anchor",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13479829",
+          "description": "",
+          "graph_score": 0.136363636363636,
+          "paths": [
+            {
+              "signal": "ps.DataFrame",
+              "degree": 22,
+              "source_excerpt": ">>> psdf = ps.DataFrame({\"a\": [1,2,3], \"b\": [4,5,6]})",
+              "candidate_excerpt": "ps.DataFrame(data, index) should support the same anchor",
+              "contribution": 0.136363636363636
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-e99c57c7b453",
+      "latency_ms": 889.48
+    },
+    {
+      "case_id": "R19",
+      "issue_id": "spark-13355742",
+      "action": "review_recorded_resolution",
+      "reasons": [
+        "Title indicates maintenance/enhancement; inspect the original change rather than treating it as an incident."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": false,
+      "ranked_evidence": [
+        {
+          "id": "spark-13355741",
+          "title": "Migrate ALTER TABLE .. CHANGE COLUMN to new resolution framework",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13355741",
+          "description": "# Create the Command logical node for ALTER TABLE .. CHANGE COLUMN\r\n# Remove AlterTableAlterColumnStatement\r\n# Remove the check verifyAlterTableType() from run()",
+          "graph_score": 0.5,
+          "paths": [
+            {
+              "signal": "verifyAlterTableType",
+              "degree": 2,
+              "source_excerpt": "# Remove the check verifyAlterTableType() from run()",
+              "candidate_excerpt": "# Remove the check verifyAlterTableType() from run()",
+              "contribution": 0.5
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-2401734d15cd",
+      "latency_ms": 1029.45
+    },
+    {
+      "case_id": "R20",
+      "issue_id": "spark-13353674",
+      "action": "request_details",
+      "reasons": [
+        "Source description is absent, short or adds too little beyond its title.",
+        "Performance proposal lacks enough measurement context."
+      ],
+      "primary_components": [],
+      "action_enum_agreement": true,
+      "must_abstain": true,
+      "ranked_evidence": [
+        {
+          "id": "spark-13347610",
+          "title": "Word2VecSuite failed for Scala 2.13",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13347610",
+          "description": "<del>This may be the first failed build:</del>\r\nhttps://amplab.cs.berkeley.edu/jenkins/job/spark-master-test-maven-hadoop-2.7-scala-2.13/52/\r\n\r\nh2. Possible Work Around Fix\r\nMove \r\n\r\ncase class Data(word: String, vector: Array[Float])\r\n\r\nout of the class Word2VecModel\r\n\r\n\r\n\r\n\r\n\r\nh2. Attempts to git bisect\r\n\r\n\r\nmaster branch git \"bisect\"\r\ncc23581e2645c91fa8d6e6c81dc87b4221718bb1 fail\r\n3d0323401f7a3e4369a3d3f4ff98f15d19e8a643  fail\r\n9d9d4a8e122cf1137edeca857e925f7e76c1ace2   fail\r\nf5d2165c95fe83f24be9841807613950c1d5d6d0 fail 2020-12-01\r\n\r\n\r\n\r\n\r\nh2. Attached Stack Trace\r\nTo reproduce it in master:\r\n\r\n./dev/change-scala-version.sh 2.13\r\n\r\nsbt -Pscala-2.13\r\n> project mllib\r\n> testOnly org.apache.spark.ml.feature.Word2VecSuite\r\n\r\n\r\n[info] Word2VecSuite:\r\n[info] - params (45 milliseconds)\r\n[info] - Word2Vec (5 seconds, 768 milliseconds)\r\n[info] - getVectors (549 milliseconds)\r\n[info] - findSyn",
+          "graph_score": 1.5,
+          "paths": [
+            {
+              "signal": "findSynonyms",
+              "degree": 2,
+              "source_excerpt": "w2v findSynonyms optimization",
+              "candidate_excerpt": "[info] - findSynonyms (222 milliseconds)",
+              "contribution": 1.5
+            }
+          ]
+        },
+        {
+          "id": "spark-13315462",
+          "title": "RDD.takeOrdered can choose to merge intermediate results in executor or driver",
+          "resolution": "",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13315462",
+          "description": "In the list of issues, I saw some discussions about exceeding the memory limit of the driver when using _RDD.takeOrdered_ or _SQL(order by xx limit xx)_. I think that the implementation of _RDD.takeOrdered_ can be improved.\r\n\r\nIn the original code implementation of _RDD.takeOrdered_, the QuickSelect algorithm in guava is used in the executor process to calculate the local TopK results of each RDD partition. These intermediate results are packaged into java.util.PriorityQueue and returned to the driver process. In the driver process, these intermediate results are merged to get the global TopK results.\r\n\r\nThe problem with this implementation is that if the intermediate results are too large and too many partitions, the intermediate results may accumulate in the memory of the driver process, causing excessive memory pressure.\r\n\r\nWe can use an optional config to determine whether the interm",
+          "graph_score": 0.25,
+          "paths": [
+            {
+              "signal": "BoundedPriorityQueue",
+              "degree": 4,
+              "source_excerpt": "{\\{findSynonyms}} in w2v could be future optimized by using guavaording instead of BoundedPriorityQueue",
+              "candidate_excerpt": "val queue = new BoundedPriorityQueue[T](num)(ord.reverse)",
+              "contribution": 0.25
+            }
+          ]
+        },
+        {
+          "id": "spark-13340972",
+          "title": "RDD.takeOrdered should get rid of usage of reduce or use treeReduce instead",
+          "resolution": "Not A Problem",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13340972",
+          "description": "{{RDD.takeOrdered}} API sorts elements in each partition and puts the sorted elements into a `BoundedPriorityQueue`.  So actually in the result RDD each partition has only one priority queue. Then the API calls {{RDD.reduce}} API to reduce the elements. But as mentioned before the RDD has only one queue at each partition, it doesn't make sense to call reduce to reduce elements (here the element is queue).\r\n\r\nWe should either simplify {{RDD.reduce}} call in {{RDD.takeOrdered}} or replace it with {{treeReduce}} which can actually do partially reducing for this case.",
+          "graph_score": 0.25,
+          "paths": [
+            {
+              "signal": "BoundedPriorityQueue",
+              "degree": 4,
+              "source_excerpt": "{\\{findSynonyms}} in w2v could be future optimized by using guavaording instead of BoundedPriorityQueue",
+              "candidate_excerpt": "{{RDD.takeOrdered}} API sorts elements in each partition and puts the sorted elements into a `BoundedPriorityQueue`.  So actually in the result RDD each partition has only one priority queue. Then the API calls {{RDD.reduce}} API to reduce the elements. But as mentioned before the RDD has only one queue at each partition, it doesn't make sense to call reduce to reduce elements (here the element is queue).",
+              "contribution": 0.25
+            }
+          ]
+        },
+        {
+          "id": "spark-13342102",
+          "title": "Improve performance of ML ALS recommendForAll by GEMV",
+          "resolution": "Fixed",
+          "url": "https://issues.apache.org/jira/secure/ViewIssue.jspa?id=13342102",
+          "description": "There were a lot of works on improving ALS's {{recommendForAll}}\r\n\r\nFor now, I found that it maybe futhermore optimized by\r\n\r\n1, using GEMV;\r\n\r\n2, use guava.ordering instead of BoundedPriorityQueue;",
+          "graph_score": 0.25,
+          "paths": [
+            {
+              "signal": "BoundedPriorityQueue",
+              "degree": 4,
+              "source_excerpt": "{\\{findSynonyms}} in w2v could be future optimized by using guavaording instead of BoundedPriorityQueue",
+              "candidate_excerpt": "2, use guava.ordering instead of BoundedPriorityQueue;",
+              "contribution": 0.25
+            }
+          ]
+        }
+      ],
+      "run_id": "RUN-804e25085c95",
+      "latency_ms": 266.11
+    }
+  ]
+}

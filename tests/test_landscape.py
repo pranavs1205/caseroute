@@ -12,7 +12,7 @@ class ConnectedLandscape(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.store = Store('caseroute_landscape_test_' + uuid4().hex)
-        cls.rows = [dict(id='a', title='Python streaming DataFrame from Kafka', description=''),
+        cls.rows = [dict(id='a', title='Python streaming DataFrame from Kafka', description='The connector reads messages successfully but writing the resulting dataset fails. Reproduce using an explicit schema and record the exact exception and runtime configuration.'),
                     dict(id='b', title='Python streaming Kafka retry', description='A SQL reader issue'),
                     dict(id='c', title='Kafka broker error', description='')]
         s=cls.store

@@ -1,0 +1,18 @@
+{
+  "created": "2026-10-17T20:19:26.966396+00:00",
+  "python": "3.11.5",
+  "platform": "Windows",
+  "docker_server": "29.8.2",
+  "graph": "caseroute_setup_check_b50cd82b95cc40b8bc2ee04f2e4252bd",
+  "checks": [
+    "Fresh graph: full pinned CSV imported; 20,275 reports / 68 versions",
+    "Fresh component enrichment: 13,909 excerpt-backed links",
+    "Fresh technical-identifier index: 75232 excerpt-backed links; no unsupported excerpts",
+    "Fresh-client attempt persistence and a different next check",
+    "Real four-component case, changed decision after review, saved-run reload",
+    "Full real projection: independent count checks pass"
+  ],
+  "passed": true,
+  "full_graph_query_ms": 7518.44,
+  "temporary_graph_deleted": true
+}

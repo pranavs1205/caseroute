@@ -12,6 +12,7 @@ from graph import Store
 from import_real_data import EXPECTED_SHA256, RAW, REVISION, download, records
 from llm import LLMUnavailable, investigate
 from real_cases import RealCases
+from investigation_policy import VERSION
 
 ROOT=Path(__file__).parent/'evaluation'/'real'
 STEPS={'check_environment','review_recorded_resolution','request_details','investigate_component_boundary'}
@@ -123,7 +124,9 @@ def run_assessment(use_llm):
             results.append(dict(case_id=case['case_id'],latency_ms=round((perf_counter()-started)*1000,2),result=r,error=None))
         except (LLMUnavailable,KeyError,ValueError) as error:
             results.append(dict(case_id=case['case_id'],latency_ms=round((perf_counter()-started)*1000,2),result=None,error=str(error)))
-        write_json(out,dict(protocol=plan['protocol'],plan_sha256=plan['sha256'],labels_sha256=locked['labels_sha256'],mode='llm' if use_llm else 'graph',results=results))
+        write_json(out,dict(protocol=plan['protocol'],policy_version=VERSION,
+                            caveat='This case set has informed implementation changes; later runs are development diagnostics, not fresh validation.',
+                            plan_sha256=plan['sha256'],labels_sha256=locked['labels_sha256'],mode='llm' if use_llm else 'graph',results=results))
     print('Raw predictions saved. Review evidence relevance before reporting human relevance/acceptability.')
     review_path=ROOT/('post_review_'+('llm' if use_llm else 'graph')+'.csv')
     with review_path.open('w',encoding='utf-8',newline='') as file:
@@ -148,6 +151,7 @@ def summarize():
         for row in ok:
             r=row['result'];c=r['context'];ids={m['id'] for m in r['matches'][:5]}
             if c:ids|={c['issue']['id']}|{m['id'] for m in c['related'][:4]}|{m['id'] for m in c.get('component_related',[])[:4]}
+            if c:ids|={m['id'] for m in c.get('ranked_evidence',[])[:5]}
             citation_membership+=set(r['decision']['evidence_ids'])<=ids
         relevance_covered=[r for r in ok if labels[r['case_id']]['relevant_issue_ids'].strip()]
         hits=sum(bool({m['id'] for m in r['result']['matches'][:5]} & set(labels[r['case_id']]['relevant_issue_ids'].split(';'))) for r in relevance_covered)

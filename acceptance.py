@@ -16,6 +16,7 @@ from landscape import Landscape
 from real_cases import RealCases
 from llm import investigate
 from seed import seed
+from evidence_graph import enrich as enrich_evidence
 
 
 def main():
@@ -34,12 +35,16 @@ def main():
             source=download()
             load(store,source,manifest_path=None)
             enriched=enrich(store,records(source))
+            signal_links=enrich_evidence(store,records(source))
         real=RealCases(store)
         assert real.stats()['issues']==20275
         assert real.stats()['versions']==68
         result['checks'].append('Fresh graph: full pinned CSV imported; 20,275 reports / 68 versions')
         assert enriched==13909
         result['checks'].append('Fresh component enrichment: 13,909 excerpt-backed links')
+        assert signal_links > 0
+        assert store.read('MATCH ()-[e:HAS_SIGNAL]->() WHERE NOT e.excerpt CONTAINS e.matched RETURN count(e) AS n')[0]['n']==0
+        result['checks'].append(f'Fresh technical-identifier index: {signal_links} excerpt-backed links; no unsupported excerpts')
         cid=store.create_case('discounts','Clean setup gate: checkout fails with discount')
         store.attempt(cid,'pricing-cache','failed','Clean gate: cache versions match')
         assert Store(name).investigate(cid)['action']['id']=='pricing-rule'

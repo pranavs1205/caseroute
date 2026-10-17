@@ -1,5 +1,11 @@
 # CaseRoute verification — 16 October 2026, IST
 
+## Graph-guidance gate ? 18 October, after the frozen baseline
+
+Technical identifier enrichment added 75,232 excerpt-supported edges and 33,168 identifier nodes. Degree-discounted two-hop retrieval, primary-component checks, report-type and sufficiency gates are implemented. All 36 backend tests pass. Browser and fresh full-import checks pass; one live AnyAPI run passed two bounded calls with a permitted action. [Detailed analysis](GRAPH_IMPROVEMENTS.md) and [setup receipt](submission/verification/guidance-setup-check.json).
+
+Development replays are separate: v2 16/20 action agreement and 6/8 required clarification; v3 18/20 and 7/8. This is in-sample development after inspecting failures, not independent validation or new retrieval quality. Original baseline artifacts are unchanged. The existing public video is the preceding release snapshot.
+
 ## Submission evidence gate ? 18 October
 
 - Fresh Windows Python 3.11.5 virtual environment installed from `requirements.lock`; `pip check` passed. Docker 29.8.2 and pinned FalkorDB image used.

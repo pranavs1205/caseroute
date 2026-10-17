@@ -4,6 +4,7 @@ import re
 from datetime import datetime, timezone
 from time import perf_counter
 from uuid import uuid4
+from evidence_graph import ranked_neighbors
 
 
 STOPWORDS = set('a an and are as at be by can could do does for from has have i in is it my of on or our please the this to was we when with works not after'.split())
@@ -63,7 +64,7 @@ class RealCases:
             WHERE other.id <> i.id
             RETURN other.id AS id, other.title AS title, other.resolution AS resolution,
                 other.url AS url, collect(DISTINCT v.name) AS shared_versions
-            ORDER BY id DESC LIMIT 8''', id=iid)
+            ORDER BY reduce(score=0, term IN $terms | score + CASE WHEN toLower(title) CONTAINS term THEN 1 ELSE 0 END) DESC, id ASC LIMIT 8''', id=iid, terms=terms_for(issues[0]['title']))
         memory = self.query(trace, 'read_review_memory', 'Recall this app’s previous human reviews, separate from the historical source status.', '''
             MATCH (r:Review)-[:BASED_ON]->(:HistoricalIssue {id:$id})
             RETURN r.id AS id, r.note AS note, r.outcome AS outcome, r.created AS created ORDER BY created DESC LIMIT 20''', id=iid)
@@ -72,15 +73,18 @@ class RealCases:
             RETURN c.id AS id, c.name AS name, m.excerpt AS excerpt, m.field AS field,
                 m.matched AS matched, m.rule AS rule ORDER BY name''', id=iid)
         component_related = self.query(trace, 'find_component_intersections', 'Find reports that mention the same combination of components, beyond shared affected versions.', '''
-            MATCH (i:HistoricalIssue {id:$id})-[:MENTIONS]->(c:Component)<-[:MENTIONS]-(other:HistoricalIssue)
+            MATCH (i:HistoricalIssue {id:$id})-[a:MENTIONS]->(c:Component)<-[b:MENTIONS]-(other:HistoricalIssue)
             WHERE i.id <> other.id
-            WITH other, collect(DISTINCT c.name) AS shared_components
+            WITH other, collect(DISTINCT c.name) AS shared_components,
+                sum((CASE WHEN a.field='title' THEN 3.0 ELSE 1.0 END) *
+                    (CASE WHEN b.field='title' THEN 3.0 ELSE 1.0 END) / coalesce(c.degree,1)) AS graph_score
             WHERE size(shared_components) >= 2
             RETURN other.id AS id, other.title AS title, other.resolution AS resolution,
-                other.url AS url, shared_components
-            ORDER BY size(shared_components) DESC, id DESC LIMIT 8''', id=iid)
+                other.url AS url, shared_components, graph_score
+            ORDER BY graph_score DESC, id ASC LIMIT 8''', id=iid)
+        ranked = ranked_neighbors(self, iid, trace)
         return dict(issue=issues[0], versions=versions, related=related, memory=memory,
-                    components=components, component_related=component_related,
+                    components=components, component_related=component_related, ranked_evidence=ranked,
                     warnings=['These reports are historical. Confirm applicability to the current environment.',
                               'Recorded resolution is a status label; the CSV does not provide a verified fix procedure.',
                               'Shared-version links are not duplicate or dependency assertions.'])
