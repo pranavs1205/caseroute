@@ -1,0 +1,424 @@
+{
+  "kind": "Synthetic structured-context policy benchmark",
+  "scenarios": 24,
+  "graph_pass": 24,
+  "static_lookup_pass": 12,
+  "median_latency_ms": 53.91,
+  "max_latency_ms": 127.6,
+  "limitations": [
+    "Authored alongside implementation; not independently held out.",
+    "Reports are stored, not interpreted. Feature and optional service are human inputs.",
+    "Static baseline lacks graph updates and attempt memory; this isolates their value, not graph superiority over every database.",
+    "Single synthetic company, local database, no LLM, no load test."
+  ],
+  "results": [
+    {
+      "condition": "normal",
+      "report": "Checkout fails when a discount is applied.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 127.6,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "normal",
+      "report": "The cart rejects an active promotion.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 56.32,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "normal",
+      "report": "A customer cannot complete the discounted purchase.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 37.47,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "normal",
+      "report": "Payment stops after entering a coupon.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 21.45,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "failed_check",
+      "report": "Checkout fails when a discount is applied.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 41.71,
+      "expected": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "failed_check",
+      "report": "The cart rejects an active promotion.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 119.88,
+      "expected": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "failed_check",
+      "report": "A customer cannot complete the discounted purchase.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 91.93,
+      "expected": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "failed_check",
+      "report": "Payment stops after entering a coupon.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 83.83,
+      "expected": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "pricing-rule",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "changed_owner",
+      "report": "Checkout fails when a discount is applied.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 53.91,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ]
+    },
+    {
+      "condition": "changed_owner",
+      "report": "The cart rejects an active promotion.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 28.56,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ]
+    },
+    {
+      "condition": "changed_owner",
+      "report": "A customer cannot complete the discounted purchase.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 79.25,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ]
+    },
+    {
+      "condition": "changed_owner",
+      "report": "Payment stops after entering a coupon.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 39.75,
+      "expected": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ],
+      "actual": [
+        "ready",
+        "pricing-cache",
+        "Platform Reliability"
+      ]
+    },
+    {
+      "condition": "ambiguous",
+      "report": "Checkout fails when a discount is applied.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 39.85,
+      "expected": [
+        "needs_service",
+        null,
+        null
+      ],
+      "actual": [
+        "needs_service",
+        null,
+        null
+      ]
+    },
+    {
+      "condition": "ambiguous",
+      "report": "The cart rejects an active promotion.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 121.89,
+      "expected": [
+        "needs_service",
+        null,
+        null
+      ],
+      "actual": [
+        "needs_service",
+        null,
+        null
+      ]
+    },
+    {
+      "condition": "ambiguous",
+      "report": "A customer cannot complete the discounted purchase.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 63.73,
+      "expected": [
+        "needs_service",
+        null,
+        null
+      ],
+      "actual": [
+        "needs_service",
+        null,
+        null
+      ]
+    },
+    {
+      "condition": "ambiguous",
+      "report": "Payment stops after entering a coupon.",
+      "graph_pass": true,
+      "baseline_pass": false,
+      "latency_ms": 26.69,
+      "expected": [
+        "needs_service",
+        null,
+        null
+      ],
+      "actual": [
+        "needs_service",
+        null,
+        null
+      ]
+    },
+    {
+      "condition": "selected_growth",
+      "report": "Checkout fails when a discount is applied.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 36.65,
+      "expected": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ],
+      "actual": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ]
+    },
+    {
+      "condition": "selected_growth",
+      "report": "The cart rejects an active promotion.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 100.33,
+      "expected": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ],
+      "actual": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ]
+    },
+    {
+      "condition": "selected_growth",
+      "report": "A customer cannot complete the discounted purchase.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 61.89,
+      "expected": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ],
+      "actual": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ]
+    },
+    {
+      "condition": "selected_growth",
+      "report": "Payment stops after entering a coupon.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 74.79,
+      "expected": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ],
+      "actual": [
+        "ready",
+        "campaign-window",
+        "Growth Platform"
+      ]
+    },
+    {
+      "condition": "selected_checkout",
+      "report": "Checkout fails when a discount is applied.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 38.64,
+      "expected": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "selected_checkout",
+      "report": "The cart rejects an active promotion.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 44.23,
+      "expected": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "selected_checkout",
+      "report": "A customer cannot complete the discounted purchase.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 38.47,
+      "expected": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ]
+    },
+    {
+      "condition": "selected_checkout",
+      "report": "Payment stops after entering a coupon.",
+      "graph_pass": true,
+      "baseline_pass": true,
+      "latency_ms": 24.16,
+      "expected": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ],
+      "actual": [
+        "ready",
+        "checkout-trace",
+        "Commerce Engineering"
+      ]
+    }
+  ]
+}

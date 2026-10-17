@@ -1,0 +1,42 @@
+{
+  "dataset": "GitBugs / Apache Spark",
+  "revision": "eadf2d6794990a1aaa26d0ae15391f29f8969301",
+  "source": "https://raw.githubusercontent.com/av9ash/gitbugs/eadf2d6794990a1aaa26d0ae15391f29f8969301/spark/spark_bugs.csv",
+  "publisher": "https://github.com/av9ash/gitbugs",
+  "paper": "https://arxiv.org/abs/2504.09651",
+  "author": "Avinash Patil",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "bytes": 18665594,
+  "sha256": "34c18f07ab9877dfe15471d8356eb017b7658a87f0e1a20bf60043659ff1af02",
+  "rows": 20275,
+  "unique_versions": 68,
+  "resolutions": {
+    "Fixed": 14099,
+    "unrecorded": 4070,
+    "Cannot Reproduce": 70,
+    "Duplicate": 536,
+    "Done": 105,
+    "Resolved": 76,
+    "Won't Do": 71,
+    "Won't Fix": 300,
+    "Not A Problem": 299,
+    "Not A Bug": 37,
+    "Abandoned": 16,
+    "Invalid": 402,
+    "Implemented": 12,
+    "Later": 34,
+    "Works for Me": 2,
+    "Workaround": 11,
+    "Incomplete": 126,
+    "Information Provided": 8,
+    "Auto Closed": 1
+  },
+  "imported_at": "2026-10-15T20:07:12.424906+00:00",
+  "transformations": [
+    "Preserved original dates without assuming a timezone.",
+    "Split comma-delimited affected versions into Version nodes.",
+    "Added dataset provenance and constructed JIRA URLs from internal numeric issue IDs.",
+    "No owner, root cause, fix procedure, duplicate target, or service dependency was inferred."
+  ]
+}
