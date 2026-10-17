@@ -2,6 +2,10 @@
 
 **Updated 18 October 2026, India time.** CaseRoute is an original support operations product centered on FalkorDB. Its UI, graph schema, traversal tools, decision policy, and case memory are built in this repository. It does not connect to another support platform. Standard third-party dependencies still need normal attribution and accurate AI-assistance disclosure in the final submission.
 
+## One-repository pilot ? 18 October 2026
+
+A read-only getzep/graphiti integration is implemented in a separate graph: 30 public issue records, a bounded commit-pinned Python AST index, cached/live/direct-number search, new local intakes, source/caller-name paths, observations with revision checks and optional one-call LLM review. Real browser and source integration checks pass. See `GITHUB_PILOT.md` for scope and costs. Manual updates are implemented; webhooks, reproduction execution and patch generation remain future work. The earlier Spark demo and frozen baseline remain valid historical evidence, not validation of this new repository workflow.
+
 ## Graph-guided development update ? 18 October 2026
 
 Analysis of the frozen baseline produced technical-identifier graph retrieval, degree-discounted neighbor ranking, evidence sufficiency/report-type gates and constrained model actions. All 36 backend tests, a new browser check, a fresh full-import gate and one live AnyAPI investigation pass. Development replay: 18/20 prelabel action agreement and 7/8 required clarifications. This is in-sample development, not an independent accuracy claim. The frozen baseline remains unchanged. See `GRAPH_IMPROVEMENTS.md`; fresh blinded validation is the next measurement priority.

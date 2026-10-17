@@ -9,11 +9,106 @@ from graph import Store
 from real_cases import RealCases
 from landscape import Landscape
 from llm import LLMUnavailable, configuration, investigate as run_investigation
+import os
+from github_client import GitHubUnavailable
+from repo_pilot import RepoPilot, RevisionConflict
 
 app = FastAPI(title='CaseRoute', description='Graph-guided investigations with sourced real historical reports and a synthetic ownership lab')
 store = Store()
 real = RealCases(store)
 landscape = Landscape(real)
+repo_pilot = RepoPilot(Store(os.getenv('CASE_GITHUB_GRAPH', 'caseroute_github')))
+
+
+@app.exception_handler(RevisionConflict)
+async def repo_conflict(request, exc):
+    return JSONResponse(status_code=409, content={'detail':str(exc)})
+
+
+@app.exception_handler(GitHubUnavailable)
+async def github_error(request, exc):
+    return JSONResponse(status_code=503, content={'detail':str(exc)})
+
+
+class RepoSyncInput(BaseModel):
+    include_code: bool = True
+
+
+class RepoSearchInput(BaseModel):
+    keywords: str = Field(default='', max_length=160)
+    live: bool = False
+
+
+class RepoIntakeInput(BaseModel):
+    title: str = Field(min_length=5,max_length=400)
+    body: str = Field(default='',max_length=12000)
+    version: str = Field(default='',max_length=80)
+    source_number: int | None = Field(default=None,ge=1)
+
+
+class RepoRunInput(BaseModel):
+    use_llm: bool = False
+
+
+class RepoObservationInput(BaseModel):
+    outcome: Literal['needs_more_info','not_applicable','useful_lead']
+    note: str = Field(min_length=3,max_length=2000)
+    revision: int = Field(ge=0)
+
+
+@app.get('/repo.js')
+def repo_script():
+    return FileResponse(Path(__file__).parent/'static'/'repo.js',media_type='text/javascript')
+
+
+@app.get('/api/repo/status')
+def repo_status():
+    return repo_pilot.stats()
+
+
+@app.post('/api/repo/sync')
+def repo_sync(data: RepoSyncInput):
+    return repo_pilot.sync(data.include_code)
+
+
+@app.post('/api/repo/search')
+def repo_search(data: RepoSearchInput):
+    return repo_pilot.search(data.keywords,data.live)
+
+
+@app.get('/api/repo/issues/{number}')
+def repo_issue(number: int):
+    return repo_pilot.issue(number)
+
+
+@app.post('/api/repo/issues/{number}/refresh')
+def repo_issue_refresh(number: int):
+    return repo_pilot.refresh(number)
+
+
+@app.get('/api/repo/intakes')
+def repo_intakes():
+    return repo_pilot.cases()
+
+
+@app.post('/api/repo/intakes',status_code=201)
+def repo_intake_create(data: RepoIntakeInput):
+    return repo_pilot.create(data.title,data.body,data.version,data.source_number)
+
+
+@app.get('/api/repo/intakes/{cid}')
+def repo_intake_read(cid: str):
+    return repo_pilot.case(cid)
+
+
+@app.post('/api/repo/intakes/{cid}/run')
+def repo_intake_run(cid: str,data: RepoRunInput):
+    return repo_pilot.investigate(cid,data.use_llm)
+
+
+@app.post('/api/repo/intakes/{cid}/observations')
+def repo_intake_observe(cid: str,data: RepoObservationInput):
+    return repo_pilot.observe(cid,data.outcome,data.note,data.revision)
 
 
 @app.get('/api/graph/examples')

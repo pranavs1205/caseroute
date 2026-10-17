@@ -1,5 +1,13 @@
 # CaseRoute verification — 16 October 2026, IST
 
+## GitHub pilot gate ? 18 October 2026
+
+The separate Graphiti pilot imported 30 public issues and a balanced 16/236-file Python snapshot at commit `a107b622205733c0a53617ce0cd79fe4461cdb35`, 382,760 downloaded code bytes, 20 GitHub GET requests and no model calls for sync. The original Spark graph/evaluation remain separate.
+
+All 36 existing backend checks and all 11 repository-pilot checks pass (47 total). Browser verification passes real issue #2014 to SearchResults.merge, self exclusion, new-report local retrieval, saved rejection/reload, HTTP 409 stale-write rejection and mobile layout without horizontal overflow. One live AnyAPI repository review passes one model call; it requests details and cites an allowed issue. No GitHub writes, code execution, tested patch or fix-quality score is claimed.
+
+See [pilot documentation](GITHUB_PILOT.md), [sync receipt](submission/verification/github-sync.json), [browser receipt](submission/verification/github-browser.json) and [LLM receipt](submission/verification/github-llm-smoke.json). Old public video predates this extension.
+
 ## Graph-guidance gate ? 18 October, after the frozen baseline
 
 Technical identifier enrichment added 75,232 excerpt-supported edges and 33,168 identifier nodes. Degree-discounted two-hop retrieval, primary-component checks, report-type and sufficiency gates are implemented. All 36 backend tests pass. Browser and fresh full-import checks pass; one live AnyAPI run passed two bounded calls with a permitted action. [Detailed analysis](GRAPH_IMPROVEMENTS.md) and [setup receipt](submission/verification/guidance-setup-check.json).
